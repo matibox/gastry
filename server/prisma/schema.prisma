@@ -8,3 +8,94 @@ datasource db {
   url                  = env("DATABASE_URL")
   referentialIntegrity = "prisma"
 }
+
+model User {
+  id         String      @id @default(uuid())
+  email      String      @unique
+  name       String
+  password   String
+  role       Role        @default(user)
+  recipes    Recipe[]
+  favourites Favourite[]
+  menus      Menu[]
+}
+
+enum Role {
+  user
+  admin
+}
+
+model Recipe {
+  id           String       @id @default(uuid())
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  title        String       @unique
+  cookingTime  Int
+  instructions String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  ingredients  Ingredient[]
+  favourites   Favourite[]
+  timeOfDays   TimeOfDay[]
+}
+
+model Ingredient {
+  id       String   @id @default(uuid())
+  name     String
+  quantity Int
+  unit     String
+  recipes  Recipe[]
+}
+
+model Favourite {
+  user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  userId   String
+  recipeId String
+
+  @@id([userId, recipeId])
+}
+
+model Menu {
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  name   String
+  color  String
+  days   Day[]
+}
+
+enum WeekDays {
+  monday
+  tuesday
+  wednesday
+  thrusday
+  friday
+  saturday
+  sunday
+}
+
+model Day {
+  id         String      @id @default(uuid())
+  menu       Menu        @relation(fields: [menuId], references: [id], onDelete: Cascade)
+  menuId     String
+  name       WeekDays
+  timeOfDays TimeOfDay[]
+}
+
+enum TimeOfDays {
+  morning
+  before_noon
+  noon
+  afternoon
+  evening
+}
+
+model TimeOfDay {
+  id       String     @id @default(uuid())
+  day      Day        @relation(fields: [dayId], references: [id], onDelete: Cascade)
+  dayId    String
+  recipe   Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipeId String
+  name     TimeOfDays
+}
