@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "push": "npx prisma db push",
+    "seed": "npx prisma db seed"
   },
   "keywords": [],
   "author": "",
@@ -18,5 +19,8 @@
   },
   "dependencies": {
     "@prisma/client": "^4.6.1"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   }
 }
