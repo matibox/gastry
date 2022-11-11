@@ -48,12 +48,11 @@ model Ingredient {
 }
 
 model Favourite {
+  id       String @id @default(uuid())
   user     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   userId   String
   recipeId String
-
-  @@id([userId, recipeId])
 }
 
 model Menu {
