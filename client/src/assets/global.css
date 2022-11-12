@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&family=Open+Sans:wght@400;700&display=swap');
+
+/* Global variables */
+:root {
+  --bg-color: #ddd;
+  --orange: #e78d34;
+  --brown: #ae4e10;
+  --green: #8c8e30;
+  --black: #0e1211;
+  --beige: #ebc392;
+  --white: #fff;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root,
+.App {
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+body {
+  background-color: var(--bg-color);
+  font-family: 'Open Sans', 'Montserrat', sans-serif;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
