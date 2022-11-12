@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 
-type callback = (...cbParams: any[]) => Promise<any>;
+type Callback = (...cbParams: any[]) => Promise<any>;
 
-export function useAsync(callback: callback, dependencies: any[] = []) {
+export function useAsync(callback: Callback, dependencies: any[] = []) {
   const { run, ...state } = useAsyncInternal(callback, dependencies, true);
 
   useEffect(() => {
@@ -12,12 +12,12 @@ export function useAsync(callback: callback, dependencies: any[] = []) {
   return state;
 }
 
-export function useAsyncFn(callback: callback, dependencies: any[] = []) {
+export function useAsyncFn(callback: Callback, dependencies: any[] = []) {
   return useAsyncInternal(callback, dependencies);
 }
 
 function useAsyncInternal(
-  callback: callback,
+  callback: Callback,
   dependencies: any[],
   initialLoading: boolean = false
 ) {

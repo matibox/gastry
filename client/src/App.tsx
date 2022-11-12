@@ -1,5 +1,11 @@
 import { Route, Routes } from 'react-router-dom';
+import { useIsMobile } from './hooks/useIsMobile';
+
+// components
+import { MobileMenu } from './components/MobileMenu/MobileMenu';
 import { Navbar } from './components/Navbar/Navbar';
+
+// pages
 import { Favourites } from './pages/Favourites/Favourites';
 import { Home } from './pages/Home/Home';
 import { Login } from './pages/Login/Login';
@@ -11,6 +17,8 @@ import { Search } from './pages/Search/Search';
 import { Signup } from './pages/Signup/Signup';
 
 function App() {
+  const { isMobile } = useIsMobile();
+
   return (
     <div className='App'>
       <Navbar />
@@ -25,6 +33,7 @@ function App() {
         <Route path='/profile' element={<Profile />} />
         <Route path='/menu' element={<Menu />} />
       </Routes>
+      {isMobile && <MobileMenu />}
     </div>
   );
 }
