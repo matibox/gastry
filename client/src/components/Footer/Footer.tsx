@@ -32,7 +32,7 @@ export function Footer() {
         <a href='https://github.com/matibox' target='_blank'>
           Mateusz Hladky
         </a>
-        <span> &copy; 2022</span>
+        <span> &copy; {new Date().getFullYear()}</span>
       </p>
     </footer>
   );
