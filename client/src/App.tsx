@@ -4,6 +4,7 @@ import { useIsMobile } from './hooks/useIsMobile';
 // components
 import { MobileMenu } from './components/MobileMenu/MobileMenu';
 import { Navbar } from './components/Navbar/Navbar';
+import { Footer } from './components/Footer/Footer';
 
 // pages
 import { Favourites } from './pages/Favourites/Favourites';
@@ -33,6 +34,7 @@ function App() {
         <Route path='/profile' element={<Profile />} />
         <Route path='/menu' element={<Menu />} />
       </Routes>
+      <Footer />
       {isMobile && <MobileMenu />}
     </div>
   );

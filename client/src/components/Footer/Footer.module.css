@@ -1,0 +1,34 @@
+.footer {
+  background-color: var(--black);
+  margin-top: auto;
+  margin-bottom: var(--mobile-menu-height);
+  border-bottom: 1px solid var(--beige);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.6rem 4rem;
+}
+
+.logosWrapper {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.socialsWrapper {
+  display: flex;
+  gap: 1rem;
+}
+
+.text {
+  color: var(--white);
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 1.4rem;
+}
+
+.text > a {
+  color: var(--orange);
+}
