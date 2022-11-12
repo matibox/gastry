@@ -1,0 +1,30 @@
+.wrapper {
+  width: 100%;
+  height: 6rem;
+  background-color: var(--black);
+  padding: 0.8rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 1rem;
+}
+
+.menuWrapper {
+  display: flex;
+  gap: 1rem;
+  font-size: 1.5rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+}
+
+.menuWrapper > a {
+  text-decoration: none;
+  color: var(--green);
+}
