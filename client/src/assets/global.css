@@ -9,8 +9,10 @@
   --black: #0e1211;
   --beige: #ebc392;
   --white: #fff;
+  --black-alpha: #0e121199;
 
   --mobile-menu-height: 5.5rem;
+  --navbar-height: 6rem;
 }
 
 *,
@@ -59,11 +61,12 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 3.4rem;
+  height: 3.5rem;
   padding-inline: 1.6rem;
   border-radius: 2em;
   border: 2px solid var(--orange);
   transition: background-color 0.2s ease;
+  gap: 0.3rem;
 }
 
 .button:hover {
