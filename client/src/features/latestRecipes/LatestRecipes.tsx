@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { RecipesList } from '../../components/RecipesList/RecipesList';
 import RecipeOverview from '../../types/RecipeOverview';
 

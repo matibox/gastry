@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useAsyncFn } from '../../hooks/useAsync';
 import { getLatestRecipes } from '../../services/recipes';
 import Recipe from '../../types/RecipeOverview';
