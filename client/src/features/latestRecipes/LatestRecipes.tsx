@@ -10,15 +10,6 @@ interface LatestRecipesProps {
   sectionRef: React.RefObject<HTMLElement>;
 }
 
-const placeHolderRecipes: RecipeOverview[] = [
-  {
-    id: 'a',
-    title: 'foo',
-    cookingTime: 45,
-    imgURL: 'https://unsplash.it/334/223',
-  },
-];
-
 export function LatestRecipes({ sectionRef }: LatestRecipesProps) {
   const { recipes, loading, error, loadMore, moreToLoad } = useLatestRecipes(3);
 
