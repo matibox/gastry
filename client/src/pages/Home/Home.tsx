@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { Hero } from '../../features/hero/Hero';
+import { LatestRecipes } from '../../features/latestRecipes/LatestRecipes';
 
 export function Home() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -7,7 +8,7 @@ export function Home() {
   return (
     <main>
       <Hero scrollToRef={sectionRef} />
-      <section ref={sectionRef}>placeholder section</section>
+      <LatestRecipes sectionRef={sectionRef} />
     </main>
   );
 }

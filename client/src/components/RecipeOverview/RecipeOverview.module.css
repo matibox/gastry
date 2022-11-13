@@ -1,0 +1,61 @@
+.wrapper {
+  width: 33rem;
+  background-color: var(--black);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 2.5rem;
+}
+
+.link {
+  display: block;
+}
+
+.link img {
+  width: 100%;
+}
+
+.infoWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 1.2rem 2rem;
+}
+
+.infoWrapper h3 {
+  flex-basis: 100%;
+  text-align: center;
+  color: var(--white);
+  font-family: 'Open sans', sans-serif;
+  font-weight: 400;
+  font-size: 1.9rem;
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--white);
+}
+
+.timer span:last-child {
+  font-size: 1.75em;
+}
+
+.infoWrapper > a {
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.favBtn {
+  color: var(--white);
+  cursor: pointer;
+}
+
+.favBtn:hover {
+  color: var(--brown);
+}
+
+.favBtn.favActive {
+  color: var(--brown);
+}

@@ -52,6 +52,11 @@ a {
   color: inherit;
 }
 
+button {
+  background: inherit;
+  border: none;
+}
+
 .button {
   background-color: transparent;
   color: var(--white);
