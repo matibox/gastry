@@ -17,14 +17,30 @@ app.register(cors, {
 
 const prisma = new PrismaClient();
 
-app.get('/recipes', async () => {
+interface LatestRecipes {
+  Body: {
+    skip: number;
+    take: number;
+  };
+}
+
+app.post<LatestRecipes>('/latestRecipes', async req => {
+  const { skip, take } = req.body;
+  //TODO recipe thumbnails
+
+  if (skip === undefined || take === undefined) {
+    return app.httpErrors.badRequest('skip/take is undefined');
+  }
+
   return await commitToDb(
     prisma.recipe.findMany({
       select: {
         id: true,
-        cookingTime: true,
         title: true,
+        cookingTime: true,
       },
+      skip,
+      take,
     })
   );
 });

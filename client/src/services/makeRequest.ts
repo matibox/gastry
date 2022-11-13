@@ -3,7 +3,7 @@ import { api } from '../api/api';
 interface MakeRequestConfig {
   method: string;
   params?: object;
-  body?: object;
+  data?: object;
 }
 
 export function makeRequest(url: string, config: MakeRequestConfig) {
