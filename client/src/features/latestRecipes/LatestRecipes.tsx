@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { RecipesList } from '../../components/RecipesList/RecipesList';
-import RecipeOverview from '../../types/RecipeOverview';
 
 // styles
 import styles from './LatestRecipes.module.css';
