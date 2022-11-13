@@ -1,4 +1,5 @@
 import { RefObject } from 'react';
+import { useIsMobile } from '../../contexts/isMobileContext';
 
 // styles
 import styles from './Hero.module.css';
@@ -10,9 +11,10 @@ interface HeroProps {
 
 export function Hero({ scrollToRef }: HeroProps) {
   const { scrollTo } = useScroll(scrollToRef);
+  const { isMobile } = useIsMobile();
 
   return (
-    <section className={styles.wrapper}>
+    <section className={`${styles.wrapper} ${isMobile ? styles.mobile : ''}`}>
       <div className={styles.content}>
         <h1>gastry</h1>
         {/*//TODO changing text */}

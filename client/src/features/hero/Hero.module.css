@@ -1,12 +1,16 @@
 .wrapper {
   width: 100%;
-  height: calc(100vh - var(--mobile-menu-height) - var(--navbar-height));
+  height: calc(100vh - var(--navbar-height));
   background: url('../../assets/background.png') no-repeat center center;
   background-size: cover;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.mobile {
+  height: calc(100vh - var(--mobile-menu-height) - var(--navbar-height));
 }
 
 .overlay {

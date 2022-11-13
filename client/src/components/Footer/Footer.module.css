@@ -1,14 +1,17 @@
 .footer {
   background-color: var(--black);
   margin-top: auto;
-  margin-bottom: var(--mobile-menu-height);
-  border-bottom: 1px solid var(--beige);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 1.5rem;
   padding: 1.6rem 4rem;
+}
+
+.mobile {
+  border-bottom: 1px solid var(--beige);
+  margin-bottom: var(--mobile-menu-height);
 }
 
 .logosWrapper {

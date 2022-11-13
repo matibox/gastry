@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router-dom';
-import { useIsMobile } from './hooks/useIsMobile';
+import { useIsMobile } from './contexts/isMobileContext';
 
 // components
 import { MobileMenu } from './components/MobileMenu/MobileMenu';

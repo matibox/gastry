@@ -1,13 +1,16 @@
 // assets
 import GitHub from '../../assets/github.png';
 import Twitter from '../../assets/twitter.png';
+import { useIsMobile } from '../../contexts/isMobileContext';
 
 // styles
 import styles from './Footer.module.css';
 
 export function Footer() {
+  const { isMobile } = useIsMobile();
+
   return (
-    <footer className={styles.footer}>
+    <footer className={`${styles.footer} ${isMobile ? styles.mobile : ''}`}>
       <div className={styles.logosWrapper}>
         <img src='/footer-logo.png' alt='gastry' />
         <div className={styles.socialsWrapper}>
