@@ -3,6 +3,7 @@ import sensible from '@fastify/sensible';
 import cors from '@fastify/cors';
 import dotenv from 'dotenv';
 import { PrismaClient } from '@prisma/client';
+
 dotenv.config();
 
 if (!process.env.PORT) process.exit(1);
