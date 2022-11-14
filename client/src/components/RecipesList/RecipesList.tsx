@@ -1,4 +1,5 @@
 import Recipe from '../../types/RecipeOverview';
+import Loading from '../Loading/Loading';
 import { RecipeOverview } from '../RecipeOverview/RecipeOverview';
 
 interface RecipesListProps {
@@ -23,8 +24,7 @@ export function RecipesList({
       {recipes?.map(recipe => (
         <RecipeOverview key={recipe.id} recipe={recipe} />
       ))}
-      //TODO Loading component
-      {loading && <p>Loading...</p>}
+      {loading && <Loading />}
       {loadMore && moreToLoad && (
         <button
           className='button'
