@@ -39,6 +39,9 @@ app.post<LatestRecipes>('/latestRecipes', async req => {
         title: true,
         cookingTime: true,
       },
+      orderBy: {
+        updatedAt: 'desc',
+      },
       skip,
       take,
     })
