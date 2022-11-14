@@ -27,6 +27,7 @@ export default function recipesRoutes(
           id: true,
           title: true,
           cookingTime: true,
+          thumbnail: true,
         },
         orderBy: {
           updatedAt: 'desc',

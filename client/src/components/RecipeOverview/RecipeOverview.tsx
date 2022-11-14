@@ -19,7 +19,7 @@ export function RecipeOverview({ recipe }: RecipeOverviewProps) {
       <Link className={styles.link} to={`/recipes/${recipe.id}`}>
         <img
           className={styles.thumbnail}
-          src={recipe.imgURL}
+          src={recipe.thumbnail}
           alt={recipe.title}
         />
       </Link>

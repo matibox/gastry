@@ -41,6 +41,8 @@ async function main() {
         ],
       },
       userId: user1.id,
+      thumbnail:
+        'https://res.cloudinary.com/drjsjdeff/image/upload/v1668449869/dev_setups/thumbnail_kmgait.png',
     },
   });
 
@@ -65,6 +67,8 @@ async function main() {
         ],
       },
       userId: user2.id,
+      thumbnail:
+        'https://res.cloudinary.com/drjsjdeff/image/upload/v1668449869/dev_setups/thumbnail_kmgait.png',
     },
   });
 

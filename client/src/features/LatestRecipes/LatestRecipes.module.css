@@ -1,0 +1,15 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+  margin-block: 4rem;
+}
+
+.wrapper h2 {
+  text-align: center;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 4rem;
+}
