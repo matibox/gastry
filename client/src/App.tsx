@@ -7,15 +7,15 @@ import { Navbar } from './components/Navbar/Navbar';
 import { Footer } from './components/Footer/Footer';
 
 // pages
-import { Favourites } from './pages/Favourites/Favourites';
-import { Home } from './pages/Home/Home';
-import { Login } from './pages/Login/Login';
-import { Menu } from './pages/Menu/Menu';
-import { Profile } from './pages/Profile/Profile';
-import { Recipe } from './pages/Recipe/Recipe';
-import { Recipes } from './pages/Recipes/Recipes';
-import { Search } from './pages/Search/Search';
-import { Signup } from './pages/Signup/Signup';
+import { Favourites } from './pages/Favourites';
+import { Home } from './pages/Home';
+import { Login } from './pages/Login';
+import { Menu } from './pages/Menu';
+import { Profile } from './pages/Profile';
+import { Recipe } from './pages/Recipe';
+import { Recipes } from './pages/Recipes';
+import { Search } from './pages/Search';
+import { Signup } from './pages/Signup';
 
 function App() {
   const { isMobile } = useIsMobile();
