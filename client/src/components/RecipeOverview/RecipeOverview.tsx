@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Recipe from '../../types/RecipeOverview';
+import { Icon } from '../Icon/Icon';
 
 // styles
 import styles from './RecipeOverview.module.css';
@@ -26,26 +27,18 @@ export function RecipeOverview({ recipe }: RecipeOverviewProps) {
       <div className={styles.infoWrapper}>
         <h3>{recipe.title}</h3>
         <div className={styles.timer}>
-          <span className='material-symbols-outlined icons-normal'>timer</span>
+          <Icon name='timer' />
           <span>{recipe.cookingTime}</span>
         </div>
         <Link to={`/recipes/${recipe.id}`} className='button'>
           <span>cook now</span>
-          <span className='material-symbols-outlined icons-normal'>
-            restaurant
-          </span>
+          <Icon name='restaurant' />
         </Link>
         <button
           onClick={() => setIsFav(prev => !prev)}
           className={`${styles.favBtn} ${isFav && styles.favActive}`}
         >
-          <span
-            className={`material-symbols-outlined ${
-              isFav ? 'icons-filled' : 'icons-normal'
-            }`}
-          >
-            favorite
-          </span>
+          <Icon name='favorite' isFilled={isFav} />
         </button>
       </div>
     </div>

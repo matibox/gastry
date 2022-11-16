@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import Recipe from '../../types/RecipeOverview';
+import { Icon } from '../Icon/Icon';
 import Loading from '../Loading/Loading';
 import { RecipeOverview } from '../RecipeOverview/RecipeOverview';
 
@@ -51,9 +52,7 @@ export function RecipesList({
             style={{ color: 'var(--black)' }}
           >
             <span>login</span>
-            <span className='material-symbols-outlined icons-normal'>
-              login
-            </span>
+            <Icon name='login' />
           </Link>
         </>
       )}

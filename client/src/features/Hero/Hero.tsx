@@ -5,6 +5,7 @@ import { useScroll } from './useScroll';
 
 // styles
 import styles from './Hero.module.css';
+import { Icon } from '../../components/Icon/Icon';
 
 interface HeroProps {
   scrollToRef: RefObject<HTMLElement>;
@@ -25,12 +26,7 @@ export function Hero({ scrollToRef }: HeroProps) {
         </h2>
         <button className='button' onClick={scrollTo}>
           <span>learn more</span>
-          <span
-            className='material-symbols-outlined icons-normal'
-            style={{ translate: '0 1px' }}
-          >
-            expand_more
-          </span>
+          <Icon name='expand_more' />
         </button>
       </div>
       <div className={styles.overlay} />

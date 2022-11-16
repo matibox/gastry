@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { Icon } from '../Icon/Icon';
 
 // styles
 import styles from './MobileMenu.module.css';
@@ -25,9 +26,7 @@ export function MobileMenu() {
           key={link.path}
           className={({ isActive }) => (isActive ? styles.active : '')}
         >
-          <span className='material-symbols-outlined icons-normal'>
-            {link.iconName}
-          </span>
+          <Icon name={link.iconName} />
         </NavLink>
       ))}
     </nav>
