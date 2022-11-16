@@ -1,3 +1,9 @@
+import { Searchbar } from '../features/Search/Searchbar';
+
 export function Search() {
-  return <div>Search</div>;
+  return (
+    <section>
+      <Searchbar />
+    </section>
+  );
 }
