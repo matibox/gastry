@@ -1,0 +1,42 @@
+.wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
+  background-color: var(--black);
+  border-radius: 0.8rem;
+  gap: 1.8rem;
+}
+
+.wrapper span {
+  color: var(--white);
+  order: 1;
+  transition: color 0.15s ease;
+}
+
+.wrapper input {
+  background: none;
+  border: none;
+  height: 100%;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 2rem;
+  color: var(--white);
+  order: 2;
+}
+
+.wrapper input::placeholder {
+  color: #adadad;
+  font-size: 1em;
+}
+
+.wrapper input:focus {
+  outline: none;
+}
+
+.wrapper input:focus::placeholder {
+  text-decoration: underline;
+}
+
+.wrapper input:focus + span {
+  color: var(--orange);
+}

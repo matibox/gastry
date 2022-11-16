@@ -18,15 +18,16 @@ export function Searchbar() {
   );
 
   return (
-    <div>
-      <Icon name='search' />
+    <div className={styles.wrapper}>
       <input
         type='text'
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           setQuery(e.target.value)
         }
         value={query}
+        placeholder='search recipes'
       />
+      <Icon name='search' />
     </div>
   );
 }
