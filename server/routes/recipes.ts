@@ -9,11 +9,24 @@ interface LatestRecipes {
   };
 }
 
+interface RecipesSearch {
+  Querystring: {
+    q: string;
+  };
+}
+
 export default function recipesRoutes(
   app: FastifyInstance,
   options: object,
   done: HookHandlerDoneFunction
 ) {
+  const recipeOverviewSelectFields = {
+    id: true,
+    title: true,
+    cookingTime: true,
+    thumbnail: true,
+  };
+
   app.post<LatestRecipes>('/recipes/latest', async (req, res) => {
     const { skip, take } = req.body;
 
@@ -23,17 +36,41 @@ export default function recipesRoutes(
 
     return await commitToDb(
       prisma.recipe.findMany({
-        select: {
-          id: true,
-          title: true,
-          cookingTime: true,
-          thumbnail: true,
-        },
+        select: recipeOverviewSelectFields,
         orderBy: {
           updatedAt: 'desc',
         },
         skip,
         take,
+      })
+    );
+  });
+
+  app.post<RecipesSearch>('/recipes/search', async (req, res) => {
+    const query = req.query.q;
+    if (!query) {
+      return app.httpErrors.badRequest('query was not provided');
+    }
+
+    return await commitToDb(
+      prisma.recipe.findMany({
+        select: recipeOverviewSelectFields,
+        where: {
+          OR: [
+            {
+              title: { contains: query },
+            },
+            {
+              ingredients: {
+                some: {
+                  name: {
+                    contains: query,
+                  },
+                },
+              },
+            },
+          ],
+        },
       })
     );
   });

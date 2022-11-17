@@ -21,3 +21,12 @@ export function getYourRecipes(skip: number, take: number) {
     },
   });
 }
+
+export function getByQuery(query: string) {
+  return makeRequest('/recipes/search', {
+    method: 'POST',
+    params: {
+      q: query,
+    },
+  });
+}

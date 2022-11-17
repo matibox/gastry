@@ -1,9 +1,11 @@
 import { Icon } from '../../components/Icon/Icon';
 import { useQuery } from './useQuery';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 // styles
 import styles from './Searchbar.module.css';
+import { useAsync } from '../../hooks/useAsync';
+import { getByQuery } from '../../services/recipes';
 
 export function Searchbar() {
   const [query, setQuery] = useState('');
