@@ -14,7 +14,7 @@ export default function recipesRoutes(
   options: object,
   done: HookHandlerDoneFunction
 ) {
-  app.post<LatestRecipes>('/latestRecipes', async (req, res) => {
+  app.post<LatestRecipes>('/recipes/latest', async (req, res) => {
     const { skip, take } = req.body;
 
     if (skip === undefined || take === undefined) {
