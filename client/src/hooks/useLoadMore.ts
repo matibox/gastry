@@ -12,9 +12,9 @@ export function useLoadMore(quantity: number, serviceFn: ServiceFn) {
   const [offset, setOffset] = useState(0);
   const [moreToLoad, setMoreToLoad] = useState(true);
 
-  const loadMore = useCallback(() => {
+  const loadMore = useCallback((...params: any[]) => {
     if (!moreToLoad) return;
-    serviceFn.run(offset, quantity).then(newData => {
+    serviceFn.run(offset, quantity, ...params).then(newData => {
       let length = data.length;
       setData(prevData => {
         return [

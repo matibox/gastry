@@ -1,32 +1,36 @@
 import { makeRequest } from './makeRequest';
 
-export function getLatestRecipes(skip: number, take: number) {
+export function getLatestRecipes(offset: number, quantity: number) {
   return makeRequest('/recipes/latest', {
     method: 'POST',
     data: {
-      skip,
-      take,
+      skip: offset,
+      take: quantity,
     },
   });
 }
 
-export function getYourRecipes(skip: number, take: number) {
+export function getYourRecipes(offset: number, quantity: number) {
   //! implement after auth, currently /latestRecipes is used
   //! as a placeholder
   return makeRequest('/recipes/latest', {
     method: 'POST',
     data: {
-      skip,
-      take,
+      skip: offset,
+      take: quantity,
     },
   });
 }
 
-export function getByQuery(query: string) {
+export function getByQuery(offset: number, quantity: number, query: string) {
   return makeRequest('/recipes/search', {
     method: 'POST',
     params: {
       q: query,
+    },
+    data: {
+      skip: offset,
+      take: quantity,
     },
   });
 }

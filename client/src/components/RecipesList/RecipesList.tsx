@@ -11,6 +11,7 @@ interface RecipesListProps {
   error: any;
   moreToLoad?: boolean;
   loggedIn?: boolean;
+  lastElRef?: React.RefObject<HTMLDivElement>;
 }
 
 export function RecipesList({
@@ -20,6 +21,7 @@ export function RecipesList({
   error,
   moreToLoad,
   loggedIn = true,
+  lastElRef,
 }: RecipesListProps) {
   if (error) return <p>Error</p>;
 
@@ -27,9 +29,19 @@ export function RecipesList({
     <>
       {loggedIn ? (
         <>
-          {recipes?.map(recipe => (
-            <RecipeOverview key={recipe.id} recipe={recipe} />
-          ))}
+          {recipes?.map((recipe, i) => {
+            if (!recipes[i + 1]) {
+              return (
+                <RecipeOverview
+                  key={recipe.id}
+                  recipe={recipe}
+                  lastElRef={lastElRef}
+                />
+              );
+            }
+
+            return <RecipeOverview key={recipe.id} recipe={recipe} />;
+          })}
           {loading && <Loading />}
           {loadMore && moreToLoad && (
             <button

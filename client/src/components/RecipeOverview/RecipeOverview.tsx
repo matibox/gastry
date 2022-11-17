@@ -8,15 +8,16 @@ import styles from './RecipeOverview.module.css';
 
 interface RecipeOverviewProps {
   recipe: Recipe;
+  lastElRef?: React.RefObject<HTMLDivElement>;
 }
 
-export function RecipeOverview({ recipe }: RecipeOverviewProps) {
+export function RecipeOverview({ recipe, lastElRef }: RecipeOverviewProps) {
   //TODO get favorite data from API
   //TODO more info on PC
   const [isFav, setIsFav] = useState(false);
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} ref={lastElRef}>
       <Link className={styles.link} to={`/recipes/${recipe.id}`}>
         <img
           className={styles.thumbnail}
