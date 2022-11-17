@@ -9,7 +9,7 @@ interface RecipesListProps {
   loadMore?: () => void;
   loading: boolean;
   error: any;
-  moreToLoad: boolean;
+  moreToLoad?: boolean;
   loggedIn?: boolean;
 }
 
