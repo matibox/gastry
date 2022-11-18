@@ -38,6 +38,19 @@ model Recipe {
   ingredients  Ingredient[]
   favourites   Favourite[]
   timeOfDays   TimeOfDay[]
+  types        RecipeType[]
+}
+
+enum RecipeTypeName {
+  vegetarian
+  vegan
+  spicy
+}
+
+model RecipeType {
+  id      String         @id @default(uuid())
+  name    RecipeTypeName
+  recipes Recipe[]
 }
 
 model Ingredient {

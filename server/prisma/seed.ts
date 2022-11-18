@@ -69,6 +69,16 @@ async function main() {
       userId: user2.id,
       thumbnail:
         'https://res.cloudinary.com/drjsjdeff/image/upload/v1668449869/dev_setups/thumbnail_kmgait.png',
+      types: {
+        create: [
+          {
+            name: 'vegetarian',
+          },
+          {
+            name: 'spicy',
+          },
+        ],
+      },
     },
   });
 
