@@ -49,6 +49,24 @@ export default function recipesRoutes(
   app.post<RecipesSearch>('/recipes/search', async (req, res) => {
     const query = req.query.q;
     const { skip, take } = req.body;
+    let moreToLoad: boolean;
+
+    const recipeWhereFields = {
+      OR: [
+        {
+          title: { contains: query },
+        },
+        {
+          ingredients: {
+            some: {
+              name: {
+                contains: query,
+              },
+            },
+          },
+        },
+      ],
+    };
 
     if (skip === undefined || take === undefined) {
       return app.httpErrors.badRequest('skip/take is undefined');
@@ -58,29 +76,34 @@ export default function recipesRoutes(
       return app.httpErrors.badRequest('query was not provided');
     }
 
-    return await commitToDb(
-      prisma.recipe.findMany({
+    try {
+      const recipes = await prisma.recipe.findMany({
         select: recipeOverviewSelectFields,
-        where: {
-          OR: [
-            {
-              title: { contains: query },
-            },
-            {
-              ingredients: {
-                some: {
-                  name: {
-                    contains: query,
-                  },
-                },
-              },
-            },
-          ],
-        },
+        where: recipeWhereFields,
         skip,
         take,
-      })
-    );
+      });
+
+      const nextRecipes = await prisma.recipe.findMany({
+        select: recipeOverviewSelectFields,
+        where: recipeWhereFields,
+        skip: skip + take,
+        take,
+      });
+
+      if (nextRecipes.length > 0) {
+        moreToLoad = true;
+      } else {
+        moreToLoad = false;
+      }
+
+      return {
+        recipes,
+        moreToLoad,
+      };
+    } catch (e) {
+      return app.httpErrors.internalServerError();
+    }
   });
 
   done();

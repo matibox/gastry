@@ -1,5 +1,6 @@
 import { Searchbar } from '../features/Search/Searchbar';
 import { SearchContextProvider } from '../features/Search/searchContext';
+import { SearchResults } from '../features/Search/SearchResults';
 
 export function Search() {
   return (
@@ -17,6 +18,7 @@ export function Search() {
         <section style={{ width: '100%' }}>
           <Searchbar />
         </section>
+        <SearchResults />
       </main>
     </SearchContextProvider>
   );
