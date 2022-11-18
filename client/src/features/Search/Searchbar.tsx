@@ -1,11 +1,15 @@
 import { Icon } from '../../components/Icon/Icon';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
+import { useSearch } from './searchContext';
 
 // styles
 import styles from './Searchbar.module.css';
 
 export function Searchbar() {
-  const [query, setQuery] = useState('');
+  const searchContext = useSearch();
+  if (!searchContext) return null;
+  const { query, setQuery } = searchContext;
+
   return (
     <>
       <div className={styles.wrapper}>
