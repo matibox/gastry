@@ -38,10 +38,6 @@ export function SearchContextProvider({
   const { recipes, ...recipesState } = useQuery(query);
   const { data: filters, ...filtersState } = useAsync(getFilters);
 
-  useEffect(() => {
-    console.log(filters);
-  }, [filters]);
-
   return (
     <SearchContext.Provider
       value={{

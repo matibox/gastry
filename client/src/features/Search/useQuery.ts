@@ -13,10 +13,6 @@ export function useQuery(query: string) {
   const [offset, setOffset] = useState(0);
   const [moreToLoad, setMoreToLoad] = useState(false);
 
-  useEffect(() => {
-    console.log(recipes);
-  }, [recipes]);
-
   useDebounce(
     () => {
       if (!query) {
@@ -35,7 +31,6 @@ export function useQuery(query: string) {
   const loadMore = useCallback(() => {
     if (!moreToLoad) return;
     getRecipesByQueryFn.run(offset + QUANTITY, QUANTITY, query).then(data => {
-      console.log('new recipes', data);
       setRecipes(prevRecipes => {
         return [
           ...new Map(
