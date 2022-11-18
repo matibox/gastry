@@ -2,11 +2,13 @@ import app from './utils/fastify';
 import dotenv from 'dotenv';
 dotenv.config();
 import recipes from './routes/recipes';
+import filters from './routes/filters';
 
 if (!process.env.PORT) process.exit(1);
 const PORT = Number(process.env.PORT);
 
 app.register(recipes);
+app.register(filters);
 
 app.listen({ port: PORT }, (err, address) => {
   if (err) {
