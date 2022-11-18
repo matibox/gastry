@@ -1,15 +1,24 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useAsync } from '../../hooks/useAsync';
+import { getFilters } from '../../services/filters';
 import RecipeOverview from '../../types/RecipeOverview';
 import { useQuery } from './useQuery';
 
 interface TSearchContext {
   query: string;
   setQuery: React.Dispatch<React.SetStateAction<string>>;
-  recipes: undefined | RecipeOverview[];
-  loading: boolean;
-  error: undefined | string;
-  moreToLoad: boolean;
-  loadMore: () => void;
+  recipes: {
+    data: undefined | RecipeOverview[];
+    loading: boolean;
+    error: undefined | string;
+    moreToLoad: boolean;
+    loadMore: () => void;
+  };
+  filters: {
+    data: undefined | { name: string }[];
+    loading: boolean;
+    error: undefined | string;
+  };
 }
 
 interface SearchContextProviderProps {
@@ -26,18 +35,26 @@ export function SearchContextProvider({
   children,
 }: SearchContextProviderProps) {
   const [query, setQuery] = useState('');
-  const { recipes, loading, error, moreToLoad, loadMore } = useQuery(query);
+  const { recipes, ...recipesState } = useQuery(query);
+  const { data: filters, ...filtersState } = useAsync(getFilters);
+
+  useEffect(() => {
+    console.log(filters);
+  }, [filters]);
 
   return (
     <SearchContext.Provider
       value={{
         query,
         setQuery,
-        recipes,
-        loading,
-        error,
-        moreToLoad,
-        loadMore,
+        recipes: {
+          data: recipes,
+          ...recipesState,
+        },
+        filters: {
+          data: filters,
+          ...filtersState,
+        },
       }}
     >
       {children}

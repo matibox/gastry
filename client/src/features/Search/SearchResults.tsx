@@ -4,10 +4,10 @@ import { useSearch } from './searchContext';
 export function SearchResults() {
   const searchContext = useSearch();
   if (!searchContext) return null;
-  const { recipes, loading, error, loadMore, moreToLoad } = searchContext;
+  const { data, loading, error, loadMore, moreToLoad } = searchContext.recipes;
   return (
     <RecipesList
-      recipes={recipes}
+      recipes={data}
       loading={loading}
       error={error}
       loadMore={loadMore}
