@@ -1,19 +1,11 @@
 import { Icon } from '../../components/Icon/Icon';
-import { useQuery } from './useQuery';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 // styles
 import styles from './Searchbar.module.css';
 
-interface SearchbarProps {
-  callback: () => void;
-  query: string;
-  setQuery: React.Dispatch<React.SetStateAction<string>>;
-}
-
-export function Searchbar({ callback, query, setQuery }: SearchbarProps) {
-  useQuery(callback, 500, [query]);
-
+export function Searchbar() {
+  const [query, setQuery] = useState('');
   return (
     <>
       <div className={styles.wrapper}>
