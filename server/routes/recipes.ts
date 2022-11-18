@@ -49,7 +49,6 @@ export default function recipesRoutes(
   app.post<RecipesSearch>('/recipes/search', async (req, res) => {
     const query = req.query.q;
     const { skip, take } = req.body;
-    let moreToLoad: boolean;
 
     const recipeWhereFields = {
       OR: [
@@ -91,15 +90,9 @@ export default function recipesRoutes(
         take,
       });
 
-      if (nextRecipes.length > 0) {
-        moreToLoad = true;
-      } else {
-        moreToLoad = false;
-      }
-
       return {
         recipes,
-        moreToLoad,
+        moreToLoad: nextRecipes.length > 0,
       };
     } catch (e) {
       return app.httpErrors.internalServerError();
