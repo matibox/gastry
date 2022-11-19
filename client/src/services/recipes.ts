@@ -22,13 +22,28 @@ export function getYourRecipes(offset: number, quantity: number) {
   });
 }
 
-export function getByQuery(offset: number, quantity: number, query: string) {
+enum Filters {
+  'vegetarian',
+  'vegan',
+  'spicy',
+}
+type SortBy = [Filters, 'asc' | 'desc'];
+
+export function getByQuery(
+  offset: number,
+  quantity: number,
+  query: string,
+  filters: Filters[],
+  sortBy: SortBy
+) {
   return makeRequest('/recipes/search', {
     method: 'GET',
     params: {
       q: query,
       skip: offset,
       take: quantity,
+      filters: filters.join(','),
+      sortBy: sortBy.join(':'),
     },
   });
 }
