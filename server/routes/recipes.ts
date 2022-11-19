@@ -60,11 +60,10 @@ export default function recipesRoutes(
       ','
     ) as Prisma.Enumerable<RecipeTypeName>;
 
-    let recipeWhereFields: {};
+    let recipeWhereFields: {}[] = [];
 
-    if (!filtersArray) {
-      console.log('only query');
-      recipeWhereFields = {
+    if (query) {
+      recipeWhereFields.push({
         OR: [
           {
             title: { contains: query },
@@ -79,51 +78,31 @@ export default function recipesRoutes(
             },
           },
         ],
-      };
-    } else {
-      recipeWhereFields = {
-        AND: [
-          {
-            OR: [
-              {
-                title: { contains: query },
-              },
-              {
-                ingredients: {
-                  some: {
-                    name: {
-                      contains: query,
-                    },
-                  },
-                },
-              },
-            ],
-          },
-          {
-            types: {
-              some: {
-                name: {
-                  in: filtersArray,
-                },
-              },
+      });
+    }
+
+    if (filtersArray) {
+      recipeWhereFields.push({
+        types: {
+          some: {
+            name: {
+              in: filtersArray,
             },
           },
-        ],
-      };
+        },
+      });
     }
 
     if (skip === undefined || take === undefined) {
       return app.httpErrors.badRequest('skip/take is undefined');
     }
 
-    if (!query) {
-      return app.httpErrors.badRequest('query was not provided');
-    }
-
     try {
       const recipes = await prisma.recipe.findMany({
         select: recipeOverviewSelectFields,
-        where: recipeWhereFields,
+        where: {
+          AND: recipeWhereFields,
+        },
         orderBy: {
           [sortedItem]: order,
         },
@@ -133,7 +112,9 @@ export default function recipesRoutes(
 
       const nextRecipes = await prisma.recipe.findMany({
         select: recipeOverviewSelectFields,
-        where: recipeWhereFields,
+        where: {
+          AND: recipeWhereFields,
+        },
         orderBy: {
           [sortedItem]: order,
         },

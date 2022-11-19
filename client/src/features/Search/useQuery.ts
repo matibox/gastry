@@ -17,7 +17,7 @@ export function useQuery(query: string, filters: Filters[], sortBy: SortBy) {
 
   useDebounce(
     () => {
-      if (!query) {
+      if (!query && filters.length === 0 && sortBy.length === 0) {
         setRecipes([]);
         return;
       }
@@ -29,7 +29,7 @@ export function useQuery(query: string, filters: Filters[], sortBy: SortBy) {
         });
     },
     DELAY,
-    [query]
+    [query, filters, sortBy]
   );
 
   const loadMore = useCallback(() => {
