@@ -39,6 +39,6 @@
   color: var(--white);
 }
 
-.btn.active > span {
+.btn.active > span:last-child {
   color: var(--beige);
 }

@@ -6,12 +6,26 @@ export function SearchResults() {
   if (!searchContext) return null;
   const { data, loading, error, loadMore, moreToLoad } = searchContext.recipes;
   return (
-    <RecipesList
-      recipes={data}
-      loading={loading}
-      error={error}
-      loadMore={loadMore}
-      moreToLoad={moreToLoad}
-    />
+    <>
+      {data && data.length > 0 && (
+        <h1
+          style={{
+            alignSelf: 'flex-start',
+            fontFamily: '"Montserrat", sans-serif',
+            fontWeight: '500',
+            fontSize: '2.4rem',
+          }}
+        >
+          Found {data.length} recipe{data.length > 1 && 's'}
+        </h1>
+      )}
+      <RecipesList
+        recipes={data}
+        loading={loading}
+        error={error}
+        loadMore={loadMore}
+        moreToLoad={moreToLoad}
+      />
+    </>
   );
 }
