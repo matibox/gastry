@@ -54,7 +54,7 @@ export function SearchContextProvider({
   const { data: availFiltersData, ...availFiltersState } = useAsync(getFilters);
   const [availFilters, setAvailFilters] = useState<FilterObj[]>([]);
   const [filters, setFilters] = useState<Filters[]>([]);
-  const [sortBy, setSortBy] = useState<SortBy>([]);
+  const [sortBy, setSortBy] = useState<SortBy>(['updatedAt', 'desc']);
 
   const { recipes, ...recipesState } = useQuery(query, filters, sortBy);
 

@@ -97,6 +97,13 @@ export default function recipesRoutes(
       return app.httpErrors.badRequest('skip/take is undefined');
     }
 
+    if (recipeWhereFields.length === 0) {
+      return {
+        recipes: [],
+        moreToLoad: false,
+      };
+    }
+
     try {
       const recipes = await prisma.recipe.findMany({
         select: recipeOverviewSelectFields,
