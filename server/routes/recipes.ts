@@ -33,7 +33,7 @@ export default function recipesRoutes(
     types: true,
   };
 
-  app.post<LatestRecipes>('/recipes/latest', async (req, res) => {
+  app.get<LatestRecipes>('/recipes/latest', async (req, res) => {
     const { skip, take } = req.query;
 
     if (skip === undefined || take === undefined) {
@@ -52,7 +52,7 @@ export default function recipesRoutes(
     );
   });
 
-  app.post<RecipesSearch>('/recipes/search', async (req, res) => {
+  app.get<RecipesSearch>('/recipes/search', async (req, res) => {
     const { q: query, filters, sortBy, skip, take } = req.query;
 
     const [sortedItem, order] = sortBy?.split(':') || ['updatedAt', 'desc'];
