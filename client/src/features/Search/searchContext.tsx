@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { useAsync } from '../../hooks/useAsync';
 import { getFilters } from '../../services/filters';
 import RecipeOverview from '../../types/RecipeOverview';

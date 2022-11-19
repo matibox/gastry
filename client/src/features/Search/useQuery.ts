@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useAsyncFn } from '../../hooks/useAsync';
 import { useDebounce } from '../../hooks/useDebounce';
 import { getByQuery } from '../../services/recipes';
