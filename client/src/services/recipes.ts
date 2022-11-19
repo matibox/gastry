@@ -28,8 +28,8 @@ export function getByQuery(
   offset: number,
   quantity: number,
   query: string,
-  filters: Filters[],
-  sortBy: SortBy
+  filters?: Filters[],
+  sortBy?: SortBy
 ) {
   return makeRequest('/recipes/search', {
     method: 'GET',
@@ -37,8 +37,8 @@ export function getByQuery(
       q: query,
       skip: offset,
       take: quantity,
-      filters: filters.join(','),
-      sortBy: sortBy.join(':'),
+      filters: filters?.join(',') || undefined,
+      sortBy: sortBy?.join(':') || undefined,
     },
   });
 }

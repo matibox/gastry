@@ -8,7 +8,7 @@ import styles from './Searchbar.module.css';
 export function Searchbar() {
   const searchContext = useSearch();
   if (!searchContext) return null;
-  const { query, setQuery } = searchContext;
+  const { data: query, setQuery } = searchContext.query;
 
   return (
     <>

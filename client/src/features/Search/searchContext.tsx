@@ -1,12 +1,20 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useAsync } from '../../hooks/useAsync';
 import { getFilters } from '../../services/filters';
 import RecipeOverview from '../../types/RecipeOverview';
 import { useQuery } from './useQuery';
+import { Filters } from '../../types/Filters';
+import { SortBy } from '../../types/SortBy';
+
+interface FilterObj {
+  name: string;
+}
 
 interface TSearchContext {
-  query: string;
-  setQuery: React.Dispatch<React.SetStateAction<string>>;
+  query: {
+    data: string;
+    setQuery: React.Dispatch<React.SetStateAction<string>>;
+  };
   recipes: {
     data: undefined | RecipeOverview[];
     loading: boolean;
@@ -14,10 +22,18 @@ interface TSearchContext {
     moreToLoad: boolean;
     loadMore: () => void;
   };
-  filters: {
-    data: undefined | { name: string }[];
+  availFilters: {
+    data: Filters[];
     loading: boolean;
     error: undefined | string;
+  };
+  filters: {
+    data: Filters[];
+    setFilters: React.Dispatch<React.SetStateAction<Filters[]>>;
+  };
+  sortBy: {
+    data: SortBy;
+    setSortBy: React.Dispatch<React.SetStateAction<SortBy>>;
   };
 }
 
@@ -35,21 +51,40 @@ export function SearchContextProvider({
   children,
 }: SearchContextProviderProps) {
   const [query, setQuery] = useState('');
-  const { recipes, ...recipesState } = useQuery(query);
-  const { data: filters, ...filtersState } = useAsync(getFilters);
+  const { data: availFiltersData, ...availFiltersState } = useAsync(getFilters);
+  const [availFilters, setAvailFilters] = useState<FilterObj[]>([]);
+  const [filters, setFilters] = useState<Filters[]>([]);
+  const [sortBy, setSortBy] = useState<SortBy>([]);
+
+  const { recipes, ...recipesState } = useQuery(query, filters, sortBy);
+
+  useEffect(() => {
+    if (!availFiltersData) return;
+    setAvailFilters(availFiltersData);
+  }, [availFiltersData]);
 
   return (
     <SearchContext.Provider
       value={{
-        query,
-        setQuery,
+        query: {
+          data: query,
+          setQuery,
+        },
         recipes: {
           data: recipes,
           ...recipesState,
         },
+        availFilters: {
+          data: availFilters.map(filter => filter.name) as Filters[],
+          ...availFiltersState,
+        },
         filters: {
           data: filters,
-          ...filtersState,
+          setFilters,
+        },
+        sortBy: {
+          data: sortBy,
+          setSortBy,
         },
       }}
     >
