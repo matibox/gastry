@@ -3,18 +3,20 @@ import prisma from '../utils/prisma';
 import commitToDb from '../utils/commitToDb';
 import { Prisma, RecipeTypeName } from '@prisma/client';
 
-interface Pagination {
-  Body: {
-    skip: number;
-    take: number;
+interface LatestRecipes {
+  Querystring: {
+    skip: string;
+    take: string;
   };
 }
 
-interface RecipesSearch extends Pagination {
+interface RecipesSearch {
   Querystring: {
     q: string;
     filters: string;
     sortBy: string;
+    skip: string;
+    take: string;
   };
 }
 
@@ -31,8 +33,8 @@ export default function recipesRoutes(
     types: true,
   };
 
-  app.post<Pagination>('/recipes/latest', async (req, res) => {
-    const { skip, take } = req.body;
+  app.post<LatestRecipes>('/recipes/latest', async (req, res) => {
+    const { skip, take } = req.query;
 
     if (skip === undefined || take === undefined) {
       return app.httpErrors.badRequest('skip/take is undefined');
@@ -44,15 +46,14 @@ export default function recipesRoutes(
         orderBy: {
           updatedAt: 'desc',
         },
-        skip,
-        take,
+        skip: parseInt(skip),
+        take: parseInt(take),
       })
     );
   });
 
   app.post<RecipesSearch>('/recipes/search', async (req, res) => {
-    const { q: query, filters, sortBy } = req.query;
-    const { skip, take } = req.body;
+    const { q: query, filters, sortBy, skip, take } = req.query;
 
     const [sortedItem, order] = sortBy?.split(':') || ['updatedAt', 'desc'];
     const filtersArray = filters?.split(
@@ -126,8 +127,8 @@ export default function recipesRoutes(
         orderBy: {
           [sortedItem]: order,
         },
-        skip,
-        take,
+        skip: parseInt(skip),
+        take: parseInt(take),
       });
 
       const nextRecipes = await prisma.recipe.findMany({
@@ -136,8 +137,8 @@ export default function recipesRoutes(
         orderBy: {
           [sortedItem]: order,
         },
-        skip: skip + take,
-        take,
+        skip: parseInt(skip) + parseInt(take),
+        take: parseInt(take),
       });
 
       return {
