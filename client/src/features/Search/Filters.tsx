@@ -11,7 +11,11 @@ export function Filters() {
   return (
     <div className={styles.wrapper}>
       <span>filter by</span>
-      <div className={styles.optionsWrapper}>
+      <div
+        className={`${styles.optionsWrapper} ${
+          availFilters.loading && styles.loading
+        }`}
+      >
         {availFilters.data.map(filter => (
           <Checkbox key={filter} label={filter} />
         ))}
