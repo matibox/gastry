@@ -1,3 +1,5 @@
+import { Filters } from '../types/Filters';
+import { SortBy } from '../types/SortBy';
 import { makeRequest } from './makeRequest';
 
 export function getLatestRecipes(offset: number, quantity: number) {
@@ -21,10 +23,6 @@ export function getYourRecipes(offset: number, quantity: number) {
     },
   });
 }
-
-type Filters = 'vegetarian' | 'vegan' | 'spicy';
-type SortEl = 'updatedAt' | 'cookingTime';
-type SortBy = [SortEl, 'asc' | 'desc'];
 
 export function getByQuery(
   offset: number,
