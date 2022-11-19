@@ -1,6 +1,7 @@
 import { FastifyInstance, HookHandlerDoneFunction } from 'fastify';
 import prisma from '../utils/prisma';
 import commitToDb from '../utils/commitToDb';
+import { Prisma, RecipeTypeName } from '@prisma/client';
 
 interface Pagination {
   Body: {
@@ -12,6 +13,8 @@ interface Pagination {
 interface RecipesSearch extends Pagination {
   Querystring: {
     q: string;
+    filters: string;
+    sortBy: string;
   };
 }
 
@@ -25,6 +28,7 @@ export default function recipesRoutes(
     title: true,
     cookingTime: true,
     thumbnail: true,
+    types: true,
   };
 
   app.post<Pagination>('/recipes/latest', async (req, res) => {
@@ -47,25 +51,65 @@ export default function recipesRoutes(
   });
 
   app.post<RecipesSearch>('/recipes/search', async (req, res) => {
-    const query = req.query.q;
+    const { q: query, filters, sortBy } = req.query;
     const { skip, take } = req.body;
 
-    const recipeWhereFields = {
-      OR: [
-        {
-          title: { contains: query },
-        },
-        {
-          ingredients: {
-            some: {
-              name: {
-                contains: query,
+    const [sortedItem, order] = sortBy?.split(':') || ['updatedAt', 'desc'];
+    const filtersArray = filters?.split(
+      ','
+    ) as Prisma.Enumerable<RecipeTypeName>;
+
+    let recipeWhereFields: {};
+
+    if (!filtersArray) {
+      console.log('only query');
+      recipeWhereFields = {
+        OR: [
+          {
+            title: { contains: query },
+          },
+          {
+            ingredients: {
+              some: {
+                name: {
+                  contains: query,
+                },
               },
             },
           },
-        },
-      ],
-    };
+        ],
+      };
+    } else {
+      recipeWhereFields = {
+        AND: [
+          {
+            OR: [
+              {
+                title: { contains: query },
+              },
+              {
+                ingredients: {
+                  some: {
+                    name: {
+                      contains: query,
+                    },
+                  },
+                },
+              },
+            ],
+          },
+          {
+            types: {
+              some: {
+                name: {
+                  in: filtersArray,
+                },
+              },
+            },
+          },
+        ],
+      };
+    }
 
     if (skip === undefined || take === undefined) {
       return app.httpErrors.badRequest('skip/take is undefined');
@@ -79,6 +123,9 @@ export default function recipesRoutes(
       const recipes = await prisma.recipe.findMany({
         select: recipeOverviewSelectFields,
         where: recipeWhereFields,
+        orderBy: {
+          [sortedItem]: order,
+        },
         skip,
         take,
       });
@@ -86,6 +133,9 @@ export default function recipesRoutes(
       const nextRecipes = await prisma.recipe.findMany({
         select: recipeOverviewSelectFields,
         where: recipeWhereFields,
+        orderBy: {
+          [sortedItem]: order,
+        },
         skip: skip + take,
         take,
       });
