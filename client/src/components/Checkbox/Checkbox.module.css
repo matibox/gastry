@@ -1,0 +1,54 @@
+.wrapper {
+  display: block;
+  position: relative;
+  cursor: pointer;
+  color: var(--background);
+  font-weight: 500;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-shadow: inset 0 0 0 2px var(--beige);
+  border-radius: 1rem;
+  transition: all 0.1s ease;
+  width: 2.4rem;
+  height: 2.4rem;
+  color: var(--white);
+}
+
+.checkbox:hover ~ .fill,
+.checkbox:checked ~ .fill {
+  background-color: var(--beige);
+}
+
+.checkbox:checked ~ .fill > span {
+  opacity: 1;
+}
+
+.fill > span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
+  font-size: 2.3rem;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+  color: var(--dark-blue);
+}
+
+.label {
+  padding-left: 4rem;
+  font-size: 1.7rem;
+}
