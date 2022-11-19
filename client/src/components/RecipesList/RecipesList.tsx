@@ -28,12 +28,9 @@ export function RecipesList({
       {loggedIn ? (
         <>
           {!loading &&
-            recipes?.map((recipe, i) => {
-              if (!recipes[i + 1]) {
-                return <RecipeOverview key={recipe.id} recipe={recipe} />;
-              }
-              return <RecipeOverview key={recipe.id} recipe={recipe} />;
-            })}
+            recipes?.map((recipe, i) => (
+              <RecipeOverview key={recipe.id} recipe={recipe} />
+            ))}
           {loading && <Loading />}
           {loadMore && moreToLoad && (
             <button
