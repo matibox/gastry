@@ -22,12 +22,9 @@ export function getYourRecipes(offset: number, quantity: number) {
   });
 }
 
-enum Filters {
-  'vegetarian',
-  'vegan',
-  'spicy',
-}
-type SortBy = [Filters, 'asc' | 'desc'];
+type Filters = 'vegetarian' | 'vegan' | 'spicy';
+type SortEl = 'updatedAt' | 'cookingTime';
+type SortBy = [SortEl, 'asc' | 'desc'];
 
 export function getByQuery(
   offset: number,
