@@ -32,13 +32,18 @@ const circleTransition: Transition = {
   ease: 'easeInOut',
 };
 
-export default function Loading() {
+interface LoadingProps {
+  height?: string;
+}
+
+export default function Loading({ height }: LoadingProps) {
   return (
     <motion.div
       className={styles.loading}
       variants={containerVariants}
       initial='start'
       animate='end'
+      style={height ? { height } : { height: '20rem' }}
     >
       <motion.div
         className={styles.circle}

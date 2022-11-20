@@ -36,14 +36,14 @@ const options: TOption[] = [
 export function SortBy() {
   const searchContext = useSearch();
   if (!searchContext) return null;
-  const { data: optionsOpened } = searchContext.optionsOpened;
+  const { data: optionsOpened, toggle } = searchContext.optionsOpened;
 
   return (
     <AnimatePresence>
       {optionsOpened && (
         <motion.div
           className={styles.wrapper}
-          initial={{ opacity: 0 }}
+          initial={toggle ? { opacity: 0 } : false}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{

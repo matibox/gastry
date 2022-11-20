@@ -18,7 +18,7 @@ export function SearchResults() {
             fontSize: '2.4rem',
           }}
         >
-          {!notFound && (
+          {!notFound && data.length > 0 && (
             <>
               Found {data.length} recipe{data.length > 1 && 's'}
             </>

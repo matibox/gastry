@@ -4,7 +4,7 @@ import { SearchContextProvider } from '../features/Search/searchContext';
 import { SearchResults } from '../features/Search/SearchResults';
 import { SortBy } from '../features/Search/SortBy';
 
-import styles from './Search.module.css';
+import styles from './SearchSec.module.css';
 
 export function Search() {
   return (

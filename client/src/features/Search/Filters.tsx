@@ -14,7 +14,7 @@ export function Filters() {
       {optionsOpened.data && (
         <motion.div
           className={styles.wrapper}
-          initial={{ opacity: 0 }}
+          initial={optionsOpened.toggle ? { opacity: 0 } : false}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{
@@ -31,7 +31,7 @@ export function Filters() {
             {availFilters.data.map(filter => (
               <Checkbox key={filter} label={filter} />
             ))}
-            {availFilters.loading && <Loading />}
+            {availFilters.loading && <Loading height='100%' />}
             {availFilters.error && <p>Error</p>}
           </div>
         </motion.div>
