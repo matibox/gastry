@@ -30,7 +30,12 @@ export default function recipesRoutes(
     title: true,
     cookingTime: true,
     thumbnail: true,
-    types: true,
+    types: {
+      select: {
+        name: true,
+      },
+    },
+    updatedAt: true,
   };
 
   app.get<LatestRecipes>('/recipes/latest', async (req, res) => {
@@ -53,9 +58,8 @@ export default function recipesRoutes(
   });
 
   app.get<RecipesSearch>('/recipes/search', async (req, res) => {
-    const { q: query, filters, sortBy, skip, take } = req.query;
+    const { q: query, filters, skip, take } = req.query;
 
-    const [sortedItem, order] = sortBy?.split(':') || ['updatedAt', 'desc'];
     const filtersArray = filters?.split(
       ','
     ) as Prisma.Enumerable<RecipeTypeName>;
@@ -110,9 +114,6 @@ export default function recipesRoutes(
         where: {
           AND: recipeWhereFields,
         },
-        orderBy: {
-          [sortedItem]: order,
-        },
         skip: parseInt(skip),
         take: parseInt(take),
       });
@@ -121,9 +122,6 @@ export default function recipesRoutes(
         select: recipeOverviewSelectFields,
         where: {
           AND: recipeWhereFields,
-        },
-        orderBy: {
-          [sortedItem]: order,
         },
         skip: parseInt(skip) + parseInt(take),
         take: parseInt(take),

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAsyncFn } from '../../hooks/useAsync';
 import { useDebounce } from '../../hooks/useDebounce';
 import { getByQuery } from '../../services/recipes';
@@ -6,36 +6,57 @@ import { Filters } from '../../types/Filters';
 import RecipeOverview from '../../types/RecipeOverview';
 import { SortBy } from '../../types/SortBy';
 
-const QUANTITY = 3;
+const QUANTITY = 1;
 const DELAY = 500;
 
 export function useQuery(query: string, filters: Filters[], sortBy: SortBy) {
   const getRecipesByQueryFn = useAsyncFn(getByQuery);
   const [recipes, setRecipes] = useState<RecipeOverview[]>([]);
+  const [sortedRecipes, setSortedRecipes] = useState<RecipeOverview[]>([]);
   const [offset, setOffset] = useState(0);
   const [moreToLoad, setMoreToLoad] = useState(false);
 
   useDebounce(
     () => {
-      if (!query && filters.length === 0 && sortBy.length === 0) {
+      if (!query && filters.length === 0) {
         setRecipes([]);
         return;
       }
-      getRecipesByQueryFn
-        .run(offset, QUANTITY, query, filters, sortBy)
-        .then(data => {
-          setRecipes(data.recipes);
-          setMoreToLoad(data.moreToLoad);
-        });
+      getRecipesByQueryFn.run(offset, QUANTITY, query, filters).then(data => {
+        setRecipes(data.recipes);
+        setMoreToLoad(data.moreToLoad);
+      });
     },
     DELAY,
-    [query, filters, sortBy]
+    [query, filters]
   );
+
+  useEffect(() => {
+    if (recipes.length === 0) return;
+    console.log(recipes, sortBy);
+    const [item, order] = sortBy;
+    setSortedRecipes(() => {
+      let newRecipes = [...recipes].sort((a, b) => {
+        if (item === 'updatedAt') {
+          return (
+            new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+          );
+        }
+        if (item === 'cookingTime') return b.cookingTime - a.cookingTime;
+
+        return 0;
+      });
+
+      if (order === 'asc') return newRecipes.reverse();
+      console.log(newRecipes);
+      return newRecipes;
+    });
+  }, [recipes, sortBy]);
 
   const loadMore = useCallback(() => {
     if (!moreToLoad) return;
     getRecipesByQueryFn
-      .run(offset + QUANTITY, QUANTITY, query, filters, sortBy)
+      .run(offset + QUANTITY, QUANTITY, query, filters)
       .then(data => {
         setRecipes(prevRecipes => {
           return [
@@ -53,7 +74,7 @@ export function useQuery(query: string, filters: Filters[], sortBy: SortBy) {
   }, [query, moreToLoad]);
 
   return {
-    recipes,
+    recipes: sortedRecipes,
     loading: getRecipesByQueryFn.loading,
     error: getRecipesByQueryFn.error,
     loadMore,

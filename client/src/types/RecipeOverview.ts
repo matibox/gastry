@@ -3,4 +3,5 @@ export default interface RecipeOverview {
   title: string;
   cookingTime: number;
   thumbnail: string;
+  updatedAt: string;
 }
