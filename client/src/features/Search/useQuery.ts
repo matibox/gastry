@@ -15,6 +15,7 @@ export function useQuery(query: string, filters: Filters[], sortBy: SortBy) {
   const [sortedRecipes, setSortedRecipes] = useState<RecipeOverview[]>([]);
   const [offset, setOffset] = useState(0);
   const [moreToLoad, setMoreToLoad] = useState(false);
+  const [notFound, setNotFound] = useState(false);
 
   useDebounce(
     () => {
@@ -25,6 +26,7 @@ export function useQuery(query: string, filters: Filters[], sortBy: SortBy) {
       getRecipesByQueryFn.run(offset, QUANTITY, query, filters).then(data => {
         setRecipes(data.recipes);
         setMoreToLoad(data.moreToLoad);
+        setNotFound(data.notFound);
       });
     },
     DELAY,
@@ -33,7 +35,6 @@ export function useQuery(query: string, filters: Filters[], sortBy: SortBy) {
 
   useEffect(() => {
     if (recipes.length === 0) return;
-    console.log(recipes, sortBy);
     const [item, order] = sortBy;
     setSortedRecipes(() => {
       let newRecipes = [...recipes].sort((a, b) => {
@@ -48,7 +49,6 @@ export function useQuery(query: string, filters: Filters[], sortBy: SortBy) {
       });
 
       if (order === 'asc') return newRecipes.reverse();
-      console.log(newRecipes);
       return newRecipes;
     });
   }, [recipes, sortBy]);
@@ -79,5 +79,6 @@ export function useQuery(query: string, filters: Filters[], sortBy: SortBy) {
     error: getRecipesByQueryFn.error,
     loadMore,
     moreToLoad,
+    notFound,
   };
 }

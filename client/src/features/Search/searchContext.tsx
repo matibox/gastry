@@ -21,6 +21,7 @@ interface TSearchContext {
     error: undefined | string;
     moreToLoad: boolean;
     loadMore: () => void;
+    notFound: boolean;
   };
   availFilters: {
     data: Filters[];

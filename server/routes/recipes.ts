@@ -29,11 +29,6 @@ export default function recipesRoutes(
     title: true,
     cookingTime: true,
     thumbnail: true,
-    types: {
-      select: {
-        name: true,
-      },
-    },
     updatedAt: true,
   };
 
@@ -129,6 +124,7 @@ export default function recipesRoutes(
       return {
         recipes,
         moreToLoad: nextRecipes.length > 0,
+        notFound: recipes.length === 0,
       };
     } catch (e) {
       return app.httpErrors.internalServerError();

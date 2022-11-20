@@ -4,10 +4,12 @@ import { useSearch } from './searchContext';
 export function SearchResults() {
   const searchContext = useSearch();
   if (!searchContext) return null;
-  const { data, loading, error, loadMore, moreToLoad } = searchContext.recipes;
+  const { data, loading, error, loadMore, moreToLoad, notFound } =
+    searchContext.recipes;
+
   return (
     <>
-      {data && data.length > 0 && (
+      {data && (
         <h1
           style={{
             alignSelf: 'flex-start',
@@ -16,7 +18,12 @@ export function SearchResults() {
             fontSize: '2.4rem',
           }}
         >
-          Found {data.length} recipe{data.length > 1 && 's'}
+          {!notFound && (
+            <>
+              Found {data.length} recipe{data.length > 1 && 's'}
+            </>
+          )}
+          {notFound && <>No recipes found</>}
         </h1>
       )}
       <RecipesList
