@@ -14,7 +14,6 @@ interface RecipesSearch {
   Querystring: {
     q: string;
     filters: string;
-    sortBy: string;
     skip: string;
     take: string;
   };

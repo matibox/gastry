@@ -6,7 +6,7 @@ import { Filters } from '../../types/Filters';
 import RecipeOverview from '../../types/RecipeOverview';
 import { SortBy } from '../../types/SortBy';
 
-const QUANTITY = 1;
+const QUANTITY = 3;
 const DELAY = 500;
 
 export function useQuery(query: string, filters: Filters[], sortBy: SortBy) {
