@@ -10,6 +10,7 @@ const QUANTITY = 3;
 const DELAY = 500;
 
 export function useQuery(query: string, filters: Filters[], sortBy: SortBy) {
+  //TODO After auth implementation - pass serviceFn as a param
   const getRecipesByQueryFn = useAsyncFn(getByQuery);
   const [recipes, setRecipes] = useState<RecipeOverview[]>([]);
   const [sortedRecipes, setSortedRecipes] = useState<RecipeOverview[]>([]);
@@ -74,7 +75,7 @@ export function useQuery(query: string, filters: Filters[], sortBy: SortBy) {
   }, [query, moreToLoad]);
 
   return {
-    recipes: sortedRecipes,
+    recipes: recipes.length > 0 ? sortedRecipes : recipes,
     loading: getRecipesByQueryFn.loading,
     error: getRecipesByQueryFn.error,
     loadMore,
