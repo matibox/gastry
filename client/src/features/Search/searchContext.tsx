@@ -5,7 +5,6 @@ import RecipeOverview from '../../types/RecipeOverview';
 import { useQuery } from './useQuery';
 import { Filters } from '../../types/Filters';
 import { SortBy } from '../../types/SortBy';
-import { TargetAndTransition } from 'framer-motion';
 
 interface FilterObj {
   name: string;
