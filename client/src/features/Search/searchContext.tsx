@@ -1,10 +1,11 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useAsync } from '../../hooks/useAsync';
 import { getFilters } from '../../services/filters';
 import RecipeOverview from '../../types/RecipeOverview';
 import { useQuery } from './useQuery';
 import { Filters } from '../../types/Filters';
 import { SortBy } from '../../types/SortBy';
+import { TargetAndTransition } from 'framer-motion';
 
 interface FilterObj {
   name: string;
@@ -35,10 +36,16 @@ interface TSearchContext {
     data: SortBy;
     setSortBy: React.Dispatch<React.SetStateAction<SortBy>>;
   };
+  optionsOpened: {
+    data: boolean;
+    setOptionsOpened: React.Dispatch<React.SetStateAction<boolean>>;
+    toggle: boolean;
+  };
 }
 
 interface SearchContextProviderProps {
   children: JSX.Element;
+  filtersToggle?: boolean;
 }
 
 const SearchContext = createContext<TSearchContext | null>(null);
@@ -49,6 +56,7 @@ export function useSearch() {
 
 export function SearchContextProvider({
   children,
+  filtersToggle = false,
 }: SearchContextProviderProps) {
   const [query, setQuery] = useState('');
   const { data: availFiltersData, ...availFiltersState } = useAsync(getFilters);
@@ -57,6 +65,8 @@ export function SearchContextProvider({
   const [sortBy, setSortBy] = useState<SortBy>(['updatedAt', 'desc']);
 
   const { recipes, ...recipesState } = useQuery(query, filters, sortBy);
+
+  const [optionsOpened, setOptionsOpened] = useState(!filtersToggle);
 
   useEffect(() => {
     if (!availFiltersData) return;
@@ -85,6 +95,11 @@ export function SearchContextProvider({
         sortBy: {
           data: sortBy,
           setSortBy,
+        },
+        optionsOpened: {
+          data: optionsOpened,
+          setOptionsOpened,
+          toggle: filtersToggle,
         },
       }}
     >

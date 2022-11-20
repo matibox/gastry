@@ -9,6 +9,11 @@ export function Searchbar() {
   const searchContext = useSearch();
   if (!searchContext) return null;
   const { data: query, setQuery } = searchContext.query;
+  const {
+    data: optionsOpened,
+    setOptionsOpened,
+    toggle,
+  } = searchContext.optionsOpened;
 
   return (
     <>
@@ -22,6 +27,16 @@ export function Searchbar() {
           placeholder='search recipes'
         />
         <Icon name='search' />
+        {toggle && (
+          <button
+            className={`${styles.filtersToggle} ${
+              optionsOpened && styles.active
+            }`}
+            onClick={() => setOptionsOpened(prev => !prev)}
+          >
+            <Icon name='tune' />
+          </button>
+        )}
       </div>
     </>
   );

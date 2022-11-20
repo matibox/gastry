@@ -22,6 +22,7 @@
   font-size: 2rem;
   color: var(--white);
   order: 2;
+  max-width: 70%;
 }
 
 .wrapper input::placeholder {
@@ -38,5 +39,21 @@
 }
 
 .wrapper input:focus + span {
+  color: var(--orange);
+}
+
+.filtersToggle {
+  order: 3;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  cursor: pointer;
+}
+
+.filtersToggle > span {
+  font-size: 2.6rem;
+}
+
+.filtersToggle.active > span {
   color: var(--orange);
 }
