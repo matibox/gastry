@@ -13,7 +13,7 @@ import { Login } from './pages/Login';
 import { Menu } from './pages/Menu';
 import { Profile } from './pages/Profile';
 import { Recipe } from './pages/Recipe';
-import { Recipes } from './pages/Recipes';
+import { YourRecipes } from './pages/Recipes';
 import { Search } from './pages/Search';
 import { Signup } from './pages/Signup';
 
@@ -29,7 +29,7 @@ function App() {
         <Route path='/signup' element={<Signup />} />
         <Route path='/search' element={<Search />} />
         <Route path='/favourites' element={<Favourites />} />
-        <Route path='/recipes' element={<Recipes />} />
+        <Route path='/recipes' element={<YourRecipes />} />
         <Route path='/recipes/:id' element={<Recipe />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/menu' element={<Menu />} />
