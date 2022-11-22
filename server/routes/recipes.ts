@@ -19,6 +19,12 @@ interface RecipesSearch {
   };
 }
 
+interface Recipe {
+  Params: {
+    id: string;
+  };
+}
+
 export default function recipesRoutes(
   app: FastifyInstance,
   options: object,
@@ -129,6 +135,38 @@ export default function recipesRoutes(
     } catch (e) {
       return app.httpErrors.internalServerError();
     }
+  });
+
+  app.get<Recipe>('/recipes/:id', async (req, res) => {
+    const { id } = req.params;
+
+    if (!id) return app.httpErrors.badRequest('No id specified');
+
+    const recipe = await commitToDb(
+      prisma.recipe.findUnique({
+        where: {
+          id,
+        },
+        select: {
+          title: true,
+          cookingTime: true,
+          ingredients: {
+            select: {
+              name: true,
+              quantity: true,
+              unit: true,
+            },
+          },
+          instructions: true,
+          thumbnail: true,
+        },
+      })
+    );
+
+    return {
+      ...(recipe as object),
+      //TODO isLiked, isAuthor etc.
+    };
   });
 
   done();
