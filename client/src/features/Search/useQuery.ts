@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useAsyncFn } from '../../hooks/useAsync';
 import { useDebounce } from '../../hooks/useDebounce';
-import { getByQuery } from '../../services/recipes';
 import { Filters } from '../../types/Filters';
 import RecipeOverview from '../../types/RecipeOverview';
 import { SortBy } from '../../types/SortBy';
@@ -9,9 +8,15 @@ import { SortBy } from '../../types/SortBy';
 const QUANTITY = 3;
 const DELAY = 500;
 
-export function useQuery(query: string, filters: Filters[], sortBy: SortBy) {
+export function useQuery(
+  query: string,
+  filters: Filters[],
+  sortBy: SortBy,
+  initialFetch: boolean = false,
+  serviceFn: (...props: any[]) => Promise<any>
+) {
   //TODO After auth implementation - pass serviceFn as a param
-  const getRecipesByQueryFn = useAsyncFn(getByQuery);
+  const getRecipes = useAsyncFn(serviceFn);
   const [recipes, setRecipes] = useState<RecipeOverview[]>([]);
   const [sortedRecipes, setSortedRecipes] = useState<RecipeOverview[]>([]);
   const [offset, setOffset] = useState(0);
@@ -24,7 +29,7 @@ export function useQuery(query: string, filters: Filters[], sortBy: SortBy) {
         setRecipes([]);
         return;
       }
-      getRecipesByQueryFn.run(offset, QUANTITY, query, filters).then(data => {
+      getRecipes.run(offset, QUANTITY, query, filters).then(data => {
         setRecipes(data.recipes);
         setMoreToLoad(data.moreToLoad);
         setNotFound(data.notFound);
@@ -54,30 +59,36 @@ export function useQuery(query: string, filters: Filters[], sortBy: SortBy) {
     });
   }, [recipes, sortBy]);
 
+  useEffect(() => {
+    if (initialFetch) {
+      getRecipes.run(offset, QUANTITY, query, filters).then(data => {
+        setRecipes(data.recipes);
+        setMoreToLoad(data.moreToLoad);
+        setNotFound(data.notFound);
+        setOffset(prevOffset => prevOffset + data.recipes.length);
+      });
+    }
+  }, []);
+
   const loadMore = useCallback(() => {
     if (!moreToLoad) return;
-    getRecipesByQueryFn
-      .run(offset + QUANTITY, QUANTITY, query, filters)
-      .then(data => {
-        setRecipes(prevRecipes => {
-          return [
-            ...new Map(
-              [...prevRecipes, ...data.recipes].map(recipe => [
-                recipe.id,
-                recipe,
-              ])
-            ).values(),
-          ];
-        });
-        setMoreToLoad(data.moreToLoad);
-        setOffset(prevOffset => prevOffset + QUANTITY);
+    getRecipes.run(offset + QUANTITY, QUANTITY, query, filters).then(data => {
+      setRecipes(prevRecipes => {
+        return [
+          ...new Map(
+            [...prevRecipes, ...data.recipes].map(recipe => [recipe.id, recipe])
+          ).values(),
+        ];
       });
+      setMoreToLoad(data.moreToLoad);
+      setOffset(prevOffset => prevOffset + data.recipes.length);
+    });
   }, [query, moreToLoad]);
 
   return {
     recipes: recipes.length > 0 ? sortedRecipes : recipes,
-    loading: getRecipesByQueryFn.loading,
-    error: getRecipesByQueryFn.error,
+    loading: getRecipes.loading,
+    error: getRecipes.error,
     loadMore,
     moreToLoad,
     notFound,

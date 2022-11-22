@@ -3,12 +3,13 @@ import { Searchbar } from '../features/Search/Searchbar';
 import { SearchContextProvider } from '../features/Search/searchContext';
 import { SearchResults } from '../features/Search/SearchResults';
 import { SortBy } from '../features/Search/SortBy';
+import { getByQuery } from '../services/recipes';
 
 import styles from './SearchSec.module.css';
 
 export function YourRecipes() {
   return (
-    <SearchContextProvider filtersToggle>
+    <SearchContextProvider filtersToggle initialFetch serviceFn={getByQuery}>
       <main className={styles.wrapper}>
         <h1>your recipes</h1>
         <section className={styles.searchWrapper}>

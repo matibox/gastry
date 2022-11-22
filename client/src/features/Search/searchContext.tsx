@@ -46,6 +46,8 @@ interface TSearchContext {
 interface SearchContextProviderProps {
   children: JSX.Element;
   filtersToggle?: boolean;
+  initialFetch?: boolean;
+  serviceFn: (...props: any[]) => Promise<any>;
 }
 
 const SearchContext = createContext<TSearchContext | null>(null);
@@ -57,6 +59,8 @@ export function useSearch() {
 export function SearchContextProvider({
   children,
   filtersToggle = false,
+  initialFetch = false,
+  serviceFn,
 }: SearchContextProviderProps) {
   const [query, setQuery] = useState('');
   const { data: availFiltersData, ...availFiltersState } = useAsync(getFilters);
@@ -64,7 +68,13 @@ export function SearchContextProvider({
   const [filters, setFilters] = useState<Filters[]>([]);
   const [sortBy, setSortBy] = useState<SortBy>(['updatedAt', 'desc']);
 
-  const { recipes, ...recipesState } = useQuery(query, filters, sortBy);
+  const { recipes, ...recipesState } = useQuery(
+    query,
+    filters,
+    sortBy,
+    initialFetch,
+    serviceFn
+  );
 
   const [optionsOpened, setOptionsOpened] = useState(!filtersToggle);
 
