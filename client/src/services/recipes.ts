@@ -1,5 +1,4 @@
 import { Filters } from '../types/Filters';
-import { SortBy } from '../types/SortBy';
 import { makeRequest } from './makeRequest';
 
 export function getLatestRecipes(offset: number, quantity: number) {
@@ -38,5 +37,11 @@ export function getByQuery(
       take: quantity,
       filters: filters?.join(',') || undefined,
     },
+  });
+}
+
+export function getRecipe(id: string) {
+  return makeRequest(`/recipes/${id}`, {
+    method: 'GET',
   });
 }
