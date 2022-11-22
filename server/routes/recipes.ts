@@ -152,6 +152,7 @@ export default function recipesRoutes(
           cookingTime: true,
           ingredients: {
             select: {
+              id: true,
               name: true,
               quantity: true,
               unit: true,

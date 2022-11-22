@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAsync } from '../../hooks/useAsync';
 import { getRecipe } from '../../services/recipes';
@@ -18,6 +18,10 @@ interface recipeContextProviderProps {
 }
 
 const RecipeContext = createContext<TRecipeContext | null>(null);
+
+export function useRecipe() {
+  return useContext(RecipeContext);
+}
 
 export function RecipeContextProvider({
   children,

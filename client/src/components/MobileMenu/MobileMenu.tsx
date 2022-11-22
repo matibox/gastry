@@ -25,6 +25,7 @@ export function MobileMenu() {
           to={link.path}
           key={link.path}
           className={({ isActive }) => (isActive ? styles.active : '')}
+          end={true}
         >
           <Icon name={link.iconName} />
         </NavLink>
