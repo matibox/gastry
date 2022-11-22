@@ -68,7 +68,7 @@ export function useQuery(
         setOffset(prevOffset => prevOffset + data.recipes.length);
       });
     }
-  }, []);
+  }, [initialFetch]);
 
   const loadMore = useCallback(() => {
     if (!moreToLoad) return;
