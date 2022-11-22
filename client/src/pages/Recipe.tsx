@@ -1,3 +1,10 @@
+import { RecipeContent } from '../features/Recipe/RecipeContent';
+import { RecipeContextProvider } from '../features/Recipe/recipeContext';
+
 export function Recipe() {
-  return <div>Recipe</div>;
+  return (
+    <RecipeContextProvider>
+      <RecipeContent />
+    </RecipeContextProvider>
+  );
 }
