@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 
 export interface CustomRequest extends Request {
-  token: string | JwtPayload;
+  user: string | JwtPayload | undefined;
 }
 
 export function verify(req: Request, res: Response, next: NextFunction) {
@@ -12,6 +12,6 @@ export function verify(req: Request, res: Response, next: NextFunction) {
 
   jwt.verify(token, process.env.JWT_SECRET as string, (err, user) => {
     if (err) return res.status(403).json('Token invalid');
-    (req as CustomRequest).token = token;
+    (req as CustomRequest).user = user;
   });
 }
