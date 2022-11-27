@@ -1,10 +1,9 @@
 import express from 'express';
-import type { Request, Response } from 'express';
-import { getFilters } from './service';
+import { getFilters } from '../services/filters.services';
 
 export const filtersRouter = express.Router();
 
-filtersRouter.get('', async (req: Request, res: Response) => {
+filtersRouter.get('', async (req, res) => {
   try {
     const filters = await getFilters();
     if (!filters) return res.status(404).json('No filters available');

@@ -1,6 +1,10 @@
 import express from 'express';
 import type { Request, Response } from 'express';
-import { latestRecipes, singleRecipe, searchRecipes } from './service';
+import {
+  latestRecipes,
+  singleRecipe,
+  searchRecipes,
+} from '../services/recipes.services';
 import { Prisma, RecipeTypeName } from '@prisma/client';
 
 export const recipeRouter = express.Router();
