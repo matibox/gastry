@@ -1,19 +1,22 @@
-import app from './utils/fastify';
 import dotenv from 'dotenv';
+import express from 'express';
+import cors from 'cors';
+
+import { recipeRouter } from './recipe/router';
+import { filtersRouter } from './filter/router';
+
 dotenv.config();
-import recipes from './routes/recipes';
-import filters from './routes/filters';
 
 if (!process.env.PORT) process.exit(1);
-const PORT = Number(process.env.PORT);
+const PORT = parseInt(process.env.PORT);
 
-app.register(recipes);
-app.register(filters);
+const app = express();
 
-app.listen({ port: PORT }, (err, address) => {
-  if (err) {
-    console.log(err);
-    process.exit(1);
-  }
-  console.log(`App listening on ${address}`);
+app.use(cors());
+app.use(express.json());
+app.use('/recipes', recipeRouter);
+app.use('/filters', filtersRouter);
+
+app.listen(PORT, () => {
+  console.log(`App listening on port ${PORT}`);
 });
