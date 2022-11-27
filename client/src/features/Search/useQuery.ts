@@ -15,7 +15,6 @@ export function useQuery(
   initialFetch: boolean = false,
   serviceFn: (...props: any[]) => Promise<any>
 ) {
-  //TODO After auth implementation - pass serviceFn as a param
   const getRecipes = useAsyncFn(serviceFn);
   const [recipes, setRecipes] = useState<RecipeOverview[]>([]);
   const [sortedRecipes, setSortedRecipes] = useState<RecipeOverview[]>([]);
@@ -64,7 +63,7 @@ export function useQuery(
   // initial fetch
   useEffect(() => {
     if (initialFetch) {
-      getRecipes.run(offset, QUANTITY, query, filters).then(data => {
+      getRecipes.run(0, QUANTITY, query, filters).then(data => {
         setRecipes(data.recipes);
         setMoreToLoad(data.moreToLoad);
         setNotFound(data.notFound);
