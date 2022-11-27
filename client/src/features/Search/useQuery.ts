@@ -23,13 +23,14 @@ export function useQuery(
   const [moreToLoad, setMoreToLoad] = useState(false);
   const [notFound, setNotFound] = useState(false);
 
+  // query/filters change
   useDebounce(
     () => {
       if (!query && filters.length === 0) {
         setRecipes([]);
         return;
       }
-      getRecipes.run(offset, QUANTITY, query, filters).then(data => {
+      getRecipes.run(0, QUANTITY, query, filters).then(data => {
         setRecipes(data.recipes);
         setMoreToLoad(data.moreToLoad);
         setNotFound(data.notFound);
@@ -39,6 +40,7 @@ export function useQuery(
     [query, filters]
   );
 
+  // sorting
   useEffect(() => {
     if (recipes.length === 0) return;
     const [item, order] = sortBy;
@@ -59,6 +61,7 @@ export function useQuery(
     });
   }, [recipes, sortBy]);
 
+  // initial fetch
   useEffect(() => {
     if (initialFetch) {
       getRecipes.run(offset, QUANTITY, query, filters).then(data => {
@@ -70,6 +73,7 @@ export function useQuery(
     }
   }, [initialFetch]);
 
+  // load more
   const loadMore = useCallback(() => {
     if (!moreToLoad) return;
     getRecipes.run(offset + QUANTITY, QUANTITY, query, filters).then(data => {
