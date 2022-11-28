@@ -9,6 +9,8 @@ import { Prisma, RecipeTypeName } from '@prisma/client';
 
 export const recipeRouter = express.Router();
 
+//TODO different error data structure [{message: error_message}]
+
 // GET: latest recipes
 recipeRouter.get('/latest', async (req: Request, res: Response) => {
   const skip = parseInt(req.query.skip as string);

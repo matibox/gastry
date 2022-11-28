@@ -4,7 +4,7 @@ import cors from 'cors';
 
 import { recipeRouter } from './routers/recipes.router';
 import { filtersRouter } from './routers/filters.router';
-import { authRouter } from './routers/auth.router';
+import { authRouter } from './routers/user.router';
 
 dotenv.config();
 
