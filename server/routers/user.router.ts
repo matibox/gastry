@@ -1,6 +1,6 @@
 import express from 'express';
 import validateSchema from '../middleware/validateSchema';
-import { registerUserSchema } from '../schemas/user.schema';
+import { loginUserSchema, registerUserSchema } from '../schemas/user.schema';
 import { createUser, findByEmail } from '../services/user.services';
 import bcrypt from 'bcrypt';
 
@@ -30,3 +30,31 @@ authRouter.post(
     }
   }
 );
+
+authRouter.post('/login', validateSchema(loginUserSchema), async (req, res) => {
+  const wrongEmailOrPassword = () => {
+    return res.status(404).json([{ message: 'Wrong email/password' }]);
+  };
+
+  try {
+    const user = await findByEmail(req.body.email);
+    if (!user) {
+      return wrongEmailOrPassword();
+    }
+
+    const isPasswordMatching = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+
+    if (!isPasswordMatching) {
+      return wrongEmailOrPassword();
+    }
+
+    //! temporary
+    res.sendStatus(200);
+    // jwt
+  } catch (err: any) {
+    return res.status(500).json([{ message: err.message }]);
+  }
+});
