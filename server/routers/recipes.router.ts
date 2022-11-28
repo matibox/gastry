@@ -101,17 +101,17 @@ recipeRouter.get('/search', async (req: Request, res: Response) => {
 recipeRouter.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  if (!id) return res.status(400).json([{'No id specified'}]);
+  if (!id) return res.status(400).json([{ message: 'No id specified' }]);
 
   try {
     const recipe = await singleRecipe(id);
     if (!recipe) {
-      return res.status(404).json([{message: 'Recipe not found'}]);
+      return res.status(404).json([{ message: 'Recipe not found' }]);
     }
 
     return res.status(200).json(recipe);
     //TODO isLiked, isAuthor etc.
   } catch (err: any) {
-    return res.status(500).json([{message: err.message}]);
+    return res.status(500).json([{ message: err.message }]);
   }
 });
