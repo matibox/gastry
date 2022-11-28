@@ -1,8 +1,9 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import validateSchema from '../middleware/validateSchema';
 import { loginUserSchema, registerUserSchema } from '../schemas/user.schema';
 import { createUser, findByEmail } from '../services/user.services';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
 export const authRouter = express.Router();
 
@@ -51,9 +52,34 @@ authRouter.post('/login', validateSchema(loginUserSchema), async (req, res) => {
       return wrongEmailOrPassword();
     }
 
-    //! temporary
-    res.sendStatus(200);
-    // jwt
+    const accessToken = jwt.sign(
+      {
+        id: user.id,
+        isAdmin: user.role === 'admin',
+      },
+      process.env.JWT_SECRET as string,
+      {
+        expiresIn: '30m', //? 5m 10m
+      }
+    );
+
+    const refreshToken = jwt.sign(
+      {
+        id: user.id,
+      },
+      process.env.JWT_REFRESH_SECRET as string,
+      {
+        expiresIn: '1d',
+      }
+    );
+
+    res.cookie('token', refreshToken, {
+      httpOnly: true,
+      secure: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.status(200).json({ accessToken });
   } catch (err: any) {
     return res.status(500).json([{ message: err.message }]);
   }
