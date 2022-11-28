@@ -20,10 +20,6 @@ export const registerUserSchema = z.object({
       email: z
         .string({ required_error: 'Email is required' })
         .email({ message: 'Email is not valid' }),
-      role: z.enum(['user', 'admin'], {
-        required_error: 'Role is required',
-        invalid_type_error: 'Wrong role has been passed',
-      }),
     })
     .refine(data => data.password === data.confirmPassword, {
       message: 'Passwords do not match',
