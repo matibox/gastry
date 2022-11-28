@@ -9,22 +9,20 @@ import { Prisma, RecipeTypeName } from '@prisma/client';
 
 export const recipeRouter = express.Router();
 
-//TODO different error data structure [{message: error_message}]
-
 // GET: latest recipes
 recipeRouter.get('/latest', async (req: Request, res: Response) => {
   const skip = parseInt(req.query.skip as string);
   const take = parseInt(req.query.take as string);
 
   if (isNaN(skip) || isNaN(take)) {
-    return res.status(400).json('skip/take is undefined');
+    return res.status(400).json([{ message: 'skip/take is undefined' }]);
   }
 
   try {
     const recipes = await latestRecipes(skip, take);
     return res.status(200).json(recipes);
   } catch (err: any) {
-    return res.status(500).json(err.message);
+    return res.status(500).json([{ message: err.message }]);
   }
 });
 
@@ -71,7 +69,7 @@ recipeRouter.get('/search', async (req: Request, res: Response) => {
   }
 
   if (isNaN(skip) || isNaN(take)) {
-    return res.status(400).json('skip/take is undefined');
+    return res.status(400).json([{ message: 'skip/take is undefined' }]);
   }
 
   if (recipeWhereFields.length === 0) {
@@ -95,7 +93,7 @@ recipeRouter.get('/search', async (req: Request, res: Response) => {
       notFound: recipes.length === 0,
     });
   } catch (err: any) {
-    return res.status(500).json(err.message);
+    return res.status(500).json([{ message: err.message }]);
   }
 });
 
@@ -103,17 +101,17 @@ recipeRouter.get('/search', async (req: Request, res: Response) => {
 recipeRouter.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  if (!id) return res.status(400).json('No id specified');
+  if (!id) return res.status(400).json([{'No id specified'}]);
 
   try {
     const recipe = await singleRecipe(id);
     if (!recipe) {
-      return res.status(404).json('Recipe not found');
+      return res.status(404).json([{message: 'Recipe not found'}]);
     }
 
     return res.status(200).json(recipe);
     //TODO isLiked, isAuthor etc.
   } catch (err: any) {
-    return res.status(500).json(err.message);
+    return res.status(500).json([{message: err.message}]);
   }
 });
