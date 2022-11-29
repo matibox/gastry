@@ -21,8 +21,6 @@ export default async function deserializeUser(
 
   const { payload, expired } = verifyJWT(accessToken);
 
-  console.log('payload', payload);
-
   if (payload) {
     (req as CustomRequest).user = payload as jwt.JwtPayload;
     return next();

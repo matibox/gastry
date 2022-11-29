@@ -10,8 +10,8 @@ export default function validateSchema(schema: AnyZodObject) {
         params: req.params,
       });
       next();
-    } catch (e: any) {
-      return res.status(400).send(e.errors);
+    } catch (err: any) {
+      return res.status(400).send(err.errors);
     }
   };
 }
