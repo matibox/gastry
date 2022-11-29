@@ -12,12 +12,13 @@ datasource db {
 model User {
   id         String      @id @default(uuid())
   email      String      @unique
-  name       String
+  name       String      @unique
   password   String
   role       Role        @default(user)
   recipes    Recipe[]
   favourites Favourite[]
   menus      Menu[]
+  session    Session?
 }
 
 enum Role {
@@ -111,4 +112,11 @@ model TimeOfDay {
   recipe   Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeId String
   name     TimeOfDays
+}
+
+model Session {
+  id        String  @id @default(uuid())
+  valid     Boolean
+  user      User    @relation(fields: [userEmail], references: [email])
+  userEmail String  @unique
 }
