@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 async function main() {
   await prisma.user.deleteMany();
   await prisma.ingredient.deleteMany();
+  await prisma.session.deleteMany();
   const user1 = await prisma.user.create({
     data: {
       email: 'john@prisma.io',

@@ -11,7 +11,6 @@ export default function validateSchema(schema: AnyZodObject) {
       });
       next();
     } catch (e: any) {
-      console.log(e);
       return res.status(400).send(e.errors);
     }
   };

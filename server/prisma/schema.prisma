@@ -18,7 +18,7 @@ model User {
   recipes    Recipe[]
   favourites Favourite[]
   menus      Menu[]
-  session    Session?
+  sessions   Session[]
 }
 
 enum Role {
@@ -115,8 +115,8 @@ model TimeOfDay {
 }
 
 model Session {
-  id        String  @id @default(uuid())
-  valid     Boolean
-  user      User    @relation(fields: [userEmail], references: [email])
-  userEmail String  @unique
+  id     String  @id @default(uuid())
+  valid  Boolean
+  user   User    @relation(fields: [userId], references: [id])
+  userId String
 }
