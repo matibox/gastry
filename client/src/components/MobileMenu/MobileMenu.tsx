@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { Icon } from '../Icon/Icon';
 
 // styles
@@ -18,6 +18,9 @@ const links: Link[] = [
 ];
 
 export function MobileMenu() {
+  const { pathname } = useLocation();
+  if (pathname === '/signup' || pathname === 'login') return null;
+
   return (
     <nav className={styles.menu}>
       {links.map(link => (

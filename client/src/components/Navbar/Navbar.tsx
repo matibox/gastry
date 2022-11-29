@@ -1,9 +1,12 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // styles
 import styles from './Navbar.module.css';
 
 export function Navbar() {
+  const { pathname } = useLocation();
+  if (pathname === '/signup' || pathname === 'login') return null;
+
   return (
     <header className={styles.wrapper}>
       <div className={styles.logoWrapper}>

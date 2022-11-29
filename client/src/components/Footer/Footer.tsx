@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom';
 // assets
 import GitHub from '../../assets/github.png';
 import Twitter from '../../assets/twitter.png';
@@ -8,6 +9,8 @@ import styles from './Footer.module.css';
 
 export function Footer() {
   const { isMobile } = useIsMobile();
+  const { pathname } = useLocation();
+  if (pathname === '/signup' || pathname === 'login') return null;
 
   return (
     <footer className={`${styles.footer} ${isMobile ? styles.mobile : ''}`}>
