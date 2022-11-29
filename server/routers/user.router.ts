@@ -4,7 +4,7 @@ import { loginUserSchema, registerUserSchema } from '../schemas/user.schema';
 import { createUser, findByEmail } from '../services/user.services';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { createSession } from '../services/session.services';
+import { createSession, invalidateSession } from '../services/session.services';
 import { accessTokenExpiry, refreshTokenExpiry } from '../config/jwtExpiry';
 import requireUser from '../middleware/requireUser';
 
@@ -18,6 +18,7 @@ export interface AccessTokenPayload {
   isAdmin: boolean;
 }
 
+// POST: register user
 authRouter.post(
   '/register',
   validateSchema(registerUserSchema),
@@ -43,6 +44,7 @@ authRouter.post(
   }
 );
 
+// POST: login user
 authRouter.post('/login', validateSchema(loginUserSchema), async (req, res) => {
   try {
     const user = await findByEmail(req.body.email);
@@ -93,17 +95,32 @@ authRouter.post('/login', validateSchema(loginUserSchema), async (req, res) => {
       maxAge: 604800000, // 2 weeks
     });
 
-    //! don't return tokens, just for testing purposes
-    res.status(200).json({ email: user.email, name: user.name, accessToken });
+    res.status(200).json({ email: user.email, name: user.name });
   } catch (err: any) {
-    if (err.message.includes('unique'))
-      return res.status(500).json([{ message: err.message }]);
+    return res.status(500).json([{ message: err.message }]);
   }
 });
 
-authRouter.get('/test', requireUser, async (req, res) => {
+// POST: logout user
+authRouter.post('/logout', requireUser, async (req, res) => {
   //@ts-ignore
   if (!req.user) return res.status(401).json([{ message: 'Unauthenticated' }]);
-  //@ts-ignore
-  return res.status(200).json(req.user);
+
+  res.cookie('accessToken', '', {
+    maxAge: 0,
+    httpOnly: true,
+  });
+
+  res.cookie('refreshToken', '', {
+    maxAge: 0,
+    httpOnly: true,
+  });
+
+  try {
+    //@ts-ignore
+    const session = await invalidateSession(req.user.sessionId);
+    return res.json(session);
+  } catch (err: any) {
+    return res.json([{ message: err.message }]);
+  }
 });
