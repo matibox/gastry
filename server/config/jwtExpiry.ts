@@ -1,2 +1,2 @@
-export const accessTokenExpiry = '15s';
-export const refreshTokenExpiry = '1d';
+export const accessTokenExpiry = '5m';
+export const refreshTokenExpiry = '7d';

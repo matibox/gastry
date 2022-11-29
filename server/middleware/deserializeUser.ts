@@ -13,13 +13,11 @@ export default async function deserializeUser(
   res: Response,
   next: NextFunction
 ) {
-  const accessToken = req.headers.authorization?.split(' ')[1] || null;
+  const { accessToken, refreshToken } = req.cookies;
 
   if (!accessToken) {
     return next();
   }
-
-  const { token: refreshToken } = req.cookies;
 
   const { payload, expired } = verifyJWT(accessToken);
 
@@ -44,6 +42,11 @@ export default async function deserializeUser(
   }
 
   const newAccessToken = signJWT(session);
+
+  res.cookie('accessToken', newAccessToken, {
+    httpOnly: true,
+    maxAge: 300000, // 5m
+  });
 
   (req as CustomRequest).user = verifyJWT(newAccessToken).payload as JwtPayload;
 

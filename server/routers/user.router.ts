@@ -83,12 +83,17 @@ authRouter.post('/login', validateSchema(loginUserSchema), async (req, res) => {
       }
     );
 
-    res.cookie('token', refreshToken, {
+    res.cookie('accessToken', accessToken, {
       httpOnly: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 300000, // 5m
     });
 
-    //! don't return refresh token, just for testing purposes
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      maxAge: 604800000, // 2 weeks
+    });
+
+    //! don't return tokens, just for testing purposes
     res.status(200).json({ email: user.email, name: user.name, accessToken });
   } catch (err: any) {
     if (err.message.includes('unique'))
