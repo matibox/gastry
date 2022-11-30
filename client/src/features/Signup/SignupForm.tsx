@@ -1,4 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Error } from '../../components/Error/Error';
 import { UserInfoForm } from '../../components/UserInfoForm/UserInfoForm';
 import { useAsyncFn } from '../../hooks/useAsync';
@@ -23,12 +24,16 @@ export function SignupForm() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const navigate = useNavigate();
 
   const signupFn = useAsyncFn(signup);
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    signupFn.run(email, username, password, confirmPassword).then(res => res);
+    signupFn.run(email, username, password, confirmPassword).then(res => {
+      navigate('/');
+      return res;
+    });
   }
 
   return (
