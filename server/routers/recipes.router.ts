@@ -73,10 +73,7 @@ recipeRouter.get('/search', async (req: Request, res: Response) => {
   }
 
   if (recipeWhereFields.length === 0) {
-    return res.status(204).json({
-      recipes: [],
-      moreToLoad: false,
-    });
+    return res.status(404).json([{ message: 'No recipes found' }]);
   }
 
   try {
@@ -87,10 +84,13 @@ recipeRouter.get('/search', async (req: Request, res: Response) => {
       recipeWhereFields
     );
 
+    if (recipes.length === 0) {
+      return res.status(404).json([{ message: 'No recipes found' }]);
+    }
+
     return res.status(200).json({
       recipes,
       moreToLoad: nextRecipes.length > 0,
-      notFound: recipes.length === 0,
     });
   } catch (err: any) {
     return res.status(500).json([{ message: err.message }]);
