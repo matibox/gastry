@@ -1,38 +1,7 @@
-import { FormEvent, Reducer, useReducer, useState } from 'react';
+import { FormEvent } from 'react';
 import { Link } from 'react-router-dom';
-import { Input } from '../Input/Input';
+import { Icon } from '../Icon/Icon';
 import styles from './UserInfoForm.module.css';
-import { Field, ValueState } from '../../types/UserInfoForm';
-
-interface InputReducerAction {
-  payload: string;
-  type: InputReducerActions;
-}
-
-const inputReducerInitialState: ValueState = {
-  email: '',
-  username: '',
-  password: '',
-  confirmPassword: '',
-};
-
-enum InputReducerActions {
-  changeEmail = 'CHANGE_EMAIL',
-  changeUsername = 'CHANGE_USERNAME',
-  changePassword = 'CHANGE_PASSWORD',
-  changeConfirmPassword = 'CHANGE_CONFIRM_PASSWORD',
-}
-
-const inputReducer: Reducer<ValueState, InputReducerAction> = (
-  state,
-  action
-) => {
-  const { type, payload } = action;
-
-  //TODO switch statement
-
-  return state;
-};
 
 interface UserInfoFormProps {
   heading: string;
@@ -41,23 +10,21 @@ interface UserInfoFormProps {
     link: string;
     redirectURL: string;
   };
-  fields: Field[];
   button: {
     label: string;
     icon: string;
   };
   onSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  children: JSX.Element;
 }
 
 export function UserInfoForm({
   heading,
   headingMsg,
-  fields,
   button,
   onSubmit,
+  children,
 }: UserInfoFormProps) {
-  const [state, dispatch] = useReducer(inputReducer, inputReducerInitialState);
-
   return (
     <div className={styles.wrapper}>
       <header>
@@ -77,13 +44,11 @@ export function UserInfoForm({
           onSubmit={(e: FormEvent<HTMLFormElement>) => onSubmit(e)}
           className={styles.form}
         >
-          {fields.map(field => (
-            <Input
-              key={field.label}
-              label={field.label}
-              littleLabel={field.littleLabel}
-            />
-          ))}
+          {children}
+          <button className={styles.button}>
+            <span>Sign up</span>
+            <Icon name={button.icon} />
+          </button>
         </form>
       </main>
       <footer>{/* //TODO github link */}</footer>

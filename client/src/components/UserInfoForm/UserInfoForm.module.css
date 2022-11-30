@@ -33,3 +33,25 @@
   gap: 2.5rem;
   flex-direction: column;
 }
+
+.button {
+  border-radius: 0.5rem;
+  background-color: transparent;
+  border: 2px solid var(--orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 500;
+  padding-block: 0.8rem;
+  margin-top: 4rem;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--orange);
+}
