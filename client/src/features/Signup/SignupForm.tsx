@@ -69,7 +69,7 @@ export function SignupForm() {
         <label className={styles.inputWrapper}>
           <span className={styles.label}>Password</span>
           <input
-            type='text'
+            type='password'
             className={styles.input}
             value={password}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -84,7 +84,7 @@ export function SignupForm() {
         <label className={styles.inputWrapper}>
           <span className={styles.label}>Confirm password</span>
           <input
-            type='text'
+            type='password'
             className={styles.input}
             value={confirmPassword}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
