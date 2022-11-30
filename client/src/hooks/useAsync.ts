@@ -23,19 +23,19 @@ function useAsyncInternal(
 ) {
   const [data, setData] = useState(undefined);
   const [loading, setLoading] = useState(initialLoading);
-  const [error, setError] = useState(undefined);
+  const [errors, setErrors] = useState(undefined);
 
   const run = useCallback((...params: any[]) => {
     setLoading(true);
     return callback(...params)
       .then(data => {
         setData(data);
-        setError(undefined);
+        setErrors(undefined);
         return data;
       })
       .catch(err => {
         setData(undefined);
-        setError(err);
+        setErrors(err);
         return Promise.reject(err);
       })
       .finally(() => {
@@ -43,5 +43,5 @@ function useAsyncInternal(
       });
   }, dependencies);
 
-  return { data, loading, error, run };
+  return { data, loading, errors, run };
 }

@@ -2,6 +2,7 @@ import { createContext, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAsync } from '../../hooks/useAsync';
 import { getRecipe } from '../../services/recipes';
+import { TError } from '../../types/Error';
 import { Recipe } from '../../types/Recipe';
 
 interface TRecipeContext {
@@ -9,7 +10,7 @@ interface TRecipeContext {
     id: string;
     data: undefined | Recipe;
     loading: boolean;
-    error: undefined | string;
+    errors: undefined | TError[];
   };
 }
 

@@ -6,7 +6,7 @@ import styles from './YourRecipes.module.css';
 
 export function YourRecipes() {
   const sectionRef = useRef(null);
-  const { recipes, loading, error, loadMore, moreToLoad } = useYourRecipes(3);
+  const { recipes, loading, errors, loadMore, moreToLoad } = useYourRecipes(3);
   const { isIntersecting } = useIntersectionObserver(sectionRef);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export function YourRecipes() {
         recipes={recipes}
         loadMore={loadMore}
         loading={loading}
-        error={error}
+        errors={errors}
         moreToLoad={moreToLoad}
       />
     </section>

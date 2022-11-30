@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { RecipesList } from '../../components/RecipesList/RecipesList';
+import { TError } from '../../types/Error';
 
 // styles
 import styles from './LatestRecipes.module.css';
@@ -10,7 +11,8 @@ interface LatestRecipesProps {
 }
 
 export function LatestRecipes({ sectionRef }: LatestRecipesProps) {
-  const { recipes, loading, error, loadMore, moreToLoad } = useLatestRecipes(3);
+  const { recipes, loading, errors, loadMore, moreToLoad } =
+    useLatestRecipes(3);
 
   useEffect(() => {
     loadMore();
@@ -23,7 +25,7 @@ export function LatestRecipes({ sectionRef }: LatestRecipesProps) {
         recipes={recipes}
         loadMore={loadMore}
         loading={loading}
-        error={error}
+        errors={errors}
         moreToLoad={moreToLoad}
       />
     </section>

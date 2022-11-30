@@ -64,6 +64,8 @@ export function useQuery(
   useEffect(() => {
     if (initialFetch) {
       getRecipes.run(0, QUANTITY, query, filters).then(data => {
+        console.log(data);
+
         setRecipes(data.recipes);
         setMoreToLoad(data.moreToLoad);
         setNotFound(data.notFound);
@@ -91,7 +93,7 @@ export function useQuery(
   return {
     recipes: recipes.length > 0 ? sortedRecipes : recipes,
     loading: getRecipes.loading,
-    error: getRecipes.error,
+    errors: getRecipes.errors,
     loadMore,
     moreToLoad,
     notFound,

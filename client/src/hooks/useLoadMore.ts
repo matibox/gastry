@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 interface ServiceFn {
   data: undefined;
   loading: boolean;
-  error: undefined;
+  errors: undefined;
   run: (...params: any[]) => Promise<any>;
 }
 
@@ -34,7 +34,7 @@ export function useLoadMore(quantity: number, serviceFn: ServiceFn) {
   return {
     data,
     loading: serviceFn.loading,
-    error: serviceFn.error,
+    errors: serviceFn.errors,
     moreToLoad,
     loadMore,
   };

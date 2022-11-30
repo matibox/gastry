@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
+import { TError } from '../../types/Error';
 import Recipe from '../../types/RecipeOverview';
+import { Error } from '../Error/Error';
 import { Icon } from '../Icon/Icon';
 import Loading from '../Loading/Loading';
 import { RecipeOverview } from '../RecipeOverview/RecipeOverview';
@@ -8,7 +10,7 @@ interface RecipesListProps {
   recipes: undefined | Recipe[];
   loadMore?: () => void;
   loading: boolean;
-  error: any;
+  errors: undefined | TError[];
   moreToLoad?: boolean;
   loggedIn?: boolean;
 }
@@ -17,11 +19,11 @@ export function RecipesList({
   recipes,
   loadMore,
   loading,
-  error,
+  errors,
   moreToLoad,
   loggedIn = true,
 }: RecipesListProps) {
-  if (error) return <p>Error</p>;
+  if (errors) return <Error errors={errors} color='black' size='large' />;
 
   return (
     <>

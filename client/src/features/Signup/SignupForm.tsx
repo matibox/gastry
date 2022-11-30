@@ -1,4 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { Error } from '../../components/Error/Error';
 import { UserInfoForm } from '../../components/UserInfoForm/UserInfoForm';
 import { useAsyncFn } from '../../hooks/useAsync';
 import { signup } from '../../services/user';
@@ -93,7 +94,7 @@ export function SignupForm() {
             required
           />
         </label>
-        {signupFn.error}
+        {signupFn.errors && <Error errors={signupFn.errors} size='small' />}
       </>
     </UserInfoForm>
   );

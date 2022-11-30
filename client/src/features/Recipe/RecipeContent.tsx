@@ -3,16 +3,17 @@ import { useRecipe } from './recipeContext';
 import { Icon } from '../../components/Icon/Icon';
 
 import styles from './RecipeContent.module.css';
+import { Error } from '../../components/Error/Error';
 
 export function RecipeContent() {
   const recipeContext = useRecipe();
   if (!recipeContext) return null;
-  const { data: recipe, loading, error } = recipeContext.recipe;
+  const { data: recipe, loading, errors } = recipeContext.recipe;
 
   return (
     <main className={styles.wrapper}>
       {loading && <Loading />}
-      {error && <p>Error</p>}
+      {errors && <Error errors={errors} size='large' />}
       {recipe && (
         <>
           <h1>{recipe.title}</h1>

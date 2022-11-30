@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Checkbox } from '../../components/Checkbox/Checkbox';
+import { Error } from '../../components/Error/Error';
 import Loading from '../../components/Loading/Loading';
 import styles from './Filters.module.css';
 import { useSearch } from './searchContext';
@@ -32,7 +33,9 @@ export function Filters() {
               <Checkbox key={filter} label={filter} />
             ))}
             {availFilters.loading && <Loading height='100%' />}
-            {availFilters.error && <p>Error</p>}
+            {availFilters.errors && (
+              <Error errors={availFilters.errors} size='small' />
+            )}
           </div>
         </motion.div>
       )}

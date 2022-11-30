@@ -5,6 +5,7 @@ import RecipeOverview from '../../types/RecipeOverview';
 import { useQuery } from './useQuery';
 import { Filters } from '../../types/Filters';
 import { SortBy } from '../../types/SortBy';
+import { TError } from '../../types/Error';
 
 interface FilterObj {
   name: string;
@@ -18,7 +19,7 @@ interface TSearchContext {
   recipes: {
     data: undefined | RecipeOverview[];
     loading: boolean;
-    error: undefined | string;
+    errors: undefined | TError[];
     moreToLoad: boolean;
     loadMore: () => void;
     notFound: boolean;
@@ -26,7 +27,7 @@ interface TSearchContext {
   availFilters: {
     data: Filters[];
     loading: boolean;
-    error: undefined | string;
+    errors: undefined | TError[];
   };
   filters: {
     data: Filters[];
