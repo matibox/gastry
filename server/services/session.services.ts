@@ -8,7 +8,7 @@ export async function createSession(userId: string) {
     },
   });
 
-  if (session) return session;
+  if (session) throw new Error('You are already logged in!');
 
   return await prisma.session.create({
     data: {

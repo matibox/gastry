@@ -88,16 +88,14 @@ authRouter.post('/login', validateSchema(loginUserSchema), async (req, res) => {
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       maxAge: 300000, // 5m
-      secure: true,
     });
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       maxAge: 604800000, // 2 weeks
-      secure: true,
     });
 
-    return res.status(200).json({ email: user.email, name: user.name });
+    res.status(200).json({ email: user.email, name: user.name });
   } catch (err: any) {
     return res.status(500).json([{ message: err.message }]);
   }
@@ -111,13 +109,11 @@ authRouter.post('/logout', requireUser, async (req, res) => {
   res.cookie('accessToken', '', {
     maxAge: 0,
     httpOnly: true,
-    secure: true,
   });
 
   res.cookie('refreshToken', '', {
     maxAge: 0,
     httpOnly: true,
-    secure: true,
   });
 
   try {
