@@ -4,12 +4,15 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import './assets/global.css';
 import { IsMobileContextProvider } from './contexts/isMobileContext';
+import { AuthContextProvider } from './contexts/authContext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
       <IsMobileContextProvider>
-        <App />
+        <AuthContextProvider>
+          <App />
+        </AuthContextProvider>
       </IsMobileContextProvider>
     </BrowserRouter>
   </React.StrictMode>

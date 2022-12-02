@@ -16,3 +16,13 @@ export function signup(
     },
   });
 }
+
+export function login(email: string, password: string) {
+  return makeRequest('/auth/login', {
+    method: 'POST',
+    data: {
+      email,
+      password,
+    },
+  });
+}

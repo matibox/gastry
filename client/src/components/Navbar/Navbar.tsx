@@ -1,11 +1,16 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/authContext';
 
 // styles
 import styles from './Navbar.module.css';
 
 export function Navbar() {
   const { pathname } = useLocation();
-  if (pathname === '/signup' || pathname === 'login') return null;
+  if (pathname === '/signup' || pathname === '/login') return null;
+
+  const authContext = useAuth();
+  if (!authContext) return null;
+  const { user } = authContext;
 
   return (
     <header className={styles.wrapper}>
@@ -14,9 +19,11 @@ export function Navbar() {
           <img src='/logo.png' alt='gastry' />
         </Link>
       </div>
-      <Link to='/signup' className='button'>
-        <span>signup</span>
-      </Link>
+      {!user && (
+        <Link to='/login' className='button'>
+          <span>login</span>
+        </Link>
+      )}
     </header>
   );
 }
