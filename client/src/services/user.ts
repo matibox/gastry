@@ -26,3 +26,9 @@ export function login(email: string, password: string) {
     },
   });
 }
+
+export function refreshToken() {
+  return makeRequest('/auth/token', {
+    method: 'POST',
+  });
+}

@@ -5,7 +5,6 @@ import { UserInfoForm } from '../../components/UserInfoForm/UserInfoForm';
 import { useAuth } from '../../contexts/authContext';
 import { useAsyncFn } from '../../hooks/useAsync';
 import { login } from '../../services/user';
-import { User } from '../../types/User';
 
 import styles from './LoginForm.module.css';
 
@@ -26,7 +25,7 @@ export function LoginForm({ signupMessage }: LoginFormProps) {
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    loginFn.run(email, password).then((res) => {
+    loginFn.run(email, password).then(res => {
       setLocalUser(res);
       navigate('/');
     });

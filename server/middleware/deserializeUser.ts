@@ -1,52 +1,29 @@
 import { NextFunction, Request, Response } from 'express';
-import jwt, { JwtPayload } from 'jsonwebtoken';
-import { getSession } from '../services/session.services';
-import { signJWT, verifyJWT } from '../utils/jwt';
-import { AccessTokenPayload } from '../routers/user.router';
-
-interface CustomRequest extends Request {
-  user: object;
-}
+import { verifyJWT } from '../utils/jwt';
 
 export default async function deserializeUser(
   req: Request,
   res: Response,
   next: NextFunction
 ) {
-  const { accessToken, refreshToken } = req.cookies;
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
 
-  if (!accessToken) {
-    return next();
+  if (!token) {
+    return res.status(401).json([
+      {
+        message: 'Token not found',
+      },
+    ]);
   }
 
-  const { payload, expired } = verifyJWT(accessToken);
+  const { payload } = verifyJWT(token);
 
-  if (payload) {
-    (req as CustomRequest).user = payload as jwt.JwtPayload;
-    return next();
+  if (!payload) {
+    return res.status(403).json([{ message: 'Invalid token' }]);
   }
 
-  const { payload: refresh } =
-    expired && refreshToken ? verifyJWT(refreshToken, true) : { payload: null };
-
-  if (!refresh) {
-    return next();
-  }
-
-  const session = await getSession((refresh as AccessTokenPayload).sessionId);
-
-  if (!session) {
-    return next();
-  }
-
-  const newAccessToken = signJWT(session);
-
-  res.cookie('accessToken', newAccessToken, {
-    httpOnly: true,
-    maxAge: 300000, // 5m
-  });
-
-  (req as CustomRequest).user = verifyJWT(newAccessToken).payload as JwtPayload;
-
-  return next();
+  //@ts-ignore
+  req.user = payload;
+  next();
 }

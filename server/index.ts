@@ -23,7 +23,6 @@ app.use(
 );
 app.use(cookies());
 app.use(express.json());
-app.use(deserializeUser);
 app.use('/recipes', recipeRouter);
 app.use('/filters', filtersRouter);
 app.use('/auth', authRouter);

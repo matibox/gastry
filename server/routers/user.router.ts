@@ -4,9 +4,14 @@ import { loginUserSchema, registerUserSchema } from '../schemas/user.schema';
 import { createUser, findByEmail } from '../services/user.services';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { createSession, invalidateSession } from '../services/session.services';
+import {
+  createSession,
+  getSession,
+  invalidateSession,
+} from '../services/session.services';
 import { accessTokenExpiry, refreshTokenExpiry } from '../config/jwtExpiry';
-import requireUser from '../middleware/requireUser';
+import { signJWT, verifyJWT } from '../utils/jwt';
+import deserializeUser from '../middleware/deserializeUser';
 
 export const authRouter = express.Router();
 
@@ -85,32 +90,48 @@ authRouter.post('/login', validateSchema(loginUserSchema), async (req, res) => {
       }
     );
 
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      maxAge: 300000, // 5m
-    });
-
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       maxAge: 604800000, // 2 weeks
+      secure: true,
     });
 
-    res.status(200).json({ email: user.email, name: user.name });
+    res.status(200).json({ email: user.email, name: user.name, accessToken });
   } catch (err: any) {
     return res.status(500).json([{ message: err.message }]);
   }
 });
 
-// POST: logout user
-authRouter.post('/logout', requireUser, async (req, res) => {
-  //@ts-ignore
-  if (!req.user) return res.status(401).json([{ message: 'Unauthenticated' }]);
+// GET: refresh the token
+authRouter.get('/token', async (req, res) => {
+  const { refreshToken } = req.cookies;
 
-  res.cookie('accessToken', '', {
-    maxAge: 0,
-    httpOnly: true,
+  if (!refreshToken) {
+    return res.status(401).json([{ message: 'Session expired' }]);
+  }
+
+  const { payload } = verifyJWT(refreshToken, true);
+  let session;
+
+  try {
+    session = await getSession((payload as AccessTokenPayload).sessionId);
+
+    if (!session) {
+      return res.status(403).json([{ message: 'Invalid session' }]);
+    }
+  } catch (err: any) {
+    return res.status(500).json([{ message: err.message }]);
+  }
+
+  const newAccessToken = signJWT(session);
+
+  return res.status(200).json({
+    accessToken: newAccessToken,
   });
+});
 
+// POST: logout user
+authRouter.post('/logout', deserializeUser, async (req, res) => {
   res.cookie('refreshToken', '', {
     maxAge: 0,
     httpOnly: true,
