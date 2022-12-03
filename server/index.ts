@@ -6,7 +6,6 @@ import cookies from 'cookie-parser';
 import { recipeRouter } from './routers/recipes.router';
 import { filtersRouter } from './routers/filters.router';
 import { authRouter } from './routers/user.router';
-import deserializeUser from './middleware/deserializeUser';
 
 dotenv.config();
 

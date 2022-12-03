@@ -20,3 +20,27 @@ export async function findByEmail(email: string) {
     },
   });
 }
+
+export async function addRefreshToken(token: string) {
+  return await prisma.refreshToken.create({
+    data: {
+      token,
+    },
+  });
+}
+
+export async function getRefreshToken(token: string) {
+  return await prisma.refreshToken.findFirst({
+    where: {
+      token,
+    },
+  });
+}
+
+export async function removeRefreshToken(token: string) {
+  return await prisma.refreshToken.deleteMany({
+    where: {
+      token,
+    },
+  });
+}

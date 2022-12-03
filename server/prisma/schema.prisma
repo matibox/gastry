@@ -17,7 +17,6 @@ model User {
   recipes    Recipe[]
   favourites Favourite[]
   menus      Menu[]
-  sessions   Session[]
 }
 
 enum Role {
@@ -125,11 +124,7 @@ model TimeOfDay {
   @@index([recipeId])
 }
 
-model Session {
-  id     String  @id @default(uuid())
-  valid  Boolean
-  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
-
-  @@index([userId])
+model RefreshToken {
+  id    String @id @default(uuid())
+  token String @db.VarChar(250)
 }
