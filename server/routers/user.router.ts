@@ -17,6 +17,7 @@ export const authRouter = express.Router();
 interface TokenPayload {
   email: string;
   isAdmin: boolean;
+  name: string;
 }
 
 // POST: register user
@@ -65,6 +66,7 @@ authRouter.post('/login', validateSchema(loginUserSchema), async (req, res) => {
     const { accessToken, refreshToken } = generateTokens({
       email: user.email,
       isAdmin: user.role === 'admin',
+      name: user.name,
     });
 
     await addRefreshToken(refreshToken);
@@ -76,14 +78,12 @@ authRouter.post('/login', validateSchema(loginUserSchema), async (req, res) => {
       sameSite: 'none',
     });
 
-    res
-      .status(200)
-      .json({
-        email: user.email,
-        name: user.name,
-        isAdmin: user.role === 'admin',
-        accessToken,
-      });
+    res.status(200).json({
+      email: user.email,
+      name: user.name,
+      isAdmin: user.role === 'admin',
+      accessToken,
+    });
   } catch (err: any) {
     return res.status(500).json([{ message: err.message }]);
   }
@@ -107,8 +107,17 @@ authRouter.post('/token', async (req, res) => {
       process.env.JWT_REFRESH_SECRET as string,
       (err: any, user: any) => {
         if (err) return res.status(403).json([{ message: 'Wrong token' }]);
-        const accessToken = generateAccessToken(user);
-        res.status(200).json({ accessToken });
+        const accessToken = generateAccessToken({
+          email: user.email,
+          isAdmin: user.isAdmin,
+          name: user.name,
+        });
+        res.status(200).json({
+          email: user.email,
+          isAdmin: user.isAdmin,
+          name: user.name,
+          accessToken,
+        });
       }
     );
   } catch (err: any) {

@@ -6,6 +6,7 @@ import cookies from 'cookie-parser';
 import { recipeRouter } from './routers/recipes.router';
 import { filtersRouter } from './routers/filters.router';
 import { authRouter } from './routers/user.router';
+import authToken from './middleware/authenticateToken';
 
 dotenv.config();
 
@@ -25,6 +26,11 @@ app.use(express.json());
 app.use('/recipes', recipeRouter);
 app.use('/filters', filtersRouter);
 app.use('/auth', authRouter);
+
+app.get('/test', authToken, (req, res) => {
+  //@ts-ignore
+  res.status(200).json(req.user);
+});
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
