@@ -24,7 +24,15 @@ function App() {
     <div className='App'>
       <Navbar />
       <Routes>
-        <Route path='/' element={<Home />} />
+        <Route
+          path='/'
+          element={
+            <>
+              <Home />
+              <Footer />
+            </>
+          }
+        />
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/search' element={<Search />} />
@@ -34,7 +42,6 @@ function App() {
         <Route path='/profile' element={<Profile />} />
         <Route path='/menu' element={<Menu />} />
       </Routes>
-      <Footer />
       {isMobile && <MobileMenu />}
     </div>
   );
