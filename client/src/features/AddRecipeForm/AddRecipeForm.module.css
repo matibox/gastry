@@ -1,0 +1,128 @@
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: var(--black-alpha);
+  backdrop-filter: blur(5px);
+}
+
+.wrapper {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  translate: -50% -60%;
+  width: 90%;
+  background-color: var(--black);
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 3rem;
+  gap: 1rem;
+}
+
+.wrapper h2 {
+  text-align: center;
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 3rem;
+}
+
+.wrapper label {
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.wrapper input:not([type='file']),
+.wrapper textarea {
+  height: 3.5rem;
+  background-color: #aaaaaa;
+  border: none;
+  border-radius: 0.3rem;
+  padding-inline: 1rem;
+  font-family: 'Montserrat', sans-serif;
+  caret-color: var(--black);
+}
+
+.wrapper textarea {
+  height: 14rem;
+  padding-block: 0.5rem;
+}
+
+.wrapper input:not([type='file']):focus,
+.wrapper textarea:focus {
+  border-bottom: 2px solid var(--orange);
+  outline: none;
+}
+
+.wrapper input::selection {
+  background-color: var(--orange);
+}
+
+.ingredientInputsWrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1rem;
+}
+
+.ingredientInputsWrapper input,
+.ingredientInputsWrapper button {
+  max-width: calc(50% - 1rem);
+}
+
+.ingredientInputsWrapper button {
+  background-color: transparent;
+  border: 2px solid var(--orange);
+  color: var(--white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  width: 40%;
+  flex-grow: 1;
+  transition: background-color 0.15s ease;
+  cursor: pointer;
+}
+
+.ingredientInputsWrapper button:hover {
+  background-color: var(--orange);
+}
+
+.littleLabel {
+  color: #787878;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.2rem;
+}
+
+.submit {
+  width: 100%;
+  background-color: transparent;
+  border: 2px solid var(--orange);
+  color: var(--white);
+  font-family: 'Montserrat';
+  font-weight: 500;
+  border-radius: 0.5rem;
+  padding-block: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.submit:hover {
+  background-color: var(--orange);
+}

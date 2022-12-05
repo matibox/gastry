@@ -21,3 +21,23 @@
   flex-wrap: wrap;
   gap: 1rem;
 }
+
+.addBtn {
+  position: fixed;
+  bottom: 7rem;
+  right: 1.5rem;
+  background-color: var(--orange);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 1.6rem;
+  color: var(--white);
+  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}
+
+.addBtn > span {
+  font-size: 3rem;
+}
