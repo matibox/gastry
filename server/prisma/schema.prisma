@@ -28,12 +28,12 @@ model Recipe {
   id           String       @id @default(uuid())
   user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId       String
-  title        String       @unique
+  title        String
   cookingTime  Int
   instructions String       @db.Text
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
-  thumbnail    String
+  thumbnail    String?
   ingredients  Ingredient[]
   favourites   Favourite[]
   timeOfDays   TimeOfDay[]
@@ -55,11 +55,11 @@ model RecipeType {
 }
 
 model Ingredient {
-  id       String   @id @default(uuid())
-  name     String
-  quantity Int
-  unit     String
-  recipes  Recipe[]
+  id      String   @id @default(uuid())
+  name    String
+  value   Int
+  unit    String?
+  recipes Recipe[]
 }
 
 model Favourite {

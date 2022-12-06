@@ -33,7 +33,7 @@ export async function makeAuthRequest(
     }
   }
 
-  return api(url, {
+  return makeRequest(url, {
     ...config,
     headers: {
       Authorization: `Bearer ${token}`,

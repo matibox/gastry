@@ -32,12 +32,12 @@ async function main() {
         create: [
           {
             name: 'salad',
-            quantity: 500,
+            value: 500,
             unit: 'g',
           },
           {
             name: 'wheat bread',
-            quantity: 2,
+            value: 2,
             unit: 'slices',
           },
         ],
@@ -58,12 +58,12 @@ async function main() {
         create: [
           {
             name: 'flour',
-            quantity: 500,
+            value: 500,
             unit: 'g',
           },
           {
             name: 'tomato sauce',
-            quantity: 250,
+            value: 250,
             unit: 'ml',
           },
         ],

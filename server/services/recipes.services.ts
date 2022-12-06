@@ -1,4 +1,6 @@
+import { Ingredient } from '@prisma/client';
 import prisma from '../utils/prisma';
+import { findByEmail } from './user.services';
 
 const recipeOverviewSelectFields = {
   id: true,
@@ -43,7 +45,7 @@ export async function singleRecipe(id: string) {
         select: {
           id: true,
           name: true,
-          quantity: true,
+          value: true,
           unit: true,
         },
       },
@@ -53,5 +55,34 @@ export async function singleRecipe(id: string) {
     where: {
       id,
     },
+  });
+}
+
+export async function addRecipe(
+  userEmail: string,
+  title: string,
+  cookingTime: number,
+  ingredients: Ingredient[],
+  instructions: string
+) {
+  const user = await findByEmail(userEmail);
+  if (!user) throw new Error('Bad user email');
+
+  return await prisma.recipe.create({
+    data: {
+      userId: user.id,
+      title,
+      cookingTime,
+      ingredients: {
+        create: [
+          ...ingredients.map(ingredient => ({
+            ...ingredient,
+            id: undefined,
+          })),
+        ],
+      },
+      instructions,
+    },
+    select: recipeOverviewSelectFields,
   });
 }

@@ -4,6 +4,7 @@ import {
   latestRecipes,
   singleRecipe,
   searchRecipes,
+  addRecipe,
 } from '../services/recipes.services';
 import { Prisma, RecipeTypeName } from '@prisma/client';
 import validateSchema from '../middleware/validateSchema';
@@ -119,6 +120,7 @@ recipeRouter.get('/:id', async (req: Request, res: Response) => {
   }
 });
 
+// POST: add recipe
 recipeRouter.post(
   '/',
   validateSchema(createRecipeSchema),
@@ -128,8 +130,23 @@ recipeRouter.post(
       req.body;
 
     //TODO thumbnail handling
+    if (thumbnail) {
+    }
 
-    //@ts-ignore
-    console.log(req.user);
+    try {
+      //@ts-ignore
+      const user = req.user;
+      const createdRecipe = await addRecipe(
+        user.email,
+        title,
+        cookingTime,
+        ingredients,
+        instructions
+      );
+
+      return res.status(200).json(createdRecipe);
+    } catch (err: any) {
+      return res.status(500).json([{ message: err.message }]);
+    }
   }
 );

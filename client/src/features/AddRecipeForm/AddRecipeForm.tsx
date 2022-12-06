@@ -5,6 +5,8 @@ import styles from './AddRecipeForm.module.css';
 import { v4 as uuidv4 } from 'uuid';
 import { TError } from '../../types/Error';
 import { Ingredient } from '../../types/Ingredient';
+import { useAsyncFn } from '../../hooks/useAsync';
+import { createRecipe } from '../../services/recipes';
 
 export function AddRecipeForm() {
   const [title, setTitle] = useState('');
@@ -17,11 +19,13 @@ export function AddRecipeForm() {
   const [thumbnail, setThumbnail] = useState<File | undefined | null>();
   const [thumbnailError, setThumbnailError] = useState<TError>();
 
+  const addRecipeFn = useAsyncFn(createRecipe);
+
   function handleIngredientAdd(e: React.MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
     e.preventDefault();
-    setIngredients((prev) => {
-      if (!ingredientName || !ingredientValue || !ingredientUnit) return prev;
+    setIngredients(prev => {
+      if (!ingredientName || !ingredientValue) return prev;
       return [
         ...prev,
         {
@@ -37,7 +41,7 @@ export function AddRecipeForm() {
     setIngredientUnit('');
   }
 
-  function handleSubmit(e: FormEvent<HTMLButtonElement>) {
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (thumbnail) {
       if (!thumbnail.type.startsWith('image')) {
@@ -51,6 +55,11 @@ export function AddRecipeForm() {
     }
 
     //TODO request
+    addRecipeFn
+      .run(title, parseInt(cookingTime), ingredients, instructions, thumbnail)
+      .then(res => {
+        console.log(res);
+      });
   }
 
   return (
@@ -74,6 +83,7 @@ export function AddRecipeForm() {
           duration: 0.35,
           ease: 'backOut',
         }}
+        onSubmit={(e: FormEvent<HTMLFormElement>) => handleSubmit(e)}
       >
         <h2>New recipe</h2>
         <label>
@@ -138,12 +148,12 @@ export function AddRecipeForm() {
             </button>
           </div>
           <p>
-            {ingredients.map((ingredient) => (
+            {ingredients.map(ingredient => (
               <span
                 key={ingredient.id}
                 onClick={() =>
-                  setIngredients((prev) =>
-                    prev.filter((item) => item.id !== ingredient.id)
+                  setIngredients(prev =>
+                    prev.filter(item => item.id !== ingredient.id)
                   )
                 }
               >
@@ -172,10 +182,7 @@ export function AddRecipeForm() {
           />
           <span className={styles.littleLabel}>Max size: 1MB</span>
         </label>
-        <button
-          onSubmit={(e: FormEvent<HTMLButtonElement>) => handleSubmit(e)}
-          className={styles.submit}
-        >
+        <button className={styles.submit}>
           <span>Create recipe</span>
           <Icon name='add' />
         </button>
