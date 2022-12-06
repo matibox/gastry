@@ -1,5 +1,6 @@
 import { Filters } from '../types/Filters';
-import { makeRequest } from './makeRequest';
+import { Ingredient } from '../types/Ingredient';
+import { makeAuthRequest, makeRequest } from './makeRequest';
 
 export function getLatestRecipes(offset: number, quantity: number) {
   return makeRequest('/recipes/latest', {
@@ -43,5 +44,24 @@ export function getByQuery(
 export function getRecipe(id: string) {
   return makeRequest(`/recipes/${id}`, {
     method: 'GET',
+  });
+}
+
+export function createRecipe(
+  title: string,
+  cookingTime: number,
+  ingredients: Ingredient[],
+  instructions: string,
+  thumbnail: File
+) {
+  return makeAuthRequest('/recipes', {
+    method: 'POST',
+    data: {
+      title,
+      cookingTime,
+      ingredients,
+      instructions,
+      thumbnail,
+    },
   });
 }

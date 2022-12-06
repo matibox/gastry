@@ -26,11 +26,11 @@ export function RecipeContent() {
               </p>
               <p>
                 <span className={styles.bold}>Ingredients: </span>
-                {recipe.ingredients.map(ingredient => {
+                {recipe.ingredients.map((ingredient) => {
                   const lastItem = [...recipe.ingredients].pop();
                   return (
                     <span key={ingredient.id}>
-                      {ingredient.quantity} {ingredient.unit} {ingredient.name}
+                      {ingredient.value} {ingredient.unit} {ingredient.name}
                       {lastItem?.id !== ingredient.id && ', '}
                     </span>
                   );

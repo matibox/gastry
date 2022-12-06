@@ -3,13 +3,8 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { Icon } from '../../components/Icon/Icon';
 import styles from './AddRecipeForm.module.css';
 import { v4 as uuidv4 } from 'uuid';
-
-interface Ingredient {
-  id: string;
-  name: string;
-  value: number;
-  unit: string;
-}
+import { TError } from '../../types/Error';
+import { Ingredient } from '../../types/Ingredient';
 
 export function AddRecipeForm() {
   const [title, setTitle] = useState('');
@@ -19,12 +14,13 @@ export function AddRecipeForm() {
   const [ingredientValue, setIngredientValue] = useState('');
   const [ingredientUnit, setIngredientUnit] = useState('');
   const [instructions, setInstructions] = useState('');
-  const [thumbnail, setThumbnail] = useState<any>();
+  const [thumbnail, setThumbnail] = useState<File | undefined | null>();
+  const [thumbnailError, setThumbnailError] = useState<TError>();
 
   function handleIngredientAdd(e: React.MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
     e.preventDefault();
-    setIngredients(prev => {
+    setIngredients((prev) => {
       if (!ingredientName || !ingredientValue || !ingredientUnit) return prev;
       return [
         ...prev,
@@ -43,7 +39,18 @@ export function AddRecipeForm() {
 
   function handleSubmit(e: FormEvent<HTMLButtonElement>) {
     e.preventDefault();
-    // if (thumbnail.size > 1024)
+    if (thumbnail) {
+      if (!thumbnail.type.startsWith('image')) {
+        setThumbnailError({ message: 'Uploaded file is not an image' });
+        return;
+      }
+      if (thumbnail.size > 1000000) {
+        setThumbnailError({ message: 'File size exceeds 1MB' });
+        return;
+      }
+    }
+
+    //TODO request
   }
 
   return (
@@ -131,12 +138,12 @@ export function AddRecipeForm() {
             </button>
           </div>
           <p>
-            {ingredients.map(ingredient => (
+            {ingredients.map((ingredient) => (
               <span
                 key={ingredient.id}
                 onClick={() =>
-                  setIngredients(prev =>
-                    prev.filter(item => item.id !== ingredient.id)
+                  setIngredients((prev) =>
+                    prev.filter((item) => item.id !== ingredient.id)
                   )
                 }
               >
@@ -159,7 +166,6 @@ export function AddRecipeForm() {
           <span>Thumbnail</span>
           <input
             type='file'
-            value={thumbnail}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setThumbnail(e.target.files && e.target.files[0])
             }

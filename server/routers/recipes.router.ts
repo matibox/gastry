@@ -6,6 +6,9 @@ import {
   searchRecipes,
 } from '../services/recipes.services';
 import { Prisma, RecipeTypeName } from '@prisma/client';
+import validateSchema from '../middleware/validateSchema';
+import authToken from '../middleware/authenticateToken';
+import { createRecipeSchema } from '../schemas/recipe.schema';
 
 export const recipeRouter = express.Router();
 
@@ -115,3 +118,18 @@ recipeRouter.get('/:id', async (req: Request, res: Response) => {
     return res.status(500).json([{ message: err.message }]);
   }
 });
+
+recipeRouter.post(
+  '/',
+  validateSchema(createRecipeSchema),
+  authToken,
+  async (req, res) => {
+    const { title, cookingTime, ingredients, instructions, thumbnail } =
+      req.body;
+
+    //TODO thumbnail handling
+
+    //@ts-ignore
+    console.log(req.user);
+  }
+);
