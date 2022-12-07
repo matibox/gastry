@@ -150,6 +150,7 @@ recipeRouter.post(
 // PATCH: update recipe thumbnail
 recipeRouter.patch(
   '/:id/thumbnail',
+  authToken,
   parser.single('thumbnail'),
   async (req, res) => {
     if (!req.file) {

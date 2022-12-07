@@ -51,8 +51,7 @@ export function createRecipe(
   title: string,
   cookingTime: number,
   ingredients: Ingredient[],
-  instructions: string,
-  thumbnail: File
+  instructions: string
 ) {
   return makeAuthRequest('/recipes', {
     method: 'POST',
@@ -61,7 +60,16 @@ export function createRecipe(
       cookingTime,
       ingredients,
       instructions,
-      thumbnail,
+    },
+  });
+}
+
+export function updateRecipeThumbnail(recipeId: string, formData: FormData) {
+  return makeAuthRequest(`/recipes/${recipeId}/thumbnail`, {
+    method: 'PATCH',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
     },
   });
 }

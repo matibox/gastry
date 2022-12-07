@@ -36,6 +36,7 @@ export async function makeAuthRequest(
   return makeRequest(url, {
     ...config,
     headers: {
+      ...config.headers,
       Authorization: `Bearer ${token}`,
     },
   });

@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { TError } from '../../types/Error';
 import { Ingredient } from '../../types/Ingredient';
 import { useAsyncFn } from '../../hooks/useAsync';
-import { createRecipe } from '../../services/recipes';
+import { createRecipe, updateRecipeThumbnail } from '../../services/recipes';
 
 export function AddRecipeForm() {
   const [title, setTitle] = useState('');
@@ -20,6 +20,7 @@ export function AddRecipeForm() {
   const [thumbnailError, setThumbnailError] = useState<TError>();
 
   const addRecipeFn = useAsyncFn(createRecipe);
+  const updateRecipeThumbnailFn = useAsyncFn(updateRecipeThumbnail);
 
   function handleIngredientAdd(e: React.MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
@@ -43,22 +44,25 @@ export function AddRecipeForm() {
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (thumbnail) {
-      if (!thumbnail.type.startsWith('image')) {
-        setThumbnailError({ message: 'Uploaded file is not an image' });
-        return;
-      }
-      if (thumbnail.size > 1000000) {
-        setThumbnailError({ message: 'File size exceeds 1MB' });
-        return;
-      }
+    if (!thumbnail?.type.startsWith('image')) {
+      setThumbnailError({ message: 'Uploaded file is not an image' });
+      return;
+    }
+    if (thumbnail?.size > 1000000) {
+      setThumbnailError({ message: 'File size exceeds 1MB' });
+      return;
     }
 
-    //TODO request
+    let newRecipeId: string;
     addRecipeFn
-      .run(title, parseInt(cookingTime), ingredients, instructions, thumbnail)
+      .run(title, parseInt(cookingTime), ingredients, instructions)
       .then(res => {
-        console.log(res);
+        newRecipeId = res.id;
+        const formData = new FormData();
+        formData.append('thumbnail', thumbnail);
+        updateRecipeThumbnailFn
+          .run(newRecipeId, formData)
+          .then(res => console.log(res));
       });
   }
 
