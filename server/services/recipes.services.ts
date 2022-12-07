@@ -86,3 +86,15 @@ export async function addRecipe(
     select: recipeOverviewSelectFields,
   });
 }
+
+export async function addRecipeThumbnail(id: string, thumbnailURL: string) {
+  return await prisma.recipe.update({
+    where: {
+      id,
+    },
+    data: {
+      thumbnail: thumbnailURL,
+    },
+    select: recipeOverviewSelectFields,
+  });
+}
