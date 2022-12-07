@@ -1,5 +1,11 @@
 import { motion } from 'framer-motion';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  HTMLInputTypeAttribute,
+  useEffect,
+  useState,
+} from 'react';
 import { Icon } from '../../components/Icon/Icon';
 import styles from './AddRecipeForm.module.css';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,7 +14,6 @@ import { Ingredient } from '../../types/Ingredient';
 import { useAsyncFn } from '../../hooks/useAsync';
 import { createRecipe, updateRecipeThumbnail } from '../../services/recipes';
 import { Error } from '../../components/Error/Error';
-import Loading from '../../components/Loading/Loading';
 
 export function AddRecipeForm() {
   const [title, setTitle] = useState('');
@@ -18,6 +23,7 @@ export function AddRecipeForm() {
   const [ingredientValue, setIngredientValue] = useState('');
   const [ingredientUnit, setIngredientUnit] = useState('');
   const [instructions, setInstructions] = useState('');
+  const [types, setTypes] = useState<string[]>([]);
   const [thumbnail, setThumbnail] = useState<File | undefined | null>();
   const [thumbnailError, setThumbnailError] = useState<TError>();
 
@@ -44,6 +50,14 @@ export function AddRecipeForm() {
     setIngredientUnit('');
   }
 
+  function handleCheckboxToggle(e: ChangeEvent<HTMLInputElement>) {
+    if (e.target.checked) {
+      setTypes(prev => [...prev, e.target.value]);
+    } else {
+      setTypes(prev => prev.filter(item => item !== e.target.value));
+    }
+  }
+
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (thumbnail && !thumbnail.type.startsWith('image')) {
@@ -57,15 +71,13 @@ export function AddRecipeForm() {
 
     let newRecipeId: string;
     addRecipeFn
-      .run(title, parseInt(cookingTime), ingredients, instructions)
+      .run(title, parseInt(cookingTime), ingredients, instructions, types)
       .then(res => {
         newRecipeId = res.id;
         if (thumbnail) {
           const formData = new FormData();
           formData.append('thumbnail', thumbnail);
-          updateRecipeThumbnailFn
-            .run(newRecipeId, formData)
-            .then(res => console.log(res));
+          updateRecipeThumbnailFn.run(newRecipeId, formData).then(res => res);
         }
       });
   }
@@ -179,6 +191,38 @@ export function AddRecipeForm() {
             }
             required
           />
+        </label>
+        <label className={styles.checkboxes}>
+          <label>
+            <input
+              type='checkbox'
+              value='vegetarian'
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                handleCheckboxToggle(e)
+              }
+            />
+            <span>Vegetarian</span>
+          </label>
+          <label>
+            <input
+              type='checkbox'
+              value='vegan'
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                handleCheckboxToggle(e)
+              }
+            />
+            <span>Vegan</span>
+          </label>
+          <label>
+            <input
+              type='checkbox'
+              value='spicy'
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                handleCheckboxToggle(e)
+              }
+            />
+            <span>Spicy</span>
+          </label>
         </label>
         <label>
           <span>Thumbnail</span>

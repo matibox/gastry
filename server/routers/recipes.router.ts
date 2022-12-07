@@ -1,10 +1,11 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import {
   latestRecipes,
   singleRecipe,
   searchRecipes,
   addRecipe,
   addRecipeThumbnail,
+  getYourRecipes,
 } from '../services/recipes.services';
 import { Prisma, RecipeTypeName } from '@prisma/client';
 import validateSchema from '../middleware/validateSchema';
@@ -25,7 +26,7 @@ recipeRouter.get('/latest', async (req, res) => {
 
   try {
     const recipes = await latestRecipes(skip, take);
-    return res.status(200).json(recipes);
+    return res.status(200).json({ recipes, moreToLoad: false });
   } catch (err: any) {
     return res.status(500).json([{ message: err.message }]);
   }
@@ -33,57 +34,52 @@ recipeRouter.get('/latest', async (req, res) => {
 
 // GET: recipe search
 recipeRouter.get('/search', async (req, res) => {
-  const query = req.query.q as string;
-  const filters = req.query.filters as string;
-  const skip = parseInt(req.query.skip as string);
-  const take = parseInt(req.query.take as string);
+  const { skip, take, recipeWhereFields, error } = recipeSearchHandler(req);
 
-  const filtersArray = filters?.split(',') as Prisma.Enumerable<RecipeTypeName>;
-
-  let recipeWhereFields: {}[] = [];
-
-  if (query) {
-    recipeWhereFields.push({
-      OR: [
-        {
-          title: { contains: query },
-        },
-        {
-          ingredients: {
-            some: {
-              name: {
-                contains: query,
-              },
-            },
-          },
-        },
-      ],
-    });
-  }
-
-  if (filtersArray) {
-    recipeWhereFields.push({
-      types: {
-        some: {
-          name: {
-            in: filtersArray,
-          },
-        },
-      },
-    });
-  }
-
-  if (isNaN(skip) || isNaN(take)) {
-    return res.status(400).json([{ message: 'skip/take is undefined' }]);
-  }
-
-  if (recipeWhereFields.length === 0) {
-    return res.status(404).json([{ message: 'No recipes found' }]);
-  }
+  if (error) return res.status(error.code).json([{ message: error.message }]);
 
   try {
     const recipes = await searchRecipes(skip, take, recipeWhereFields);
     const nextRecipes = await searchRecipes(
+      skip + take,
+      take,
+      recipeWhereFields
+    );
+
+    if (recipes.length === 0) {
+      return res.status(404).json([{ message: 'No recipes found' }]);
+    }
+
+    return res.status(200).json({
+      recipes,
+      moreToLoad: nextRecipes.length > 0,
+    });
+  } catch (err: any) {
+    return res.status(500).json([{ message: err.message }]);
+  }
+});
+
+// GET: your recipes
+recipeRouter.get('/your', authToken, async (req, res) => {
+  const { skip, take, recipeWhereFields, error } = recipeSearchHandler(
+    req,
+    false
+  );
+
+  if (error) return res.status(error.code).json([{ message: error.message }]);
+
+  //@ts-ignore
+  const user = req.user;
+
+  try {
+    const recipes = await getYourRecipes(
+      user.email,
+      skip,
+      take,
+      recipeWhereFields
+    );
+    const nextRecipes = await getYourRecipes(
+      user.email,
       skip + take,
       take,
       recipeWhereFields
@@ -127,7 +123,7 @@ recipeRouter.post(
   validateSchema(createRecipeSchema),
   authToken,
   async (req, res) => {
-    const { title, cookingTime, ingredients, instructions } = req.body;
+    const { title, cookingTime, ingredients, instructions, types } = req.body;
 
     try {
       //@ts-ignore
@@ -137,7 +133,8 @@ recipeRouter.post(
         title,
         cookingTime,
         ingredients,
-        instructions
+        instructions,
+        types
       );
 
       return res.status(200).json(createdRecipe);
@@ -180,3 +177,65 @@ recipeRouter.patch(
     }
   }
 );
+
+function recipeSearchHandler(
+  req: Request,
+  requiresFiltersOrQuery: boolean = true
+) {
+  const query = req.query.q as string;
+  const filters = req.query.filters as string;
+  const skip = parseInt(req.query.skip as string);
+  const take = parseInt(req.query.take as string);
+
+  let error = undefined;
+
+  const filtersArray = filters?.split(',') as Prisma.Enumerable<RecipeTypeName>;
+
+  let recipeWhereFields: {}[] = [];
+
+  if (query) {
+    recipeWhereFields.push({
+      OR: [
+        {
+          title: { contains: query },
+        },
+        {
+          ingredients: {
+            some: {
+              name: {
+                contains: query,
+              },
+            },
+          },
+        },
+      ],
+    });
+  }
+
+  if (filtersArray) {
+    recipeWhereFields.push({
+      types: {
+        some: {
+          name: {
+            in: filtersArray,
+          },
+        },
+      },
+    });
+  }
+
+  if (isNaN(skip) || isNaN(take)) {
+    error = { code: 400, message: 'Skip/take is undefined' };
+  }
+
+  if (recipeWhereFields.length === 0 && requiresFiltersOrQuery) {
+    error = { code: 404, message: 'No recipes found' };
+  }
+
+  return {
+    skip,
+    take,
+    recipeWhereFields,
+    error,
+  };
+}

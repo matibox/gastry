@@ -30,7 +30,7 @@
   font-size: 3rem;
 }
 
-.wrapper label {
+.wrapper > label {
   color: var(--white);
   font-family: 'Montserrat', sans-serif;
   font-size: 1.4rem;
@@ -96,6 +96,21 @@
 
 .ingredientInputsWrapper button:hover {
   background-color: var(--orange);
+}
+
+.checkboxes {
+  flex-wrap: wrap;
+  flex-direction: row !important;
+  justify-content: center;
+  column-gap: 2rem !important;
+}
+
+.checkboxes label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 1.5rem;
+  width: min-content;
 }
 
 .littleLabel {

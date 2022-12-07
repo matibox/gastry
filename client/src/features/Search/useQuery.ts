@@ -20,19 +20,17 @@ export function useQuery(
   const [sortedRecipes, setSortedRecipes] = useState<RecipeOverview[]>([]);
   const [offset, setOffset] = useState(0);
   const [moreToLoad, setMoreToLoad] = useState(false);
-  const [notFound, setNotFound] = useState(false);
 
   // query/filters change
   useDebounce(
     () => {
-      if (!query && filters.length === 0) {
+      if (!query && filters.length === 0 && !initialFetch) {
         setRecipes([]);
         return;
       }
       getRecipes.run(0, QUANTITY, query, filters).then(data => {
         setRecipes(data.recipes);
         setMoreToLoad(data.moreToLoad);
-        setNotFound(data.notFound);
       });
     },
     DELAY,
@@ -64,11 +62,8 @@ export function useQuery(
   useEffect(() => {
     if (initialFetch) {
       getRecipes.run(0, QUANTITY, query, filters).then(data => {
-        console.log(data);
-
         setRecipes(data.recipes);
         setMoreToLoad(data.moreToLoad);
-        setNotFound(data.notFound);
         setOffset(prevOffset => prevOffset + data.recipes.length);
       });
     }
@@ -96,6 +91,5 @@ export function useQuery(
     errors: getRecipes.errors,
     loadMore,
     moreToLoad,
-    notFound,
   };
 }

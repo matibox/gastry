@@ -7,7 +7,7 @@ import { Searchbar } from '../features/Search/Searchbar';
 import { SearchContextProvider } from '../features/Search/searchContext';
 import { SearchResults } from '../features/Search/SearchResults';
 import { SortBy } from '../features/Search/SortBy';
-import { getByQuery } from '../services/recipes';
+import { getYourRecipes } from '../services/recipes';
 
 import styles from './SearchSec.module.css';
 
@@ -15,7 +15,11 @@ export function YourRecipes() {
   const [isFormOpened, setIsFormOpened] = useState(false);
 
   return (
-    <SearchContextProvider filtersToggle initialFetch serviceFn={getByQuery}>
+    <SearchContextProvider
+      filtersToggle
+      initialFetch
+      serviceFn={getYourRecipes}
+    >
       <main className={styles.wrapper} style={{ position: 'relative' }}>
         <AnimatePresence>{isFormOpened && <AddRecipeForm />}</AnimatePresence>
         <h1>your recipes</h1>

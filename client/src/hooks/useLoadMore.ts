@@ -15,18 +15,14 @@ export function useLoadMore(quantity: number, serviceFn: ServiceFn) {
   const loadMore = useCallback((...params: any[]) => {
     if (!moreToLoad) return;
     serviceFn.run(offset, quantity, ...params).then(newData => {
-      let length = data.length;
       setData(prevData => {
         return [
           ...new Map(
-            [...prevData, ...newData].map(item => [item.id, item])
+            [...prevData, ...newData.recipes].map(item => [item.id, item])
           ).values(),
         ];
       });
-      if (data.length === length) {
-        setMoreToLoad(false);
-        return;
-      }
+      setMoreToLoad(newData.moreToLoad);
       setOffset(prevOffset => prevOffset + quantity);
     });
   }, []);

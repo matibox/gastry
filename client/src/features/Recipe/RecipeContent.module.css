@@ -5,6 +5,7 @@
   width: 100%;
   padding: 3rem;
   gap: 1.8rem;
+  margin-bottom: var(--mobile-menu-height);
 }
 
 .wrapper > h1 {

@@ -12,14 +12,19 @@ export function getLatestRecipes(offset: number, quantity: number) {
   });
 }
 
-export function getYourRecipes(offset: number, quantity: number) {
-  //! implement after auth, currently /latestRecipes is used
-  //! as a placeholder
-  return makeRequest('/recipes/latest', {
+export function getYourRecipes(
+  offset: number,
+  quantity: number,
+  query: string,
+  filters?: Filters[]
+) {
+  return makeAuthRequest('/recipes/your', {
     method: 'GET',
     params: {
+      q: query,
       skip: offset,
       take: quantity,
+      filters: filters?.join(',') || undefined,
     },
   });
 }
@@ -51,7 +56,8 @@ export function createRecipe(
   title: string,
   cookingTime: number,
   ingredients: Ingredient[],
-  instructions: string
+  instructions: string,
+  types: string[]
 ) {
   return makeAuthRequest('/recipes', {
     method: 'POST',
@@ -60,6 +66,7 @@ export function createRecipe(
       cookingTime,
       ingredients,
       instructions,
+      types,
     },
   });
 }
