@@ -126,3 +126,9 @@
 .submit:hover {
   background-color: var(--orange);
 }
+
+.loadingButton {
+  background-color: var(--orange);
+  filter: grayscale(1) brightness(0.5);
+  transition: none;
+}

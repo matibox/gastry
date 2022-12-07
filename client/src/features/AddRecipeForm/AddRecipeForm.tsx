@@ -7,6 +7,8 @@ import { TError } from '../../types/Error';
 import { Ingredient } from '../../types/Ingredient';
 import { useAsyncFn } from '../../hooks/useAsync';
 import { createRecipe, updateRecipeThumbnail } from '../../services/recipes';
+import { Error } from '../../components/Error/Error';
+import Loading from '../../components/Loading/Loading';
 
 export function AddRecipeForm() {
   const [title, setTitle] = useState('');
@@ -44,11 +46,11 @@ export function AddRecipeForm() {
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (!thumbnail?.type.startsWith('image')) {
+    if (thumbnail && !thumbnail.type.startsWith('image')) {
       setThumbnailError({ message: 'Uploaded file is not an image' });
       return;
     }
-    if (thumbnail?.size > 1000000) {
+    if (thumbnail && thumbnail.size > 1000000) {
       setThumbnailError({ message: 'File size exceeds 1MB' });
       return;
     }
@@ -58,11 +60,13 @@ export function AddRecipeForm() {
       .run(title, parseInt(cookingTime), ingredients, instructions)
       .then(res => {
         newRecipeId = res.id;
-        const formData = new FormData();
-        formData.append('thumbnail', thumbnail);
-        updateRecipeThumbnailFn
-          .run(newRecipeId, formData)
-          .then(res => console.log(res));
+        if (thumbnail) {
+          const formData = new FormData();
+          formData.append('thumbnail', thumbnail);
+          updateRecipeThumbnailFn
+            .run(newRecipeId, formData)
+            .then(res => console.log(res));
+        }
       });
   }
 
@@ -186,10 +190,28 @@ export function AddRecipeForm() {
           />
           <span className={styles.littleLabel}>Max size: 1MB</span>
         </label>
-        <button className={styles.submit}>
-          <span>Create recipe</span>
-          <Icon name='add' />
-        </button>
+        <div>
+          {addRecipeFn.errors && (
+            <Error errors={addRecipeFn.errors} size='small' />
+          )}
+          {updateRecipeThumbnailFn.errors && (
+            <Error errors={updateRecipeThumbnailFn.errors} size='small' />
+          )}
+          {thumbnailError && <Error errors={[thumbnailError]} size='small' />}
+        </div>
+        {addRecipeFn.loading || updateRecipeThumbnailFn.loading ? (
+          <button
+            className={`${styles.loadingButton} ${styles.submit}`}
+            disabled
+          >
+            Loading...
+          </button>
+        ) : (
+          <button className={styles.submit}>
+            <span>Create recipe</span>
+            <Icon name='add' />
+          </button>
+        )}
       </motion.form>
     </>
   );
