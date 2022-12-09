@@ -24,6 +24,7 @@ export function useQuery(
   // query/filters change
   useDebounce(
     () => {
+      setOffset(0);
       if (!query && filters.length === 0 && !initialFetch) {
         setRecipes([]);
         return;
@@ -31,10 +32,11 @@ export function useQuery(
       getRecipes.run(0, QUANTITY, query, filters).then(data => {
         setRecipes(data.recipes);
         setMoreToLoad(data.moreToLoad);
+        setOffset(prevOffset => prevOffset + data.recipes.length);
       });
     },
     DELAY,
-    [query, filters]
+    [query, filters, initialFetch]
   );
 
   // sorting
@@ -58,21 +60,10 @@ export function useQuery(
     });
   }, [recipes, sortBy]);
 
-  // initial fetch
-  useEffect(() => {
-    if (initialFetch) {
-      getRecipes.run(0, QUANTITY, query, filters).then(data => {
-        setRecipes(data.recipes);
-        setMoreToLoad(data.moreToLoad);
-        setOffset(prevOffset => prevOffset + data.recipes.length);
-      });
-    }
-  }, [initialFetch]);
-
   // load more
   const loadMore = useCallback(() => {
     if (!moreToLoad) return;
-    getRecipes.run(offset + QUANTITY, QUANTITY, query, filters).then(data => {
+    getRecipes.run(offset, QUANTITY, query, filters).then(data => {
       setRecipes(prevRecipes => {
         return [
           ...new Map(
@@ -83,10 +74,11 @@ export function useQuery(
       setMoreToLoad(data.moreToLoad);
       setOffset(prevOffset => prevOffset + data.recipes.length);
     });
-  }, [query, moreToLoad]);
+  }, [query, moreToLoad, offset]);
 
   return {
     recipes: recipes.length > 0 ? sortedRecipes : recipes,
+    setRecipes,
     loading: getRecipes.loading,
     errors: getRecipes.errors,
     loadMore,

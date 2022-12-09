@@ -1,11 +1,5 @@
 import { motion } from 'framer-motion';
-import React, {
-  ChangeEvent,
-  FormEvent,
-  HTMLInputTypeAttribute,
-  useEffect,
-  useState,
-} from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Icon } from '../../components/Icon/Icon';
 import styles from './AddRecipeForm.module.css';
 import { v4 as uuidv4 } from 'uuid';
@@ -14,6 +8,7 @@ import { Ingredient } from '../../types/Ingredient';
 import { useAsyncFn } from '../../hooks/useAsync';
 import { createRecipe, updateRecipeThumbnail } from '../../services/recipes';
 import { Error } from '../../components/Error/Error';
+import { useSearch } from '../Search/searchContext';
 
 export function AddRecipeForm() {
   const [title, setTitle] = useState('');
@@ -29,6 +24,10 @@ export function AddRecipeForm() {
 
   const addRecipeFn = useAsyncFn(createRecipe);
   const updateRecipeThumbnailFn = useAsyncFn(updateRecipeThumbnail);
+
+  const searchContext = useSearch();
+  if (!searchContext) return null;
+  const { addLocalRecipe } = searchContext.recipes;
 
   function handleIngredientAdd(e: React.MouseEvent<HTMLButtonElement>) {
     e.stopPropagation();
@@ -77,7 +76,11 @@ export function AddRecipeForm() {
         if (thumbnail) {
           const formData = new FormData();
           formData.append('thumbnail', thumbnail);
-          updateRecipeThumbnailFn.run(newRecipeId, formData).then(res => res);
+          updateRecipeThumbnailFn.run(newRecipeId, formData).then(res => {
+            addLocalRecipe(res);
+          });
+        } else {
+          addLocalRecipe(res);
         }
       });
   }

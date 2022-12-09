@@ -1,4 +1,4 @@
-import { Ingredient, RecipeType, RecipeTypeName } from '@prisma/client';
+import { Ingredient, RecipeTypeName } from '@prisma/client';
 import prisma from '../utils/prisma';
 import { findByEmail } from './user.services';
 
@@ -113,15 +113,7 @@ export async function getYourRecipes(
     select: recipeOverviewSelectFields,
     where: {
       AND: [
-        {
-          types: {
-            some: {
-              name: {
-                in: ['vegetarian'],
-              },
-            },
-          },
-        },
+        ...whereFields,
         {
           user: {
             email,

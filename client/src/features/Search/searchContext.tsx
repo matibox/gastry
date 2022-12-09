@@ -18,11 +18,11 @@ interface TSearchContext {
   };
   recipes: {
     data: undefined | RecipeOverview[];
+    addLocalRecipe: (recipe: RecipeOverview) => void;
     loading: boolean;
     errors: undefined | TError[];
     moreToLoad: boolean;
     loadMore: () => void;
-    notFound: boolean;
   };
   availFilters: {
     data: Filters[];
@@ -69,7 +69,7 @@ export function SearchContextProvider({
   const [filters, setFilters] = useState<Filters[]>([]);
   const [sortBy, setSortBy] = useState<SortBy>(['updatedAt', 'desc']);
 
-  const { recipes, ...recipesState } = useQuery(
+  const { recipes, setRecipes, ...recipesState } = useQuery(
     query,
     filters,
     sortBy,
@@ -84,6 +84,12 @@ export function SearchContextProvider({
     setAvailFilters(availFiltersData);
   }, [availFiltersData]);
 
+  function addLocalRecipe(recipe: RecipeOverview) {
+    setRecipes(prev => {
+      return [...prev, recipe];
+    });
+  }
+
   return (
     <SearchContext.Provider
       value={{
@@ -93,6 +99,7 @@ export function SearchContextProvider({
         },
         recipes: {
           data: recipes,
+          addLocalRecipe,
           ...recipesState,
         },
         availFilters: {
