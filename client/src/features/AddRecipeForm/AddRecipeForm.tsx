@@ -10,7 +10,11 @@ import { createRecipe, updateRecipeThumbnail } from '../../services/recipes';
 import { Error } from '../../components/Error/Error';
 import { useSearch } from '../Search/searchContext';
 
-export function AddRecipeForm() {
+interface AddRecipeFormProps {
+  setOpened: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export function AddRecipeForm({ setOpened }: AddRecipeFormProps) {
   const [title, setTitle] = useState('');
   const [cookingTime, setCookingTime] = useState('');
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
@@ -82,6 +86,7 @@ export function AddRecipeForm() {
         } else {
           addLocalRecipe(res);
         }
+        setOpened(false);
       });
   }
 

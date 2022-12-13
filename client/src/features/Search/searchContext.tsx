@@ -69,7 +69,7 @@ export function SearchContextProvider({
   const [filters, setFilters] = useState<Filters[]>([]);
   const [sortBy, setSortBy] = useState<SortBy>(['updatedAt', 'desc']);
 
-  const { recipes, setRecipes, ...recipesState } = useQuery(
+  const { recipes, setRecipes, clearErrors, ...recipesState } = useQuery(
     query,
     filters,
     sortBy,
@@ -86,6 +86,7 @@ export function SearchContextProvider({
 
   function addLocalRecipe(recipe: RecipeOverview) {
     setRecipes(prev => {
+      if (prev.length === 0) clearErrors();
       return [...prev, recipe];
     });
   }

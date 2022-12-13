@@ -21,7 +21,9 @@ export function YourRecipes() {
       serviceFn={getYourRecipes}
     >
       <main className={styles.wrapper} style={{ position: 'relative' }}>
-        <AnimatePresence>{isFormOpened && <AddRecipeForm />}</AnimatePresence>
+        <AnimatePresence>
+          {isFormOpened && <AddRecipeForm setOpened={setIsFormOpened} />}
+        </AnimatePresence>
         <h1>your recipes</h1>
         <section className={styles.searchWrapper}>
           <Searchbar />

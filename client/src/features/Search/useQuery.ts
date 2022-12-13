@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useAsyncFn } from '../../hooks/useAsync';
 import { useDebounce } from '../../hooks/useDebounce';
+import { TError } from '../../types/Error';
 import { Filters } from '../../types/Filters';
 import RecipeOverview from '../../types/RecipeOverview';
 import { SortBy } from '../../types/SortBy';
@@ -20,6 +21,7 @@ export function useQuery(
   const [sortedRecipes, setSortedRecipes] = useState<RecipeOverview[]>([]);
   const [offset, setOffset] = useState(0);
   const [moreToLoad, setMoreToLoad] = useState(false);
+  const [errors, setErrors] = useState<TError[]>();
 
   // query/filters change
   useDebounce(
@@ -29,11 +31,14 @@ export function useQuery(
         setRecipes([]);
         return;
       }
-      getRecipes.run(0, QUANTITY, query, filters).then(data => {
-        setRecipes(data.recipes);
-        setMoreToLoad(data.moreToLoad);
-        setOffset(prevOffset => prevOffset + data.recipes.length);
-      });
+      getRecipes
+        .run(0, QUANTITY, query, filters)
+        .then(data => {
+          setRecipes(data.recipes);
+          setMoreToLoad(data.moreToLoad);
+          setOffset(prevOffset => prevOffset + data.recipes.length);
+        })
+        .catch(setErrors);
     },
     DELAY,
     [query, filters, initialFetch]
@@ -63,24 +68,36 @@ export function useQuery(
   // load more
   const loadMore = useCallback(() => {
     if (!moreToLoad) return;
-    getRecipes.run(offset, QUANTITY, query, filters).then(data => {
-      setRecipes(prevRecipes => {
-        return [
-          ...new Map(
-            [...prevRecipes, ...data.recipes].map(recipe => [recipe.id, recipe])
-          ).values(),
-        ];
-      });
-      setMoreToLoad(data.moreToLoad);
-      setOffset(prevOffset => prevOffset + data.recipes.length);
-    });
+    getRecipes
+      .run(offset, QUANTITY, query, filters)
+      .then(data => {
+        setRecipes(prevRecipes => {
+          return [
+            ...new Map(
+              [...prevRecipes, ...data.recipes].map(recipe => [
+                recipe.id,
+                recipe,
+              ])
+            ).values(),
+          ];
+        });
+        setMoreToLoad(data.moreToLoad);
+        setOffset(prevOffset => prevOffset + data.recipes.length);
+      })
+      .catch(setErrors);
   }, [query, moreToLoad, offset]);
+
+  // clear errors
+  const clearErrors = useCallback(() => {
+    setErrors(undefined);
+  }, [errors]);
 
   return {
     recipes: recipes.length > 0 ? sortedRecipes : recipes,
     setRecipes,
     loading: getRecipes.loading,
-    errors: getRecipes.errors,
+    errors,
+    clearErrors,
     loadMore,
     moreToLoad,
   };
