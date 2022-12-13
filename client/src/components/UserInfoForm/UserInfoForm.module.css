@@ -55,3 +55,11 @@
 .button:hover {
   background-color: var(--orange);
 }
+
+.footer {
+  display: flex;
+}
+
+.footer > a {
+  margin-left: auto;
+}

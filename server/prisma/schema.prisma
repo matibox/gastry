@@ -9,14 +9,15 @@ datasource db {
 }
 
 model User {
-  id         String      @id @default(uuid())
-  email      String      @unique
-  name       String      @unique
-  password   String
-  role       Role        @default(user)
-  recipes    Recipe[]
-  favourites Favourite[]
-  menus      Menu[]
+  id             String      @id @default(uuid())
+  email          String      @unique
+  name           String      @unique
+  password       String
+  role           Role        @default(user)
+  profilePicture String      @default("https://res.cloudinary.com/drjsjdeff/image/upload/v1670939224/gastry/defaultAvatar_lekctc.png")
+  recipes        Recipe[]
+  favourites     Favourite[]
+  menus          Menu[]
 }
 
 enum Role {

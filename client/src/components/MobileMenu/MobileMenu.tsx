@@ -19,7 +19,7 @@ const links: Link[] = [
 
 export function MobileMenu() {
   const { pathname } = useLocation();
-  if (pathname === '/signup' || pathname === 'login') return null;
+  if (pathname === '/signup' || pathname === '/login') return null;
 
   return (
     <nav className={styles.menu}>

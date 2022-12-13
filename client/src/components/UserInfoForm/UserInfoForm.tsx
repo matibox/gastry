@@ -2,6 +2,7 @@ import { FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '../Icon/Icon';
 import styles from './UserInfoForm.module.css';
+import Github from '../../assets/github-green.png';
 
 interface UserInfoFormProps {
   heading: string;
@@ -46,12 +47,16 @@ export function UserInfoForm({
         >
           {children}
           <button className={styles.button}>
-            <span>Sign up</span>
+            <span>{button.label}</span>
             <Icon name={button.icon} />
           </button>
         </form>
       </main>
-      <footer>{/* //TODO github link */}</footer>
+      <footer className={styles.footer}>
+        <a href='https://github.com/matibox/gastry' target='_blank'>
+          <img src={Github} alt='github' />
+        </a>
+      </footer>
     </div>
   );
 }
