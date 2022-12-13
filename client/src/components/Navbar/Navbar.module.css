@@ -6,6 +6,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
 }
 
 .logoWrapper {
@@ -27,4 +28,15 @@
 .menuWrapper > a {
   text-decoration: none;
   color: var(--green);
+}
+
+.userWrapper {
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.userWrapper > img {
+  max-width: 3.4rem;
 }

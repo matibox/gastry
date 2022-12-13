@@ -65,7 +65,7 @@ export function LoginForm() {
           />
         </label>
         {loginFn.errors && <Error errors={loginFn.errors} size='small' />}
-        {location.state.signup && (
+        {location.state?.signup && (
           <p className={styles.signupMessage}>
             Successfully signed in, log in to your account
           </p>

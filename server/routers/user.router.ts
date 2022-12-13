@@ -83,6 +83,7 @@ authRouter.post('/login', validateSchema(loginUserSchema), async (req, res) => {
       name: user.name,
       isAdmin: user.role === 'admin',
       accessToken,
+      profilePicture: user.profilePicture,
     });
   } catch (err: any) {
     return res.status(500).json([{ message: err.message }]);

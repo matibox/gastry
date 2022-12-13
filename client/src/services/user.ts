@@ -1,4 +1,4 @@
-import { makeRequest } from './makeRequest';
+import { makeAuthRequest, makeRequest } from './makeRequest';
 
 export function signup(
   email: string,
@@ -30,5 +30,11 @@ export function login(email: string, password: string) {
 export function refreshToken() {
   return makeRequest('/auth/token', {
     method: 'POST',
+  });
+}
+
+export function logout() {
+  return makeRequest('/auth/logout', {
+    method: 'POSt',
   });
 }
