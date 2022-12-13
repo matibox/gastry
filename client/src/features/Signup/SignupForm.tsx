@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import { Error } from '../../components/Error/Error';
 import { UserInfoForm } from '../../components/UserInfoForm/UserInfoForm';
 import { useAsyncFn } from '../../hooks/useAsync';
@@ -31,7 +31,11 @@ export function SignupForm() {
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     signupFn.run(email, username, password, confirmPassword).then(res => {
-      navigate('/');
+      navigate('/login', {
+        state: {
+          signup: 'true',
+        },
+      });
       return res;
     });
   }

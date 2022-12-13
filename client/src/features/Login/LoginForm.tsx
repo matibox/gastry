@@ -1,5 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Error } from '../../components/Error/Error';
 import { UserInfoForm } from '../../components/UserInfoForm/UserInfoForm';
 import { useAuth } from '../../contexts/authContext';
@@ -8,11 +8,7 @@ import { login } from '../../services/user';
 
 import styles from './LoginForm.module.css';
 
-interface LoginFormProps {
-  signupMessage?: string;
-}
-
-export function LoginForm({ signupMessage }: LoginFormProps) {
+export function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const authContext = useAuth();
@@ -20,6 +16,7 @@ export function LoginForm({ signupMessage }: LoginFormProps) {
   const { setLocalUser } = authContext;
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const loginFn = useAsyncFn(login);
 
@@ -68,8 +65,10 @@ export function LoginForm({ signupMessage }: LoginFormProps) {
           />
         </label>
         {loginFn.errors && <Error errors={loginFn.errors} size='small' />}
-        {signupMessage && (
-          <p className={styles.signupMessage}>{signupMessage}</p>
+        {location.state.signup && (
+          <p className={styles.signupMessage}>
+            Successfully signed in, log in to your account
+          </p>
         )}
       </>
     </UserInfoForm>
