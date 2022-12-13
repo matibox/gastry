@@ -1,7 +1,8 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAsync } from '../../hooks/useAsync';
-import { getRecipe } from '../../services/recipes';
+import { useAuth } from '../../contexts/authContext';
+import { useAsyncFn } from '../../hooks/useAsync';
+import { getRecipe, getRecipeWithAuthor } from '../../services/recipes';
 import { TError } from '../../types/Error';
 import { Recipe } from '../../types/Recipe';
 
@@ -27,16 +28,40 @@ export function useRecipe() {
 export function RecipeContextProvider({
   children,
 }: recipeContextProviderProps) {
+  const authContext = useAuth();
+  if (!authContext) return null;
+  const { user } = authContext;
+
   const { id } = useParams();
   if (!id) return null;
-  const { ...recipeState } = useAsync(() => getRecipe(id), [id]);
+
+  const [recipe, setRecipe] = useState<Recipe>();
+
+  const getRecipeWithAuthorFn = useAsyncFn(getRecipeWithAuthor);
+  const getRecipeFn = useAsyncFn(getRecipe);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (user) {
+        getRecipeWithAuthorFn.run(id).then(setRecipe);
+        return;
+      }
+      getRecipeFn.run(id).then(setRecipe);
+    });
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [user]);
 
   return (
     <RecipeContext.Provider
       value={{
         recipe: {
           id,
-          ...recipeState,
+          data: recipe,
+          loading: getRecipeWithAuthorFn.loading || getRecipeFn.loading,
+          errors: getRecipeWithAuthorFn.errors || getRecipeFn.errors,
         },
       }}
     >

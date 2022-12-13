@@ -6,4 +6,5 @@ export interface Recipe {
   ingredients: Ingredient[];
   instructions: string;
   thumbnail: string;
+  isAuthor: boolean;
 }

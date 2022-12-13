@@ -52,6 +52,12 @@ export function getRecipe(id: string) {
   });
 }
 
+export function getRecipeWithAuthor(id: string) {
+  return makeAuthRequest(`/recipes/${id}/isAuthor`, {
+    method: 'GET',
+  });
+}
+
 export function createRecipe(
   title: string,
   cookingTime: number,

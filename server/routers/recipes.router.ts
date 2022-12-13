@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Request } from 'express';
 import {
   latestRecipes,
   singleRecipe,
@@ -12,6 +12,7 @@ import validateSchema from '../middleware/validateSchema';
 import authToken from '../middleware/authenticateToken';
 import { createRecipeSchema } from '../schemas/recipe.schema';
 import parser from '../utils/multer';
+import { findByEmail } from '../services/user.services';
 
 export const recipeRouter = express.Router();
 
@@ -110,8 +111,37 @@ recipeRouter.get('/:id', async (req, res) => {
       return res.status(404).json([{ message: 'Recipe not found' }]);
     }
 
-    return res.status(200).json(recipe);
+    return res.status(200).json({ ...recipe, isAuthor: false });
     //TODO isLiked, isAuthor etc.
+  } catch (err: any) {
+    return res.status(500).json([{ message: err.message }]);
+  }
+});
+
+recipeRouter.get('/:id/isAuthor', authToken, async (req, res) => {
+  const { id } = req.params;
+
+  //@ts-ignore;
+  const reqUser = req.user;
+
+  if (!id) return res.status(400).json([{ message: 'No id specified' }]);
+
+  try {
+    const recipe = await singleRecipe(id);
+    const user = await findByEmail(reqUser.email);
+
+    if (!recipe) {
+      return res.status(404).json([{ message: 'Recipe not found' }]);
+    }
+
+    if (!user) {
+      console.log('user not found');
+      return res.status(404).json([{ message: 'User not found' }]);
+    }
+
+    return res
+      .status(200)
+      .json({ ...recipe, isAuthor: user.id === recipe.userId });
   } catch (err: any) {
     return res.status(500).json([{ message: err.message }]);
   }

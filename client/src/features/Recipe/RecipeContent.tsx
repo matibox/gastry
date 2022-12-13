@@ -26,7 +26,7 @@ export function RecipeContent() {
               </p>
               <p>
                 <span className={styles.bold}>Ingredients: </span>
-                {recipe.ingredients.map((ingredient) => {
+                {recipe.ingredients.map(ingredient => {
                   const lastItem = [...recipe.ingredients].pop();
                   return (
                     <span key={ingredient.id}>
@@ -49,18 +49,22 @@ export function RecipeContent() {
                 iconName='menu_book'
                 handleClick={() => null}
               />
-              <Button
-                color='green'
-                text='edit recipe'
-                iconName='edit'
-                handleClick={() => null}
-              />
-              <Button
-                color='orange'
-                text='delete recipe'
-                iconName='delete'
-                handleClick={() => null}
-              />
+              {recipe.isAuthor && (
+                <>
+                  <Button
+                    color='green'
+                    text='edit recipe'
+                    iconName='edit'
+                    handleClick={() => null}
+                  />
+                  <Button
+                    color='orange'
+                    text='delete recipe'
+                    iconName='delete'
+                    handleClick={() => null}
+                  />
+                </>
+              )}
             </section>
           </div>
         </>

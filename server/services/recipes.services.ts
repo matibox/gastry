@@ -51,6 +51,7 @@ export async function singleRecipe(id: string) {
       },
       instructions: true,
       thumbnail: true,
+      userId: true,
     },
     where: {
       id,
