@@ -1,11 +1,12 @@
 import express, { Request } from 'express';
 import {
-  latestRecipes,
-  singleRecipe,
+  getLatestRecipes,
+  getRecipe,
   searchRecipes,
   addRecipe,
-  addRecipeThumbnail,
+  editRecipeThumbnail,
   getYourRecipes,
+  updateRecipe,
 } from '../services/recipes.services';
 import { Prisma, RecipeTypeName } from '@prisma/client';
 import validateSchema from '../middleware/validateSchema';
@@ -26,7 +27,7 @@ recipeRouter.get('/latest', async (req, res) => {
   }
 
   try {
-    const recipes = await latestRecipes(skip, take);
+    const recipes = await getLatestRecipes(skip, take);
     return res.status(200).json({ recipes, moreToLoad: false });
   } catch (err: any) {
     return res.status(500).json([{ message: err.message }]);
@@ -106,7 +107,7 @@ recipeRouter.get('/:id', async (req, res) => {
   if (!id) return res.status(400).json([{ message: 'No id specified' }]);
 
   try {
-    const recipe = await singleRecipe(id);
+    const recipe = await getRecipe(id);
     if (!recipe) {
       return res.status(404).json([{ message: 'Recipe not found' }]);
     }
@@ -118,6 +119,7 @@ recipeRouter.get('/:id', async (req, res) => {
   }
 });
 
+// GET: single recipe is author
 recipeRouter.get('/:id/isAuthor', authToken, async (req, res) => {
   const { id } = req.params;
 
@@ -127,7 +129,7 @@ recipeRouter.get('/:id/isAuthor', authToken, async (req, res) => {
   if (!id) return res.status(400).json([{ message: 'No id specified' }]);
 
   try {
-    const recipe = await singleRecipe(id);
+    const recipe = await getRecipe(id);
     const user = await findByEmail(reqUser.email);
 
     if (!recipe) {
@@ -192,14 +194,14 @@ recipeRouter.patch(
     }
 
     try {
-      const foundRecipe = await singleRecipe(recipeId);
+      const foundRecipe = await getRecipe(recipeId);
       if (!foundRecipe) {
         return res
           .status(404)
           .json([{ message: 'No recipes found with following id' }]);
       }
 
-      const updatedRecipe = await addRecipeThumbnail(recipeId, imgURL);
+      const updatedRecipe = await editRecipeThumbnail(recipeId, imgURL);
 
       return res.json(updatedRecipe);
     } catch (err: any) {
@@ -207,6 +209,26 @@ recipeRouter.patch(
     }
   }
 );
+
+// PUT: update recipe
+recipeRouter.put('/:id', authToken, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const newRecipe = await updateRecipe(
+      id,
+      req.body.title,
+      req.body.cookingTime,
+      req.body.ingredients,
+      req.body.instructions,
+      req.body.types
+    );
+
+    return res.status(200).json(newRecipe);
+  } catch (err: any) {
+    return res.status(500).json([{ message: err.message }]);
+  }
+});
 
 function recipeSearchHandler(
   req: Request,

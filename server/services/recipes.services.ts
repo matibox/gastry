@@ -10,7 +10,29 @@ const recipeOverviewSelectFields = {
   updatedAt: true,
 };
 
-export async function latestRecipes(skip: number, take: number) {
+const recipeSelectFields = {
+  title: true,
+  cookingTime: true,
+  ingredients: {
+    select: {
+      id: true,
+      name: true,
+      value: true,
+      unit: true,
+    },
+  },
+  types: {
+    select: {
+      id: true,
+      name: true,
+    },
+  },
+  instructions: true,
+  thumbnail: true,
+  userId: true,
+};
+
+export async function getLatestRecipes(skip: number, take: number) {
   return await prisma.recipe.findMany({
     select: recipeOverviewSelectFields,
     orderBy: {
@@ -36,23 +58,9 @@ export async function searchRecipes(
   });
 }
 
-export async function singleRecipe(id: string) {
+export async function getRecipe(id: string) {
   return await prisma.recipe.findUnique({
-    select: {
-      title: true,
-      cookingTime: true,
-      ingredients: {
-        select: {
-          id: true,
-          name: true,
-          value: true,
-          unit: true,
-        },
-      },
-      instructions: true,
-      thumbnail: true,
-      userId: true,
-    },
+    select: recipeSelectFields,
     where: {
       id,
     },
@@ -92,7 +100,7 @@ export async function addRecipe(
   });
 }
 
-export async function addRecipeThumbnail(id: string, thumbnailURL: string) {
+export async function editRecipeThumbnail(id: string, thumbnailURL: string) {
   return await prisma.recipe.update({
     where: {
       id,
@@ -101,6 +109,51 @@ export async function addRecipeThumbnail(id: string, thumbnailURL: string) {
       thumbnail: thumbnailURL,
     },
     select: recipeOverviewSelectFields,
+  });
+}
+
+export async function updateRecipe(
+  id: string,
+  title: string | undefined,
+  cookingTime: number | undefined,
+  ingredients: Ingredient[] | undefined,
+  instructions: string | undefined,
+  types: { id: string; name: string }[] | undefined
+) {
+  return await prisma.recipe.update({
+    where: {
+      id,
+    },
+    data: {
+      title,
+      cookingTime,
+      ingredients: {
+        connectOrCreate: ingredients?.map(ingredient => {
+          return {
+            where: { id: ingredient.id },
+            create: {
+              name: ingredient.name,
+              value: ingredient.value,
+              unit: ingredient.unit,
+            },
+          };
+        }),
+      },
+      types: {
+        connectOrCreate: types?.map(type => {
+          return {
+            where: {
+              id: type.id,
+            },
+            create: {
+              name: type.name as RecipeTypeName,
+            },
+          };
+        }),
+      },
+      instructions,
+    },
+    select: recipeSelectFields,
   });
 }
 

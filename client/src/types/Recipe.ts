@@ -7,4 +7,5 @@ export interface Recipe {
   instructions: string;
   thumbnail: string;
   isAuthor: boolean;
+  types: { id: string; name: string }[];
 }

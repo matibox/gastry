@@ -86,3 +86,23 @@ export function updateRecipeThumbnail(recipeId: string, formData: FormData) {
     },
   });
 }
+
+export function editRecipe(
+  recipeId: string,
+  title: string,
+  cookingTime: number,
+  ingredients: Ingredient[],
+  instructions: string,
+  types: { id: string; name: string }[]
+) {
+  return makeAuthRequest(`/recipes/${recipeId}`, {
+    method: 'PUT',
+    data: {
+      title,
+      cookingTime,
+      ingredients,
+      instructions,
+      types,
+    },
+  });
+}

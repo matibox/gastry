@@ -12,6 +12,7 @@ interface TRecipeContext {
     data: undefined | Recipe;
     loading: boolean;
     errors: undefined | TError[];
+    editLocalRecipe: (newRecipe: Recipe) => void;
   };
 }
 
@@ -54,6 +55,12 @@ export function RecipeContextProvider({
     };
   }, [user]);
 
+  function editLocalRecipe(newRecipe: Recipe) {
+    setRecipe(prev => {
+      return { ...prev, ...newRecipe };
+    });
+  }
+
   return (
     <RecipeContext.Provider
       value={{
@@ -62,6 +69,7 @@ export function RecipeContextProvider({
           data: recipe,
           loading: getRecipeWithAuthorFn.loading || getRecipeFn.loading,
           errors: getRecipeWithAuthorFn.errors || getRecipeFn.errors,
+          editLocalRecipe,
         },
       }}
     >

@@ -4,14 +4,22 @@ import { Icon } from '../../components/Icon/Icon';
 
 import styles from './RecipeContent.module.css';
 import { Error } from '../../components/Error/Error';
+import { useState } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import { EditRecipeForm } from './EditRecipeForm';
 
 export function RecipeContent() {
   const recipeContext = useRecipe();
   if (!recipeContext) return null;
   const { data: recipe, loading, errors } = recipeContext.recipe;
 
+  const [isFormOpened, setIsFormOpened] = useState(false);
+
   return (
     <main className={styles.wrapper}>
+      <AnimatePresence>
+        {isFormOpened && <EditRecipeForm setOpened={setIsFormOpened} />}
+      </AnimatePresence>
       {loading && <Loading />}
       {errors && <Error errors={errors} size='large' />}
       {recipe && (
@@ -55,7 +63,7 @@ export function RecipeContent() {
                     color='green'
                     text='edit recipe'
                     iconName='edit'
-                    handleClick={() => null}
+                    handleClick={() => setIsFormOpened(prev => !prev)}
                   />
                   <Button
                     color='orange'
