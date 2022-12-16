@@ -29,6 +29,12 @@ export function getYourRecipes(
   });
 }
 
+export function getYourLatestRecipes() {
+  return makeAuthRequest('/recipes/your/latest', {
+    method: 'GET',
+  });
+}
+
 export function getByQuery(
   offset: number,
   quantity: number,
@@ -104,5 +110,11 @@ export function editRecipe(
       instructions,
       types,
     },
+  });
+}
+
+export function deleteRecipe(id: string) {
+  return makeAuthRequest(`/recipes/${id}`, {
+    method: 'DELETE',
   });
 }

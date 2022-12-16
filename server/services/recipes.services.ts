@@ -128,6 +128,7 @@ export async function updateRecipe(
       title,
       cookingTime,
       ingredients: {
+        deleteMany: {},
         connectOrCreate: ingredients?.map(ingredient => {
           return {
             where: { id: ingredient.id },
@@ -140,6 +141,7 @@ export async function updateRecipe(
         }),
       },
       types: {
+        deleteMany: {},
         connectOrCreate: types?.map(type => {
           return {
             where: {
@@ -154,6 +156,14 @@ export async function updateRecipe(
       instructions,
     },
     select: recipeSelectFields,
+  });
+}
+
+export async function deleteRecipe(id: string) {
+  return await prisma.recipe.delete({
+    where: {
+      id,
+    },
   });
 }
 
@@ -177,5 +187,21 @@ export async function getYourRecipes(
     },
     skip,
     take,
+  });
+}
+
+export async function getYourLatestRecipes(email: string, quantity: number) {
+  return await prisma.recipe.findMany({
+    select: recipeOverviewSelectFields,
+    where: {
+      user: {
+        email,
+      },
+    },
+    skip: 0,
+    take: quantity,
+    orderBy: {
+      updatedAt: 'desc',
+    },
   });
 }

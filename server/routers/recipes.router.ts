@@ -7,6 +7,8 @@ import {
   editRecipeThumbnail,
   getYourRecipes,
   updateRecipe,
+  deleteRecipe,
+  getYourLatestRecipes,
 } from '../services/recipes.services';
 import { Prisma, RecipeTypeName } from '@prisma/client';
 import validateSchema from '../middleware/validateSchema';
@@ -95,6 +97,29 @@ recipeRouter.get('/your', authToken, async (req, res) => {
       recipes,
       moreToLoad: nextRecipes.length > 0,
     });
+  } catch (err: any) {
+    return res.status(500).json([{ message: err.message }]);
+  }
+});
+
+// GET: your latest recipes
+recipeRouter.get('/your/latest', authToken, async (req, res) => {
+  //@ts-ignore
+  const user = req.user;
+
+  try {
+    const foundUser = await findByEmail(user.email);
+    if (!foundUser) {
+      return res.status(404).json([{ message: 'User not found' }]);
+    }
+
+    const recipes = await getYourLatestRecipes(foundUser.email, 3);
+
+    if (recipes.length === 0) {
+      return res.status(404).json([{ message: 'No recipes found' }]);
+    }
+
+    return res.status(200).json(recipes);
   } catch (err: any) {
     return res.status(500).json([{ message: err.message }]);
   }
@@ -225,6 +250,18 @@ recipeRouter.put('/:id', authToken, async (req, res) => {
     );
 
     return res.status(200).json(newRecipe);
+  } catch (err: any) {
+    return res.status(500).json([{ message: err.message }]);
+  }
+});
+
+// DELETE: delete recipe
+recipeRouter.delete('/:id', authToken, async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const deletedRecipe = await deleteRecipe(id);
+    return res.status(200).json(deletedRecipe);
   } catch (err: any) {
     return res.status(500).json([{ message: err.message }]);
   }

@@ -29,7 +29,7 @@ export function RecipesList({
           <RecipeOverview key={recipe.id} recipe={recipe} />
         ))}
       {loading && <Loading />}
-      {loadMore && moreToLoad && (
+      {loadMore && moreToLoad && !loading && (
         <button
           className='button'
           onClick={loadMore}

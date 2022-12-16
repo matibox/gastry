@@ -11,7 +11,13 @@ import { EditRecipeForm } from './EditRecipeForm';
 export function RecipeContent() {
   const recipeContext = useRecipe();
   if (!recipeContext) return null;
-  const { data: recipe, loading, errors } = recipeContext.recipe;
+  const {
+    id,
+    data: recipe,
+    loading,
+    errors,
+    deleteLocalRecipe,
+  } = recipeContext.recipe;
 
   const [isFormOpened, setIsFormOpened] = useState(false);
 
@@ -50,11 +56,11 @@ export function RecipeContent() {
               </p>
             </section>
             <section className={styles.buttons}>
-              {/*//TODO btn onClicks */}
               <Button
                 color='green'
                 text='add to menu'
                 iconName='menu_book'
+                //TODO add to menu
                 handleClick={() => null}
               />
               {recipe.isAuthor && (
@@ -69,7 +75,7 @@ export function RecipeContent() {
                     color='orange'
                     text='delete recipe'
                     iconName='delete'
-                    handleClick={() => null}
+                    handleClick={() => deleteLocalRecipe(id)}
                   />
                 </>
               )}

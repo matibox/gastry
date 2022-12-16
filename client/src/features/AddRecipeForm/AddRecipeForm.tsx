@@ -176,18 +176,23 @@ export function AddRecipeForm({ setOpened }: AddRecipeFormProps) {
             </button>
           </div>
           <p>
-            {ingredients.map(ingredient => (
-              <span
-                key={ingredient.id}
-                onClick={() =>
-                  setIngredients(prev =>
-                    prev.filter(item => item.id !== ingredient.id)
-                  )
-                }
-              >
-                {ingredient.value} {ingredient.unit} {ingredient.name},{' '}
-              </span>
-            ))}
+            {ingredients.map(ingredient => {
+              const lastItem = [...ingredients].pop();
+              return (
+                <span
+                  key={ingredient.id}
+                  className={styles.ingredient}
+                  onClick={() =>
+                    setIngredients(prev =>
+                      prev.filter(item => item.id !== ingredient.id)
+                    )
+                  }
+                >
+                  {ingredient.value} {ingredient.unit} {ingredient.name}
+                  {lastItem?.id !== ingredient.id && ', '}
+                </span>
+              );
+            })}
           </p>
         </label>
         <label>

@@ -1,8 +1,13 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/authContext';
+import { useDeleteRecipe } from '../../contexts/deleteRecipeContext';
 import { useAsyncFn } from '../../hooks/useAsync';
-import { getRecipe, getRecipeWithAuthor } from '../../services/recipes';
+import {
+  deleteRecipe,
+  getRecipe,
+  getRecipeWithAuthor,
+} from '../../services/recipes';
 import { TError } from '../../types/Error';
 import { Recipe } from '../../types/Recipe';
 
@@ -13,6 +18,7 @@ interface TRecipeContext {
     loading: boolean;
     errors: undefined | TError[];
     editLocalRecipe: (newRecipe: Recipe) => void;
+    deleteLocalRecipe: (id: string) => void;
   };
 }
 
@@ -33,13 +39,20 @@ export function RecipeContextProvider({
   if (!authContext) return null;
   const { user } = authContext;
 
+  const deleteRecipeContext = useDeleteRecipe();
+  if (!deleteRecipeContext) return null;
+  const { setIsDeleted } = deleteRecipeContext;
+
   const { id } = useParams();
   if (!id) return null;
+
+  const navigate = useNavigate();
 
   const [recipe, setRecipe] = useState<Recipe>();
 
   const getRecipeWithAuthorFn = useAsyncFn(getRecipeWithAuthor);
   const getRecipeFn = useAsyncFn(getRecipe);
+  const deleteRecipeFn = useAsyncFn(deleteRecipe);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -61,15 +74,29 @@ export function RecipeContextProvider({
     });
   }
 
+  function deleteLocalRecipe(id: string) {
+    deleteRecipeFn.run(id).then(res => {
+      setIsDeleted(true);
+      navigate('/');
+    });
+  }
+
   return (
     <RecipeContext.Provider
       value={{
         recipe: {
           id,
           data: recipe,
-          loading: getRecipeWithAuthorFn.loading || getRecipeFn.loading,
-          errors: getRecipeWithAuthorFn.errors || getRecipeFn.errors,
+          loading:
+            getRecipeWithAuthorFn.loading ||
+            getRecipeFn.loading ||
+            deleteRecipeFn.loading,
+          errors:
+            getRecipeWithAuthorFn.errors ||
+            getRecipeFn.errors ||
+            deleteRecipeFn.errors,
           editLocalRecipe,
+          deleteLocalRecipe,
         },
       }}
     >

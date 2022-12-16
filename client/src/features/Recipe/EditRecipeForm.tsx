@@ -180,18 +180,23 @@ export function EditRecipeForm({ setOpened }: EditRecipeFormProps) {
             </button>
           </div>
           <p>
-            {ingredients.map(ingredient => (
-              <span
-                key={ingredient.id}
-                onClick={() =>
-                  setIngredients(prev =>
-                    prev.filter(item => item.id !== ingredient.id)
-                  )
-                }
-              >
-                {ingredient.value} {ingredient.unit} {ingredient.name},{' '}
-              </span>
-            ))}
+            {ingredients.map(ingredient => {
+              const lastItem = [...ingredients].pop();
+              return (
+                <span
+                  key={ingredient.id}
+                  className={styles.ingredient}
+                  onClick={() =>
+                    setIngredients(prev =>
+                      prev.filter(item => item.id !== ingredient.id)
+                    )
+                  }
+                >
+                  {ingredient.value} {ingredient.unit} {ingredient.name}
+                  {lastItem?.id !== ingredient.id && ', '}
+                </span>
+              );
+            })}
           </p>
         </label>
         <label>
@@ -266,10 +271,19 @@ export function EditRecipeForm({ setOpened }: EditRecipeFormProps) {
             Loading...
           </button>
         ) : (
-          <button className={styles.submit}>
-            <span>Edit recipe</span>
-            <Icon name='edit' />
-          </button>
+          <div className={styles.btnWrapper}>
+            <button type='submit' className={styles.submit}>
+              <span>Edit recipe</span>
+              <Icon name='edit' />
+            </button>
+            <button
+              className={`${styles.submit} ${styles.cancel}`}
+              onClick={() => setOpened(false)}
+            >
+              <span>Cancel</span>
+              <Icon name='close' />
+            </button>
+          </div>
         )}
       </motion.form>
     </>

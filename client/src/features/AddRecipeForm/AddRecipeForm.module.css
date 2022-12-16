@@ -99,6 +99,15 @@
   background-color: var(--orange);
 }
 
+.ingredient {
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.ingredient:hover {
+  color: var(--brown);
+}
+
 .checkboxes {
   flex-wrap: wrap;
   flex-direction: row !important;
@@ -147,4 +156,20 @@
   background-color: var(--orange);
   filter: grayscale(1) brightness(0.5);
   transition: none;
+}
+
+.btnWrapper {
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+}
+
+.cancel {
+  border: 2px solid var(--brown);
+  flex-shrink: 1.5;
+  gap: 0.5rem;
+}
+
+.cancel:hover {
+  background-color: var(--brown);
 }

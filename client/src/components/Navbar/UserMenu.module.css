@@ -47,4 +47,5 @@
   font-size: 1.7rem;
   border-top: 1px solid var(--bg-color);
   padding-top: 1rem;
+  cursor: pointer;
 }
