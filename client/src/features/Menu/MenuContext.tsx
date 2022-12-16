@@ -1,12 +1,27 @@
-import { createContext, useContext, useReducer, useState } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
 
 import { Menu } from '../../types/Menu';
+import { usePopupToggle } from './usePopupToggle';
 
 interface MenuContext {
   menus: {
     data: Menu[];
     dispatchMenus: React.Dispatch<Action>;
     menuActions: typeof menuActions;
+  };
+  menuPicker: {
+    isOpened: boolean;
+    setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  };
+  newMenuForm: {
+    isOpened: boolean;
+    setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
   };
 }
 
@@ -20,6 +35,7 @@ enum menuActions {
   setActive = 'SET_ACTIVE',
   setEditing = 'SET_EDITING',
   editNameAndClose = 'EDIT_NAME_AND_CLOSE',
+  addLocalMenu = 'ADD',
 }
 
 interface Action {
@@ -48,6 +64,8 @@ function menusReducer(state: Menu[], action: Action) {
         }
         return { ...prevMenu, isEditing: false };
       });
+    case menuActions.addLocalMenu:
+      return [...state, action.payload];
     default:
       return state;
   }
@@ -74,9 +92,33 @@ export function MenuContextProvider({ children }: MenuContextProviderProps) {
     },
   ]);
 
+  const [isMenuPickerOpened, setIsMenuPickerOpened] = useState(false);
+  const [isNewMenuFormOpened, setIsNewMenuFormOpened] = useState(false);
+
+  usePopupToggle([
+    {
+      state: isMenuPickerOpened,
+      setState: setIsMenuPickerOpened,
+    },
+    {
+      state: isNewMenuFormOpened,
+      setState: setIsNewMenuFormOpened,
+    },
+  ]);
+
   return (
     <MenuContext.Provider
-      value={{ menus: { data: state, dispatchMenus: dispatch, menuActions } }}
+      value={{
+        menus: { data: state, dispatchMenus: dispatch, menuActions },
+        menuPicker: {
+          isOpened: isMenuPickerOpened,
+          setIsOpened: setIsMenuPickerOpened,
+        },
+        newMenuForm: {
+          isOpened: isNewMenuFormOpened,
+          setIsOpened: setIsNewMenuFormOpened,
+        },
+      }}
     >
       {children}
     </MenuContext.Provider>

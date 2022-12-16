@@ -1,0 +1,96 @@
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--black-alpha);
+  backdrop-filter: blur(5px);
+}
+
+.wrapper {
+  --padding: 2rem;
+  position: absolute;
+  top: calc(var(--navbar-height) + 25%);
+  left: var(--padding);
+  width: calc(100vw - var(--padding) * 2);
+  z-index: 9;
+  background-color: var(--black);
+  color: var(--white);
+  border-radius: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  padding: var(--padding) calc(var(--padding) + 1rem);
+  gap: 2rem;
+}
+
+.wrapper h3 {
+  text-align: center;
+  font-weight: 500;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.2rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form label {
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form input {
+  height: 3rem;
+  background-color: #aaaaaa;
+  border: none;
+  border-radius: 0.3rem;
+  padding-inline: 1rem;
+  font-family: 'Montserrat', sans-serif;
+  caret-color: var(--black);
+}
+
+.form input:focus {
+  border-bottom: 2px solid var(--orange);
+  outline: none;
+}
+
+.form input::selection {
+  background-color: var(--orange);
+}
+
+.submit {
+  width: 100%;
+  background-color: transparent;
+  border: 2px solid var(--orange);
+  color: var(--white);
+  font-family: 'Montserrat';
+  font-weight: 500;
+  border-radius: 0.5rem;
+  padding-block: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.submit:hover {
+  background-color: var(--orange);
+}
+
+.loadingButton {
+  background-color: var(--orange);
+  filter: grayscale(1) brightness(0.5);
+  transition: none;
+}

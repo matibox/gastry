@@ -1,15 +1,14 @@
-import { Icon } from '../components/Icon/Icon';
 import { MenuContent } from '../features/Menu/MenuContent';
+import { MenuContextProvider } from '../features/Menu/MenuContext';
 import styles from './SearchSec.module.css';
 
 export function Menu() {
   return (
     <main className={styles.wrapper}>
       <h1>menu editor</h1>
-      <MenuContent />
-      <button className={styles.addBtn}>
-        <Icon name='add' />
-      </button>
+      <MenuContextProvider>
+        <MenuContent />
+      </MenuContextProvider>
     </main>
   );
 }

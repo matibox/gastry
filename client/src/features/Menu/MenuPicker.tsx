@@ -1,18 +1,13 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { Icon } from '../../components/Icon/Icon';
 import { MenuEl } from './MenuEl';
 import { useMenu } from './MenuContext';
 import styles from './MenuPicker.module.css';
 
-interface MenuPickerProps {
-  setOpened: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export function MenuPicker({ setOpened }: MenuPickerProps) {
+export function MenuPicker() {
   const menuContext = useMenu();
   if (!menuContext) return null;
   const { data: menus, dispatchMenus: setMenus } = menuContext.menus;
+  const { setIsOpened } = menuContext.menuPicker;
 
   return (
     <>
@@ -25,7 +20,7 @@ export function MenuPicker({ setOpened }: MenuPickerProps) {
           ease: 'easeOut',
         }}
         className={styles.overlay}
-        onClick={() => setOpened(false)}
+        onClick={() => setIsOpened(false)}
       />
       <motion.div
         initial={{ opacity: 0, y: 100 }}
