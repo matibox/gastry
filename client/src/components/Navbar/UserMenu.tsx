@@ -27,19 +27,24 @@ const links: Link[] = [
     route: '/',
   },
   {
-    title: 'your recipes',
-    icon: 'collections_bookmark',
-    route: '/recipes',
-  },
-  {
     title: 'profile',
     icon: 'account_circle',
     route: '/account',
   },
   {
+    title: 'your recipes',
+    icon: 'collections_bookmark',
+    route: '/recipes',
+  },
+  {
     title: 'favourites',
     icon: 'favorite',
     route: '/favourites',
+  },
+  {
+    title: 'menu',
+    icon: 'restaurant_menu',
+    route: '/menu',
   },
 ];
 

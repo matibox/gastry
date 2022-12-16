@@ -127,7 +127,6 @@ export function EditRecipeForm({ setOpened }: EditRecipeFormProps) {
               setTitle(e.target.value)
             }
             required
-            autoFocus
           />
         </label>
         <label>
