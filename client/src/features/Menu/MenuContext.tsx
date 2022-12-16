@@ -1,10 +1,6 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from 'react';
+import React, { createContext, useContext, useReducer, useState } from 'react';
+import { useAsyncFn } from '../../hooks/useAsync';
+import { addMenu } from '../../services/menu';
 
 import { Menu } from '../../types/Menu';
 import { usePopupToggle } from './usePopupToggle';
@@ -83,12 +79,36 @@ export function MenuContextProvider({ children }: MenuContextProviderProps) {
       name: 'Menu 1',
       isActive: true,
       isEditing: false,
+      days: [
+        {
+          id: '1',
+          name: 'monday',
+          timeOfDays: [
+            {
+              id: '1',
+              name: 'morning',
+            },
+          ],
+        },
+      ],
     },
     {
       id: '2',
       name: 'Menu 2',
       isActive: false,
       isEditing: false,
+      days: [
+        {
+          id: '2',
+          name: 'tuesday',
+          timeOfDays: [
+            {
+              id: '2',
+              name: 'evening',
+            },
+          ],
+        },
+      ],
     },
   ]);
 
@@ -109,7 +129,11 @@ export function MenuContextProvider({ children }: MenuContextProviderProps) {
   return (
     <MenuContext.Provider
       value={{
-        menus: { data: state, dispatchMenus: dispatch, menuActions },
+        menus: {
+          data: state,
+          dispatchMenus: dispatch,
+          menuActions,
+        },
         menuPicker: {
           isOpened: isMenuPickerOpened,
           setIsOpened: setIsMenuPickerOpened,

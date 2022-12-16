@@ -1,5 +1,8 @@
 import { motion } from 'framer-motion';
-import { FormEvent } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import { Error } from '../../components/Error/Error';
+import { useAsyncFn } from '../../hooks/useAsync';
+import { addMenu } from '../../services/menu';
 import { useMenu } from './MenuContext';
 
 import styles from './NewMenu.module.css';
@@ -10,10 +13,27 @@ export function NewMenu() {
   const { dispatchMenus, menuActions } = menuContext.menus;
   const { setIsOpened } = menuContext.newMenuForm;
 
+  const [name, setName] = useState('');
+
+  const addMenuFn = useAsyncFn(addMenu);
+
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    //TODO db add menu
-    // dispatchMenus()
+    addMenuFn.run(name).then(res => {
+      const newMenu = { ...res, isActive: false, isEditing: false };
+
+      dispatchMenus({
+        type: menuActions.addLocalMenu,
+        payload: newMenu,
+      });
+
+      dispatchMenus({
+        type: menuActions.setActive,
+        payload: newMenu,
+      });
+
+      setIsOpened(false);
+    });
   }
 
   return (
@@ -46,13 +66,24 @@ export function NewMenu() {
         >
           <label>
             <span>Name</span>
-            <input type='text' />
+            <input
+              type='text'
+              value={name}
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setName(e.target.value)
+              }
+              autoFocus
+            />
           </label>
-          <button className={styles.submit}>Add</button>
-          {/* 
-            //TODO loading
-            <button className={styles.loadingButton}>Loading...</button>
-          */}
+          {addMenuFn.errors && (
+            <Error errors={addMenuFn.errors} size='normal' />
+          )}
+          {!addMenuFn.loading && <button className={styles.submit}>Add</button>}
+          {addMenuFn.loading && (
+            <button className={`${styles.submit} ${styles.loadingButton}`}>
+              Loading...
+            </button>
+          )}
         </form>
       </motion.div>
     </>
