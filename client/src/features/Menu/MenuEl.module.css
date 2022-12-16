@@ -23,6 +23,13 @@
   border-radius: 50%;
 }
 
+.name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
+}
+
 .edit {
   color: var(--green);
   margin-left: auto;
@@ -30,4 +37,20 @@
 
 .delete {
   color: var(--brown);
+}
+
+.input {
+  background: #aaa;
+  border: none;
+  font-family: 'Open Sans', sans-serif;
+  color: var(--black);
+  font-weight: 400;
+  border-radius: 3px;
+  padding-inline: 1rem;
+  caret-color: var(--black);
+}
+
+.input:focus {
+  outline: none;
+  border-bottom: 1px solid var(--orange);
 }

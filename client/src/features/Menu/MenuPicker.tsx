@@ -40,7 +40,7 @@ export function MenuPicker({ setOpened }: MenuPickerProps) {
         <h3>Menu picker</h3>
         <ul className={styles.menuList}>
           {menus.map(menu => (
-            <MenuEl key={menu.name} menu={menu} />
+            <MenuEl key={menu.id} menu={menu} />
           ))}
         </ul>
       </motion.div>

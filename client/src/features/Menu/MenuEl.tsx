@@ -3,7 +3,7 @@ import styles from './MenuEl.module.css';
 import { Menu } from '../../types/Menu';
 import { useMenu } from './MenuContext';
 import { Icon } from '../../components/Icon/Icon';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, FormEvent, useRef } from 'react';
 
 interface MenuProps {
   menu: Menu;
@@ -14,23 +14,35 @@ export function MenuEl({ menu }: MenuProps) {
   if (!menuContext) return null;
   const { dispatchMenus, menuActions } = menuContext.menus;
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    dispatchMenus({
+      type: menuActions.editNameAndClose,
+      payload: { ...menu, name: inputRef.current?.value || menu.name },
+    });
+  }
+
   return (
-    <li
-      key={menu.name}
-      className={`${styles.item} ${menu.isActive && styles.active}`}
-    >
+    <li className={`${styles.item} ${menu.isActive && styles.active}`}>
       {menu.isActive && <span className={styles.activeDot} />}
       {menu.isEditing ? (
-        <input
-          type='text'
-          value={menu.name}
-          onChange={(e: ChangeEvent<HTMLInputElement>) => null}
-        />
+        <form onSubmit={(e: FormEvent<HTMLFormElement>) => handleSubmit(e)}>
+          <input
+            type='text'
+            defaultValue={menu.name}
+            ref={inputRef}
+            className={styles.input}
+            autoFocus
+          />
+        </form>
       ) : (
         <span
           onClick={() =>
             dispatchMenus({ type: menuActions.setActive, payload: menu })
           }
+          className={styles.name}
         >
           {menu.name}
         </span>
