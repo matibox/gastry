@@ -3,6 +3,7 @@ import styles from './MenuEl.module.css';
 import { Menu } from '../../types/Menu';
 import { useMenu } from './MenuContext';
 import { Icon } from '../../components/Icon/Icon';
+import { ChangeEvent } from 'react';
 
 interface MenuProps {
   menu: Menu;
@@ -11,7 +12,7 @@ interface MenuProps {
 export function MenuEl({ menu }: MenuProps) {
   const menuContext = useMenu();
   if (!menuContext) return null;
-  const { setMenus } = menuContext.menus;
+  const { dispatchMenus, menuActions } = menuContext.menus;
 
   return (
     <li
@@ -19,30 +20,26 @@ export function MenuEl({ menu }: MenuProps) {
       className={`${styles.item} ${menu.isActive && styles.active}`}
     >
       {menu.isActive && <span className={styles.activeDot} />}
-      <span
-        onClick={() =>
-          setMenus(prev => {
-            return prev.map(prevMenu => {
-              if (prevMenu.name === menu.name)
-                return { ...prevMenu, isActive: true };
-              return { ...prevMenu, isActive: false };
-            });
-          })
-        }
-      >
-        {menu.name}
-      </span>
+      {menu.isEditing ? (
+        <input
+          type='text'
+          value={menu.name}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => null}
+        />
+      ) : (
+        <span
+          onClick={() =>
+            dispatchMenus({ type: menuActions.setActive, payload: menu })
+          }
+        >
+          {menu.name}
+        </span>
+      )}
       <button
         className={styles.edit}
-        onClick={() => {
-          setMenus(prev => {
-            return prev.map(prevMenu => {
-              if (prevMenu.name === menu.name)
-                return { ...prevMenu, isEditing: !prevMenu.isEditing };
-              return { ...prevMenu, isEditing: false };
-            });
-          });
-        }}
+        onClick={() =>
+          dispatchMenus({ type: menuActions.setEditing, payload: menu })
+        }
       >
         <Icon name={`${menu.isEditing ? 'cancel' : 'edit'}`} />
       </button>

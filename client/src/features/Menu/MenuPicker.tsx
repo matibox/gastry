@@ -12,7 +12,7 @@ interface MenuPickerProps {
 export function MenuPicker({ setOpened }: MenuPickerProps) {
   const menuContext = useMenu();
   if (!menuContext) return null;
-  const { data: menus, setMenus } = menuContext.menus;
+  const { data: menus, dispatchMenus: setMenus } = menuContext.menus;
 
   return (
     <>
