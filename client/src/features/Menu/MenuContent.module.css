@@ -1,0 +1,12 @@
+.titleWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: var(--black);
+}
+
+.titleWrapper h2 {
+  font-size: 2rem;
+  font-family: 'Open Sans';
+  font-weight: 400;
+}
