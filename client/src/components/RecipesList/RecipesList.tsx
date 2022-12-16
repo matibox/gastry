@@ -11,6 +11,7 @@ interface RecipesListProps {
   errors: undefined | TError[];
   moreToLoad?: boolean;
   needsAuth?: boolean;
+  errorsCentered?: boolean;
 }
 
 export function RecipesList({
@@ -19,8 +20,17 @@ export function RecipesList({
   loading,
   errors,
   moreToLoad,
+  errorsCentered,
 }: RecipesListProps) {
-  if (errors) return <Error errors={errors} color='black' size='large' />;
+  if (errors)
+    return (
+      <Error
+        errors={errors}
+        color='black'
+        size='large'
+        centered={errorsCentered}
+      />
+    );
 
   return (
     <>

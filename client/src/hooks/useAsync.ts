@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { TError } from '../types/Error';
 
 type Callback = (...cbParams: any[]) => Promise<any>;
 
@@ -23,7 +24,7 @@ function useAsyncInternal(
 ) {
   const [data, setData] = useState(undefined);
   const [loading, setLoading] = useState(initialLoading);
-  const [errors, setErrors] = useState(undefined);
+  const [errors, setErrors] = useState<undefined | TError[]>(undefined);
 
   const run = useCallback((...params: any[]) => {
     setLoading(true);

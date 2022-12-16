@@ -4,12 +4,14 @@ interface ErrorProps {
   color?: string;
   size?: 'normal' | 'small' | 'large';
   errors: TError[];
+  centered?: boolean;
 }
 
 export function Error({
   color = 'error',
   size = 'normal',
   errors,
+  centered = false,
 }: ErrorProps) {
   return (
     <div>
@@ -23,8 +25,9 @@ export function Error({
                 ? '2rem'
                 : size === 'small'
                 ? '1.5rem'
-                : '2.5rem',
+                : '2.4rem',
             fontFamily: 'Montserrat, sans-serif',
+            textAlign: centered ? 'center' : 'left',
           }}
         >
           {error.message}

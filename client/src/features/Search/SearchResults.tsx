@@ -30,6 +30,7 @@ export function SearchResults() {
         errors={errors}
         loadMore={loadMore}
         moreToLoad={moreToLoad}
+        errorsCentered={true}
       />
     </>
   );

@@ -53,6 +53,9 @@ export async function searchRecipes(
     where: {
       AND: whereFields,
     },
+    orderBy: {
+      updatedAt: 'desc',
+    },
     skip,
     take,
   });
@@ -184,6 +187,9 @@ export async function getYourRecipes(
           },
         },
       ],
+    },
+    orderBy: {
+      updatedAt: 'desc',
     },
     skip,
     take,
