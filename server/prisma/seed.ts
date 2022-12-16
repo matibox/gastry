@@ -96,27 +96,6 @@ async function main() {
       },
     ],
   });
-
-  const menu = await prisma.menu.create({
-    data: {
-      name: 'menu one',
-      userId: user1.id,
-      color: '#fff',
-    },
-  });
-
-  await prisma.day.create({
-    data: {
-      name: 'monday',
-      menuId: menu.id,
-      timeOfDays: {
-        create: {
-          name: 'morning',
-          recipeId: recipe1.id,
-        },
-      },
-    },
-  });
 }
 
 main()

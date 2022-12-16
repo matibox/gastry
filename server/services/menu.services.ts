@@ -1,22 +1,22 @@
 import { TimeOfDays, WeekDays } from '@prisma/client';
 import prisma from '../utils/prisma';
 
-const days: { name: WeekDays }[] = [
-  { name: 'monday' },
-  { name: 'tuesday' },
-  { name: 'wednesday' },
-  { name: 'thrusday' },
-  { name: 'friday' },
-  { name: 'saturday' },
-  { name: 'sunday' },
+const days: { name: WeekDays; order: number }[] = [
+  { name: 'monday', order: 0 },
+  { name: 'tuesday', order: 1 },
+  { name: 'wednesday', order: 2 },
+  { name: 'thrusday', order: 3 },
+  { name: 'friday', order: 4 },
+  { name: 'saturday', order: 5 },
+  { name: 'sunday', order: 6 },
 ];
 
-const timesOfDay: { name: TimeOfDays }[] = [
-  { name: 'morning' },
-  { name: 'before_noon' },
-  { name: 'noon' },
-  { name: 'afternoon' },
-  { name: 'evening' },
+const timesOfDay: { name: TimeOfDays; order: number }[] = [
+  { name: 'morning', order: 0 },
+  { name: 'before_noon', order: 1 },
+  { name: 'noon', order: 2 },
+  { name: 'afternoon', order: 3 },
+  { name: 'evening', order: 4 },
 ];
 
 export async function addMenu(userId: string, title: string) {
@@ -30,23 +30,47 @@ export async function addMenu(userId: string, title: string) {
         },
       },
     },
-    include: {
+    select: {
+      id: true,
       days: {
-        include: {
-          timeOfDays: true,
+        select: {
+          id: true,
         },
       },
     },
   });
 
-  createdMenu.days.forEach(async (day, i) => {
+  createdMenu.days.forEach(async day => {
     await prisma.timeOfDay.createMany({
-      data: {
-        dayId: day.id,
-        name: timesOfDay[i].name,
-      },
+      data: timesOfDay.map(time => ({ ...time, dayId: day.id })),
     });
   });
 
-  return createdMenu;
+  return await prisma.menu.findUnique({
+    where: {
+      id: createdMenu.id,
+    },
+    select: {
+      id: true,
+      name: true,
+      days: {
+        select: {
+          id: true,
+          name: true,
+          timeOfDays: {
+            select: {
+              id: true,
+              name: true,
+            },
+            orderBy: {
+              order: 'asc',
+            },
+          },
+        },
+        orderBy: {
+          order: 'asc',
+        },
+      },
+    },
+  });
 }

@@ -11,7 +11,7 @@ export const menuRouter = express.Router();
 menuRouter.post(
   '/',
   validateSchema(createMenuSchema),
-  authToken,
+  // authToken,
   async (req, res) => {
     const { name } = req.body;
     //@ts-ignore

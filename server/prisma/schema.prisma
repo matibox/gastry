@@ -100,6 +100,7 @@ model Day {
   menuId     String
   name       WeekDays
   timeOfDays TimeOfDay[]
+  order      Int         @db.UnsignedTinyInt
 
   @@index([menuId])
 }
@@ -119,6 +120,7 @@ model TimeOfDay {
   recipe   Recipe?    @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeId String?
   name     TimeOfDays
+  order    Int        @db.UnsignedTinyInt
 
   @@index([dayId])
   @@index([recipeId])
