@@ -1,6 +1,10 @@
-import React, { createContext, useContext, useReducer, useState } from 'react';
-import { useAsyncFn } from '../../hooks/useAsync';
-import { addMenu } from '../../services/menu';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useReducer,
+  useState,
+} from 'react';
 
 import { Menu } from '../../types/Menu';
 import { usePopupToggle } from './usePopupToggle';
@@ -10,6 +14,7 @@ interface MenuContext {
     data: Menu[];
     dispatchMenus: React.Dispatch<Action>;
     menuActions: typeof menuActions;
+    getActive: () => Menu | null;
   };
   menuPicker: {
     isOpened: boolean;
@@ -126,6 +131,12 @@ export function MenuContextProvider({ children }: MenuContextProviderProps) {
     },
   ]);
 
+  const getActive = useCallback(() => {
+    const foundActive = state.find(menu => menu.isActive);
+    if (!foundActive) return null;
+    return foundActive;
+  }, [state]);
+
   return (
     <MenuContext.Provider
       value={{
@@ -133,6 +144,7 @@ export function MenuContextProvider({ children }: MenuContextProviderProps) {
           data: state,
           dispatchMenus: dispatch,
           menuActions,
+          getActive,
         },
         menuPicker: {
           isOpened: isMenuPickerOpened,

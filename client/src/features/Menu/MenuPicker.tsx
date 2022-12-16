@@ -6,7 +6,7 @@ import styles from './MenuPicker.module.css';
 export function MenuPicker() {
   const menuContext = useMenu();
   if (!menuContext) return null;
-  const { data: menus, dispatchMenus: setMenus } = menuContext.menus;
+  const { data: menus } = menuContext.menus;
   const { setIsOpened } = menuContext.menuPicker;
 
   return (

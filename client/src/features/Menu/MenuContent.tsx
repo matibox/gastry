@@ -8,6 +8,7 @@ import { NewMenu } from './NewMenu';
 export function MenuContent() {
   const menuContext = useMenu();
   if (!menuContext) return null;
+  const { getActive } = menuContext.menus;
   const { menuPicker, newMenuForm } = menuContext;
 
   return (
@@ -15,7 +16,7 @@ export function MenuContent() {
       <AnimatePresence>{menuPicker.isOpened && <MenuPicker />}</AnimatePresence>
       <AnimatePresence>{newMenuForm.isOpened && <NewMenu />}</AnimatePresence>
       <section className={styles.titleWrapper}>
-        <h2>custom menu 1</h2>
+        <h2>{getActive()?.name}</h2>
         <button onClick={() => menuPicker.setIsOpened(prev => !prev)}>
           <Icon name='menu' />
         </button>

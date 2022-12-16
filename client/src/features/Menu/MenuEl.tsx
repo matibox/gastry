@@ -13,10 +13,11 @@ export function MenuEl({ menu }: MenuProps) {
   const menuContext = useMenu();
   if (!menuContext) return null;
   const { dispatchMenus, menuActions } = menuContext.menus;
+  const { setIsOpened } = menuContext.menuPicker;
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  function handleEdit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     dispatchMenus({
       type: menuActions.editNameAndClose,
@@ -28,7 +29,7 @@ export function MenuEl({ menu }: MenuProps) {
     <li className={`${styles.item} ${menu.isActive && styles.active}`}>
       {menu.isActive && <span className={styles.activeDot} />}
       {menu.isEditing ? (
-        <form onSubmit={(e: FormEvent<HTMLFormElement>) => handleSubmit(e)}>
+        <form onSubmit={(e: FormEvent<HTMLFormElement>) => handleEdit(e)}>
           <input
             type='text'
             defaultValue={menu.name}
@@ -39,9 +40,12 @@ export function MenuEl({ menu }: MenuProps) {
         </form>
       ) : (
         <span
-          onClick={() =>
-            dispatchMenus({ type: menuActions.setActive, payload: menu })
-          }
+          onClick={() => {
+            dispatchMenus({ type: menuActions.setActive, payload: menu });
+            setTimeout(() => {
+              setIsOpened(false);
+            }, 250);
+          }}
           className={styles.name}
         >
           {menu.name}
