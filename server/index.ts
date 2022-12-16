@@ -7,6 +7,7 @@ import { recipeRouter } from './routers/recipes.router';
 import { filtersRouter } from './routers/filters.router';
 import { authRouter } from './routers/user.router';
 import authToken from './middleware/authenticateToken';
+import { menuRouter } from './routers/menu.router';
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use('/recipes', recipeRouter);
 app.use('/filters', filtersRouter);
 app.use('/auth', authRouter);
+app.use('/menu', menuRouter);
 
 app.get('/test', authToken, (req, res) => {
   //@ts-ignore

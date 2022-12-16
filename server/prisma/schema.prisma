@@ -79,7 +79,6 @@ model Menu {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
   name   String
-  color  String
   days   Day[]
 
   @@index([userId])
@@ -117,8 +116,8 @@ model TimeOfDay {
   id       String     @id @default(uuid())
   day      Day        @relation(fields: [dayId], references: [id], onDelete: Cascade)
   dayId    String
-  recipe   Recipe     @relation(fields: [recipeId], references: [id], onDelete: Cascade)
-  recipeId String
+  recipe   Recipe?    @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  recipeId String?
   name     TimeOfDays
 
   @@index([dayId])
