@@ -26,6 +26,11 @@
   color: var(--white);
   font-size: 1.6rem;
   font-weight: 400;
+  transition: color 0.15s ease;
+}
+
+.recipe:hover {
+  color: var(--orange);
 }
 
 .addBtn {

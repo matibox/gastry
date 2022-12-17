@@ -1,3 +1,4 @@
+import { Link, useNavigate } from 'react-router-dom';
 import { Error } from '../../../components/Error/Error';
 import { Icon } from '../../../components/Icon/Icon';
 import Loading from '../../../components/Loading/Loading';
@@ -17,6 +18,8 @@ export function MenuTable() {
 
   const deleteRecipeFn = useAsyncFn(deleteRecipe);
 
+  const navigate = useNavigate();
+
   return (
     <>
       {currentDay?.timeOfDays.map(timeOfDay => (
@@ -30,7 +33,12 @@ export function MenuTable() {
                 <Loading height='0' />
               ) : (
                 <>
-                  <p className={styles.recipe}>{timeOfDay.recipe.title}</p>
+                  <Link
+                    to={`/recipes/${timeOfDay.recipe.id}`}
+                    className={styles.recipe}
+                  >
+                    {timeOfDay.recipe.title}
+                  </Link>
                   <button
                     onClick={() => {
                       deleteRecipeFn.run(timeOfDay.id).then(res => {
