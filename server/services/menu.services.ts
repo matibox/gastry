@@ -140,3 +140,14 @@ export async function editMenu(menuId: string, newName: string) {
     },
   });
 }
+
+export async function deleteMenu(menuId: string) {
+  return await prisma.menu.delete({
+    where: {
+      id: menuId,
+    },
+    select: {
+      id: true,
+    },
+  });
+}

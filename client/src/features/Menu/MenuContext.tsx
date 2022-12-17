@@ -42,6 +42,7 @@ export enum menuActions {
   editNameAndClose = 'EDIT_NAME_AND_CLOSE',
   addLocalMenu = 'ADD',
   getAll = 'GET_MENUS',
+  delete = 'DELETE',
 }
 
 export type Action =
@@ -49,7 +50,8 @@ export type Action =
   | { type: menuActions.setEditing; payload: Menu }
   | { type: menuActions.editNameAndClose; payload: Menu }
   | { type: menuActions.addLocalMenu; payload: Menu }
-  | { type: menuActions.getAll; payload: Menu[] };
+  | { type: menuActions.getAll; payload: Menu[] }
+  | { type: menuActions.delete; payload: string };
 
 function menusReducer(state: Menu[], action: Action) {
   switch (action.type) {
@@ -80,6 +82,14 @@ function menusReducer(state: Menu[], action: Action) {
           ? { ...menu, isActive: true, isEditing: false }
           : { ...menu, isActive: false, isEditing: false }
       );
+    case menuActions.delete:
+      const foundMenu = state.find(menu => menu.id === action.payload);
+      if (foundMenu?.isActive) {
+        return state
+          .filter(menu => menu.id !== action.payload)
+          .map((menu, i) => (i === 0 ? { ...menu, isActive: true } : menu));
+      }
+      return state.filter(menu => menu.id !== action.payload);
     default:
       return state;
   }

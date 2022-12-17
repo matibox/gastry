@@ -35,7 +35,11 @@ export function MenuPicker() {
         <h3>Menu picker</h3>
         <ul className={styles.menuList}>
           {menus.map(menu => (
-            <MenuEl key={menu.id} menu={menu} />
+            <MenuEl
+              key={menu.id}
+              menu={menu}
+              undeletable={menus.length === 1}
+            />
           ))}
         </ul>
       </motion.div>

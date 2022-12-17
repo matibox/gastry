@@ -2,7 +2,12 @@ import express from 'express';
 import authToken from '../middleware/authenticateToken';
 import validateSchema from '../middleware/validateSchema';
 import { createMenuSchema } from '../schemas/menu.schema';
-import { addMenu, editMenu, getMenus } from '../services/menu.services';
+import {
+  addMenu,
+  deleteMenu,
+  editMenu,
+  getMenus,
+} from '../services/menu.services';
 import { findByEmail } from '../services/user.services';
 
 export const menuRouter = express.Router();
@@ -79,3 +84,15 @@ menuRouter.patch(
     }
   }
 );
+
+// DELETE: delete menu
+menuRouter.delete('/:id', authToken, async (req, res) => {
+  const { id: menuId } = req.params;
+
+  try {
+    const { id } = await deleteMenu(menuId);
+    return res.status(200).json(id);
+  } catch (err: any) {
+    return res.status(500).json([{ message: err.message }]);
+  }
+});

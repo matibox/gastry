@@ -23,3 +23,9 @@ export function editMenu(id: string, name: string) {
     },
   });
 }
+
+export function deleteMenu(id: string) {
+  return makeAuthRequest(`/menu/${id}`, {
+    method: 'DELETE',
+  });
+}

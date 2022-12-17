@@ -5,15 +5,16 @@ import { useMenu } from './MenuContext';
 import { Icon } from '../../components/Icon/Icon';
 import { FormEvent, useRef } from 'react';
 import { useAsyncFn } from '../../hooks/useAsync';
-import { editMenu } from '../../services/menu';
+import { deleteMenu, editMenu } from '../../services/menu';
 import { Error } from '../../components/Error/Error';
 import Loading from '../../components/Loading/Loading';
 
 interface MenuProps {
   menu: Menu;
+  undeletable: boolean;
 }
 
-export function MenuEl({ menu }: MenuProps) {
+export function MenuEl({ menu, undeletable }: MenuProps) {
   const menuContext = useMenu();
   if (!menuContext) return null;
   const { dispatchMenus, menuActions } = menuContext.menus;
@@ -22,6 +23,7 @@ export function MenuEl({ menu }: MenuProps) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const editMenuFn = useAsyncFn(editMenu);
+  const deleteMenuFn = useAsyncFn(deleteMenu);
 
   function handleEdit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -29,6 +31,15 @@ export function MenuEl({ menu }: MenuProps) {
     editMenuFn.run(menu.id, newName).then(res => {
       dispatchMenus({
         type: menuActions.editNameAndClose,
+        payload: res,
+      });
+    });
+  }
+
+  function handleDelete() {
+    deleteMenuFn.run(menu.id).then(res => {
+      dispatchMenus({
+        type: menuActions.delete,
         payload: res,
       });
     });
@@ -73,9 +84,11 @@ export function MenuEl({ menu }: MenuProps) {
             >
               <Icon name={`${menu.isEditing ? 'cancel' : 'edit'}`} />
             </button>
-            <button className={styles.delete}>
-              <Icon name='delete' />
-            </button>
+            {!undeletable && (
+              <button className={styles.delete} onClick={handleDelete}>
+                <Icon name='delete' />
+              </button>
+            )}
           </>
         )}
       </li>
