@@ -252,24 +252,29 @@ recipeRouter.patch(
 );
 
 // PUT: update recipe
-recipeRouter.put('/:id', authToken, async (req, res) => {
-  const { id } = req.params;
+recipeRouter.put(
+  '/:id',
+  validateSchema(createRecipeSchema),
+  authToken,
+  async (req, res) => {
+    const { id } = req.params;
 
-  try {
-    const newRecipe = await updateRecipe(
-      id,
-      req.body.title,
-      req.body.cookingTime,
-      req.body.ingredients,
-      req.body.instructions,
-      req.body.types
-    );
+    try {
+      const newRecipe = await updateRecipe(
+        id,
+        req.body.title,
+        req.body.cookingTime,
+        req.body.ingredients,
+        req.body.instructions,
+        req.body.types
+      );
 
-    return res.status(200).json(newRecipe);
-  } catch (err: any) {
-    return res.status(500).json([{ message: err.message }]);
+      return res.status(200).json(newRecipe);
+    } catch (err: any) {
+      return res.status(500).json([{ message: err.message }]);
+    }
   }
-});
+);
 
 // DELETE: delete recipe
 recipeRouter.delete('/:id', authToken, async (req, res) => {
