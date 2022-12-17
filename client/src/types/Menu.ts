@@ -3,12 +3,21 @@ export interface Menu {
   name: string;
   isActive: boolean;
   isEditing: boolean;
-  days: {
+  days: Day[];
+}
+
+export interface Day {
+  id: string;
+  name: string;
+  isActive: boolean;
+  timeOfDays: TimeOfDay[];
+}
+
+export interface TimeOfDay {
+  id: string;
+  name: string;
+  recipe?: {
     id: string;
-    name: string;
-    timeOfDays: {
-      id: string;
-      name: string;
-    }[];
-  }[];
+    title: string;
+  };
 }

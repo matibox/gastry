@@ -6,6 +6,7 @@ import styles from '../styles/MenuContent.module.css';
 import { useMenu } from '../contexts/MenuContext';
 import { MenuPicker } from './MenuPicker';
 import { NewMenu } from './NewMenu';
+import { MenuTable } from './MenuTable';
 
 export function MenuContent() {
   const menuContext = useMenu();
@@ -30,7 +31,9 @@ export function MenuContent() {
                   <Icon name='menu' />
                 </button>
               </section>
-              <section>{/* menu content */}</section>
+              <section className={styles.menuWrapper}>
+                {activeMenu && <MenuTable currentMenu={activeMenu} />}
+              </section>
               <button
                 className={styles.addBtn}
                 onClick={() => newMenuForm.setIsOpened(prev => !prev)}

@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { useGetMenus } from '../hooks/useGetMenus';
-import { Menu } from '../../../types/Menu';
+import { Day, Menu } from '../../../types/Menu';
 import { usePopupToggle } from '../hooks/usePopupToggle';
 import { TError } from '../../../types/Error';
 
@@ -19,6 +19,10 @@ interface MenuContext {
     loading: boolean;
     errors: TError[] | undefined;
     resetErrors: () => void;
+  };
+  days: {
+    getActive: () => Day | null;
+    getActiveIndex: () => number;
   };
   menuPicker: {
     isOpened: boolean;
@@ -43,6 +47,7 @@ export enum menuActions {
   addLocalMenu = 'ADD',
   getAll = 'GET_MENUS',
   delete = 'DELETE',
+  setDayActive = 'SET_DAY_ACTIVE',
 }
 
 export type Action =
@@ -51,7 +56,8 @@ export type Action =
   | { type: menuActions.editNameAndClose; payload: Menu }
   | { type: menuActions.addLocalMenu; payload: Menu }
   | { type: menuActions.getAll; payload: Menu[] }
-  | { type: menuActions.delete; payload: string };
+  | { type: menuActions.delete; payload: string }
+  | { type: menuActions.setDayActive; payload: string };
 
 function menusReducer(state: Menu[], action: Action) {
   switch (action.type) {
@@ -79,7 +85,16 @@ function menusReducer(state: Menu[], action: Action) {
     case menuActions.getAll:
       return action.payload.map((menu, i) =>
         i === 0
-          ? { ...menu, isActive: true, isEditing: false }
+          ? {
+              ...menu,
+              isActive: true,
+              isEditing: false,
+              days: menu.days.map((day, i) =>
+                i === 0
+                  ? { ...day, isActive: true }
+                  : { ...day, isActive: false }
+              ),
+            }
           : { ...menu, isActive: false, isEditing: false }
       );
     case menuActions.delete:
@@ -90,6 +105,15 @@ function menusReducer(state: Menu[], action: Action) {
           .map((menu, i) => (i === 0 ? { ...menu, isActive: true } : menu));
       }
       return state.filter(menu => menu.id !== action.payload);
+    case menuActions.setDayActive:
+      return state.map(menu => ({
+        ...menu,
+        days: menu.days.map(day =>
+          day.id === action.payload
+            ? { ...day, isActive: true }
+            : { ...day, isActive: false }
+        ),
+      }));
     default:
       return state;
   }
@@ -116,10 +140,24 @@ export function MenuContextProvider({ children }: MenuContextProviderProps) {
     },
   ]);
 
-  const getActive = useCallback(() => {
+  const getActiveMenu = useCallback(() => {
     const foundActive = state.find(menu => menu.isActive);
     if (!foundActive) return null;
     return foundActive;
+  }, [state]);
+
+  const getActiveDay = useCallback(() => {
+    const foundActive = state.map(menu => {
+      return menu.days.find(day => day.isActive);
+    })[0];
+    if (!foundActive) return null;
+    return foundActive;
+  }, [state]);
+
+  const getActiveDayIndex = useCallback(() => {
+    return state.map(menu => {
+      return menu.days.findIndex(day => day.isActive);
+    })[0];
   }, [state]);
 
   const { loading, errors, resetErrors } = useGetMenus(dispatch);
@@ -131,10 +169,14 @@ export function MenuContextProvider({ children }: MenuContextProviderProps) {
           data: state,
           dispatchMenus: dispatch,
           menuActions,
-          getActive,
+          getActive: getActiveMenu,
           loading,
           errors,
           resetErrors,
+        },
+        days: {
+          getActive: getActiveDay,
+          getActiveIndex: getActiveDayIndex,
         },
         menuPicker: {
           isOpened: isMenuPickerOpened,
