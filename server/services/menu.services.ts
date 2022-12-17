@@ -35,6 +35,12 @@ export async function getMenus(userId: string) {
             select: {
               id: true,
               name: true,
+              recipe: {
+                select: {
+                  id: true,
+                  title: true,
+                },
+              },
             },
             orderBy: {
               order: 'asc',
@@ -168,6 +174,22 @@ export async function setRecipe(recipeId: string, timeOfDayId: string) {
           title: true,
         },
       },
+    },
+  });
+}
+
+export async function removeRecipe(timeOfDayId: string) {
+  return prisma.timeOfDay.update({
+    where: {
+      id: timeOfDayId,
+    },
+    data: {
+      recipe: {
+        disconnect: true,
+      },
+    },
+    select: {
+      id: true,
     },
   });
 }

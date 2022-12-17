@@ -10,6 +10,7 @@ import { useGetMenus } from '../hooks/useGetMenus';
 import { Day, Menu } from '../../../types/Menu';
 import { usePopupToggle } from '../hooks/usePopupToggle';
 import { TError } from '../../../types/Error';
+import { getWeekday } from '../utils/getWeekday';
 
 interface MenuContext {
   menus: {
@@ -58,6 +59,7 @@ export enum menuActions {
   delete = 'DELETE',
   setDayActive = 'SET_DAY_ACTIVE',
   setRecipe = 'SET_RECIPE',
+  removeRecipe = 'REMOVE_RECIPE',
 }
 
 export type Action =
@@ -71,6 +73,10 @@ export type Action =
   | {
       type: menuActions.setRecipe;
       payload: { timeOfDayId: string; id: string; title: string };
+    }
+  | {
+      type: menuActions.removeRecipe;
+      payload: string;
     };
 
 function menusReducer(state: Menu[], action: Action) {
@@ -103,8 +109,8 @@ function menusReducer(state: Menu[], action: Action) {
               ...menu,
               isActive: true,
               isEditing: false,
-              days: menu.days.map((day, i) =>
-                i === 0
+              days: menu.days.map(day =>
+                day.name === getWeekday().toLowerCase()
                   ? { ...day, isActive: true }
                   : { ...day, isActive: false }
               ),
@@ -146,6 +152,23 @@ function menusReducer(state: Menu[], action: Action) {
                     }
                   : time
               ),
+            };
+          }),
+        };
+      });
+    case menuActions.removeRecipe:
+      return state.map(menu => {
+        return {
+          ...menu,
+          days: menu.days.map(day => {
+            return {
+              ...day,
+              timeOfDays: day.timeOfDays.map(time => {
+                if (time.id === action.payload) {
+                  return { ...time, recipe: undefined };
+                }
+                return time;
+              }),
             };
           }),
         };

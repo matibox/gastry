@@ -1,4 +1,8 @@
+import { Error } from '../../../components/Error/Error';
 import { Icon } from '../../../components/Icon/Icon';
+import Loading from '../../../components/Loading/Loading';
+import { useAsyncFn } from '../../../hooks/useAsync';
+import { deleteRecipe } from '../../../services/menu';
 import { useMenu } from '../contexts/MenuContext';
 import styles from '../styles/MenuTable.module.css';
 
@@ -8,7 +12,10 @@ export function MenuTable() {
   const { getActive } = menuContext.days;
   const { setIsOpened } = menuContext.recipePick;
   const { setCurrentId } = menuContext.timeOfDays;
+  const { dispatchMenus, menuActions } = menuContext.menus;
   const currentDay = getActive();
+
+  const deleteRecipeFn = useAsyncFn(deleteRecipe);
 
   return (
     <>
@@ -19,11 +26,26 @@ export function MenuTable() {
           </span>
           {timeOfDay.recipe ? (
             <div className={styles.recipeWrapper}>
-              <p className={styles.recipe}>{timeOfDay.recipe.title}</p>
-              {/*//TODO delete*/}
-              <button onClick={() => {}}>
-                <Icon name='delete' />
-              </button>
+              {deleteRecipeFn.loading ? (
+                <Loading height='0' />
+              ) : (
+                <>
+                  <p className={styles.recipe}>{timeOfDay.recipe.title}</p>
+                  <button
+                    onClick={() => {
+                      deleteRecipeFn.run(timeOfDay.id).then(res => {
+                        console.log(res);
+                        dispatchMenus({
+                          type: menuActions.removeRecipe,
+                          payload: res.id,
+                        });
+                      });
+                    }}
+                  >
+                    <Icon name='delete' />
+                  </button>
+                </>
+              )}
             </div>
           ) : (
             <button
@@ -36,6 +58,7 @@ export function MenuTable() {
               <Icon name='add' />
             </button>
           )}
+          {deleteRecipeFn.errors && <Error errors={deleteRecipeFn.errors} />}
         </div>
       ))}
     </>

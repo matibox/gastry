@@ -55,15 +55,8 @@ export function RecipeContent() {
                 {recipe.instructions}
               </p>
             </section>
-            <section className={styles.buttons}>
-              <Button
-                color='green'
-                text='add to menu'
-                iconName='menu_book'
-                //TODO add to menu
-                handleClick={() => null}
-              />
-              {recipe.isAuthor && (
+            {recipe.isAuthor && (
+              <section className={styles.buttons}>
                 <>
                   <Button
                     color='green'
@@ -78,8 +71,8 @@ export function RecipeContent() {
                     handleClick={() => deleteLocalRecipe(id)}
                   />
                 </>
-              )}
-            </section>
+              </section>
+            )}
           </div>
         </>
       )}

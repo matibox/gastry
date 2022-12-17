@@ -7,6 +7,7 @@ import {
   deleteMenu,
   editMenu,
   getMenus,
+  removeRecipe,
   setRecipe,
 } from '../services/menu.services';
 import { findByEmail } from '../services/user.services';
@@ -100,6 +101,20 @@ menuRouter.patch(
     }
   }
 );
+
+// DELETE: delete recipe
+menuRouter.delete('/recipe', authToken, async (req, res) => {
+  const { timeOfDayId } = req.body;
+  if (!timeOfDayId)
+    return res.status(400).json([{ message: 'No id provided' }]);
+
+  try {
+    const deletedRecipe = await removeRecipe(timeOfDayId);
+    return res.status(200).json(deletedRecipe);
+  } catch (err: any) {
+    return res.status(500).json([{ message: err.message }]);
+  }
+});
 
 // DELETE: delete menu
 menuRouter.delete('/:id', authToken, async (req, res) => {

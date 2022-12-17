@@ -3,9 +3,11 @@ import { ChangeEvent, FormEvent, useState } from 'react';
 import { Error } from '../../../components/Error/Error';
 import { useAsyncFn } from '../../../hooks/useAsync';
 import { addMenu } from '../../../services/menu';
+import { Day } from '../../../types/Menu';
 import { useMenu } from '../contexts/MenuContext';
 
 import styles from '../styles/NewMenu.module.css';
+import { getWeekday } from '../utils/getWeekday';
 
 export function NewMenu() {
   const menuContext = useMenu();
@@ -30,6 +32,13 @@ export function NewMenu() {
       dispatchMenus({
         type: menuActions.setActive,
         payload: newMenu,
+      });
+
+      dispatchMenus({
+        type: menuActions.setDayActive,
+        payload: newMenu.days.find(
+          (day: Day) => day.name === getWeekday().toLowerCase()
+        ).id,
       });
 
       setIsOpened(false);

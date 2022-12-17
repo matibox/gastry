@@ -39,3 +39,12 @@ export function setRecipe(recipeId: string, timeOfDayId: string) {
     },
   });
 }
+
+export function deleteRecipe(timeOfDayId: string) {
+  return makeAuthRequest('/menu/recipe', {
+    method: 'DELETE',
+    data: {
+      timeOfDayId,
+    },
+  });
+}

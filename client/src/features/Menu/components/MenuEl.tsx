@@ -8,6 +8,7 @@ import { useAsyncFn } from '../../../hooks/useAsync';
 import { deleteMenu, editMenu } from '../../../services/menu';
 import { Error } from '../../../components/Error/Error';
 import Loading from '../../../components/Loading/Loading';
+import { getWeekday } from '../utils/getWeekday';
 
 interface MenuProps {
   menu: Menu;
@@ -48,7 +49,7 @@ export function MenuEl({ menu, undeletable }: MenuProps) {
   return (
     <>
       <li className={`${styles.item} ${menu.isActive && styles.active}`}>
-        {editMenuFn.loading ? (
+        {editMenuFn.loading || deleteMenuFn.loading ? (
           <Loading height='0' />
         ) : (
           <>
@@ -67,6 +68,15 @@ export function MenuEl({ menu, undeletable }: MenuProps) {
               <span
                 onClick={() => {
                   dispatchMenus({ type: menuActions.setActive, payload: menu });
+                  const today = menu.days.find(
+                    day => day.name === getWeekday().toLowerCase()
+                  );
+                  if (today) {
+                    dispatchMenus({
+                      type: menuActions.setDayActive,
+                      payload: today.id,
+                    });
+                  }
                   setTimeout(() => {
                     setIsOpened(false);
                   }, 250);
@@ -93,6 +103,9 @@ export function MenuEl({ menu, undeletable }: MenuProps) {
         )}
       </li>
       {editMenuFn.errors && <Error errors={editMenuFn.errors} size='small' />}
+      {deleteMenuFn.errors && (
+        <Error errors={deleteMenuFn.errors} size='small' />
+      )}
     </>
   );
 }
