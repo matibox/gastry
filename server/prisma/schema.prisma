@@ -75,11 +75,12 @@ model Favourite {
 }
 
 model Menu {
-  id     String @id @default(uuid())
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
-  name   String
-  days   Day[]
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  name      String
+  days      Day[]
+  updatedAt DateTime @updatedAt
 
   @@index([userId])
 }

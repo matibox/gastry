@@ -19,6 +19,36 @@ const timesOfDay: { name: TimeOfDays; order: number }[] = [
   { name: 'evening', order: 4 },
 ];
 
+export async function getMenus(userId: string) {
+  return await prisma.menu.findMany({
+    where: {
+      userId,
+    },
+    select: {
+      id: true,
+      name: true,
+      days: {
+        select: {
+          id: true,
+          name: true,
+          timeOfDays: {
+            select: {
+              id: true,
+              name: true,
+            },
+            orderBy: {
+              order: 'asc',
+            },
+          },
+        },
+        orderBy: {
+          order: 'asc',
+        },
+      },
+    },
+  });
+}
+
 export async function addMenu(userId: string, title: string) {
   const createdMenu = await prisma.menu.create({
     data: {

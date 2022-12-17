@@ -5,9 +5,10 @@ import React, {
   useReducer,
   useState,
 } from 'react';
-
+import { useGetMenus } from './useGetMenus';
 import { Menu } from '../../types/Menu';
 import { usePopupToggle } from './usePopupToggle';
+import { TError } from '../../types/Error';
 
 interface MenuContext {
   menus: {
@@ -15,6 +16,8 @@ interface MenuContext {
     dispatchMenus: React.Dispatch<Action>;
     menuActions: typeof menuActions;
     getActive: () => Menu | null;
+    loading: boolean;
+    errors: TError[] | undefined;
   };
   menuPicker: {
     isOpened: boolean;
@@ -32,17 +35,20 @@ export function useMenu() {
   return useContext(MenuContext);
 }
 
-enum menuActions {
+export enum menuActions {
   setActive = 'SET_ACTIVE',
   setEditing = 'SET_EDITING',
   editNameAndClose = 'EDIT_NAME_AND_CLOSE',
   addLocalMenu = 'ADD',
+  getAll = 'GET_MENUS',
 }
 
-interface Action {
-  type: menuActions;
-  payload: Menu;
-}
+export type Action =
+  | { type: menuActions.setActive; payload: Menu }
+  | { type: menuActions.setEditing; payload: Menu }
+  | { type: menuActions.editNameAndClose; payload: Menu }
+  | { type: menuActions.addLocalMenu; payload: Menu }
+  | { type: menuActions.getAll; payload: Menu[] };
 
 function menusReducer(state: Menu[], action: Action) {
   switch (action.type) {
@@ -67,6 +73,12 @@ function menusReducer(state: Menu[], action: Action) {
       });
     case menuActions.addLocalMenu:
       return [...state, action.payload];
+    case menuActions.getAll:
+      return action.payload.map((menu, i) =>
+        i === 0
+          ? { ...menu, isActive: true, isEditing: false }
+          : { ...menu, isActive: false, isEditing: false }
+      );
     default:
       return state;
   }
@@ -78,44 +90,7 @@ interface MenuContextProviderProps {
 
 export function MenuContextProvider({ children }: MenuContextProviderProps) {
   //! temporary
-  const [state, dispatch] = useReducer(menusReducer, [
-    {
-      id: '1',
-      name: 'Menu 1',
-      isActive: true,
-      isEditing: false,
-      days: [
-        {
-          id: '1',
-          name: 'monday',
-          timeOfDays: [
-            {
-              id: '1',
-              name: 'morning',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      id: '2',
-      name: 'Menu 2',
-      isActive: false,
-      isEditing: false,
-      days: [
-        {
-          id: '2',
-          name: 'tuesday',
-          timeOfDays: [
-            {
-              id: '2',
-              name: 'evening',
-            },
-          ],
-        },
-      ],
-    },
-  ]);
+  const [state, dispatch] = useReducer(menusReducer, []);
 
   const [isMenuPickerOpened, setIsMenuPickerOpened] = useState(false);
   const [isNewMenuFormOpened, setIsNewMenuFormOpened] = useState(false);
@@ -137,6 +112,8 @@ export function MenuContextProvider({ children }: MenuContextProviderProps) {
     return foundActive;
   }, [state]);
 
+  const { loading, errors } = useGetMenus(dispatch);
+
   return (
     <MenuContext.Provider
       value={{
@@ -145,6 +122,8 @@ export function MenuContextProvider({ children }: MenuContextProviderProps) {
           dispatchMenus: dispatch,
           menuActions,
           getActive,
+          loading,
+          errors,
         },
         menuPicker: {
           isOpened: isMenuPickerOpened,

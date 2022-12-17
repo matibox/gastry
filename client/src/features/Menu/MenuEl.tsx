@@ -3,7 +3,7 @@ import styles from './MenuEl.module.css';
 import { Menu } from '../../types/Menu';
 import { useMenu } from './MenuContext';
 import { Icon } from '../../components/Icon/Icon';
-import { ChangeEvent, FormEvent, useRef } from 'react';
+import { FormEvent, useRef } from 'react';
 
 interface MenuProps {
   menu: Menu;
