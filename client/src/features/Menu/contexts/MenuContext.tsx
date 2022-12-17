@@ -5,10 +5,10 @@ import React, {
   useReducer,
   useState,
 } from 'react';
-import { useGetMenus } from './useGetMenus';
-import { Menu } from '../../types/Menu';
-import { usePopupToggle } from './usePopupToggle';
-import { TError } from '../../types/Error';
+import { useGetMenus } from '../hooks/useGetMenus';
+import { Menu } from '../../../types/Menu';
+import { usePopupToggle } from '../hooks/usePopupToggle';
+import { TError } from '../../../types/Error';
 
 interface MenuContext {
   menus: {

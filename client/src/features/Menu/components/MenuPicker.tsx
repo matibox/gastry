@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { MenuEl } from './MenuEl';
-import { useMenu } from './MenuContext';
-import styles from './MenuPicker.module.css';
+import { useMenu } from '../contexts/MenuContext';
+import styles from '../styles/MenuPicker.module.css';
 
 export function MenuPicker() {
   const menuContext = useMenu();

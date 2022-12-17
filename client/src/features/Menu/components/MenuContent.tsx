@@ -1,9 +1,9 @@
 import { AnimatePresence } from 'framer-motion';
-import { Error } from '../../components/Error/Error';
-import { Icon } from '../../components/Icon/Icon';
-import Loading from '../../components/Loading/Loading';
-import styles from './MenuContent.module.css';
-import { useMenu } from './MenuContext';
+import { Error } from '../../../components/Error/Error';
+import { Icon } from '../../../components/Icon/Icon';
+import Loading from '../../../components/Loading/Loading';
+import styles from '../styles/MenuContent.module.css';
+import { useMenu } from '../contexts/MenuContext';
 import { MenuPicker } from './MenuPicker';
 import { NewMenu } from './NewMenu';
 

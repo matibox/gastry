@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { Error } from '../../components/Error/Error';
-import { useAsyncFn } from '../../hooks/useAsync';
-import { addMenu } from '../../services/menu';
-import { useMenu } from './MenuContext';
+import { Error } from '../../../components/Error/Error';
+import { useAsyncFn } from '../../../hooks/useAsync';
+import { addMenu } from '../../../services/menu';
+import { useMenu } from '../contexts/MenuContext';
 
-import styles from './NewMenu.module.css';
+import styles from '../styles/NewMenu.module.css';
 
 export function NewMenu() {
   const menuContext = useMenu();

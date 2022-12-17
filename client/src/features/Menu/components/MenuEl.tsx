@@ -1,13 +1,13 @@
-import styles from './MenuEl.module.css';
+import styles from '../styles/MenuEl.module.css';
 
-import { Menu } from '../../types/Menu';
-import { useMenu } from './MenuContext';
-import { Icon } from '../../components/Icon/Icon';
+import { Menu } from '../../../types/Menu';
+import { useMenu } from '../contexts/MenuContext';
+import { Icon } from '../../../components/Icon/Icon';
 import { FormEvent, useRef } from 'react';
-import { useAsyncFn } from '../../hooks/useAsync';
-import { deleteMenu, editMenu } from '../../services/menu';
-import { Error } from '../../components/Error/Error';
-import Loading from '../../components/Loading/Loading';
+import { useAsyncFn } from '../../../hooks/useAsync';
+import { deleteMenu, editMenu } from '../../../services/menu';
+import { Error } from '../../../components/Error/Error';
+import Loading from '../../../components/Loading/Loading';
 
 interface MenuProps {
   menu: Menu;

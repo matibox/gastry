@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useAsync } from '../../hooks/useAsync';
-import { getMenus } from '../../services/menu';
-import { TError } from '../../types/Error';
-import { Action, menuActions } from './MenuContext';
+import { useAsync } from '../../../hooks/useAsync';
+import { getMenus } from '../../../services/menu';
+import { TError } from '../../../types/Error';
+import { Action, menuActions } from '../contexts/MenuContext';
 
 export function useGetMenus(dispatchMenus: React.Dispatch<Action>) {
   const { data, loading, errors } = useAsync(getMenus);

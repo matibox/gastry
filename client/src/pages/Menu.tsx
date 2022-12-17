@@ -1,5 +1,5 @@
-import { MenuContent } from '../features/Menu/MenuContent';
-import { MenuContextProvider } from '../features/Menu/MenuContext';
+import { MenuContent } from '../features/Menu/components/MenuContent';
+import { MenuContextProvider } from '../features/Menu/contexts/MenuContext';
 import styles from './SearchSec.module.css';
 
 export function Menu() {
