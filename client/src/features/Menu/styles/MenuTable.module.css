@@ -12,6 +12,15 @@
   color: var(--white);
 }
 
+.recipeWrapper {
+  display: flex;
+  gap: 1rem;
+}
+
+.recipeWrapper > button > span {
+  color: var(--brown);
+}
+
 .recipe {
   text-align: right;
   color: var(--white);

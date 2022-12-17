@@ -2,6 +2,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useReducer,
   useState,
 } from 'react';
@@ -23,6 +24,10 @@ interface MenuContext {
   days: {
     getActive: () => Day | null;
     getActiveIndex: () => number;
+  };
+  timeOfDays: {
+    currentId: string | null;
+    setCurrentId: React.Dispatch<React.SetStateAction<null | string>>;
   };
   menuPicker: {
     isOpened: boolean;
@@ -52,6 +57,7 @@ export enum menuActions {
   getAll = 'GET_MENUS',
   delete = 'DELETE',
   setDayActive = 'SET_DAY_ACTIVE',
+  setRecipe = 'SET_RECIPE',
 }
 
 export type Action =
@@ -61,7 +67,11 @@ export type Action =
   | { type: menuActions.addLocalMenu; payload: Menu }
   | { type: menuActions.getAll; payload: Menu[] }
   | { type: menuActions.delete; payload: string }
-  | { type: menuActions.setDayActive; payload: string };
+  | { type: menuActions.setDayActive; payload: string }
+  | {
+      type: menuActions.setRecipe;
+      payload: { timeOfDayId: string; id: string; title: string };
+    };
 
 function menusReducer(state: Menu[], action: Action) {
   switch (action.type) {
@@ -118,6 +128,28 @@ function menusReducer(state: Menu[], action: Action) {
             : { ...day, isActive: false }
         ),
       }));
+    case menuActions.setRecipe:
+      return state.map(menu => {
+        return {
+          ...menu,
+          days: menu.days.map(day => {
+            return {
+              ...day,
+              timeOfDays: day.timeOfDays.map(time =>
+                time.id === action.payload.timeOfDayId
+                  ? {
+                      ...time,
+                      recipe: {
+                        id: action.payload.id,
+                        title: action.payload.title,
+                      },
+                    }
+                  : time
+              ),
+            };
+          }),
+        };
+      });
     default:
       return state;
   }
@@ -129,6 +161,10 @@ interface MenuContextProviderProps {
 
 export function MenuContextProvider({ children }: MenuContextProviderProps) {
   const [state, dispatch] = useReducer(menusReducer, []);
+
+  const [currentTimeOfDayId, setCurrentTimeOfDayId] = useState<null | string>(
+    null
+  );
 
   const [isMenuPickerOpened, setIsMenuPickerOpened] = useState(false);
   const [isNewMenuFormOpened, setIsNewMenuFormOpened] = useState(false);
@@ -186,6 +222,10 @@ export function MenuContextProvider({ children }: MenuContextProviderProps) {
         days: {
           getActive: getActiveDay,
           getActiveIndex: getActiveDayIndex,
+        },
+        timeOfDays: {
+          currentId: currentTimeOfDayId,
+          setCurrentId: setCurrentTimeOfDayId,
         },
         menuPicker: {
           isOpened: isMenuPickerOpened,

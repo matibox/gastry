@@ -7,6 +7,7 @@ import {
   deleteMenu,
   editMenu,
   getMenus,
+  setRecipe,
 } from '../services/menu.services';
 import { findByEmail } from '../services/user.services';
 
@@ -59,6 +60,21 @@ menuRouter.post(
     }
   }
 );
+
+// POST: set recipe
+menuRouter.post('/recipe', authToken, async (req, res) => {
+  const { recipeId, timeOfDayId } = req.body;
+  if (!recipeId || !timeOfDayId) {
+    return res.status(400).json([{ message: "No id's provided" }]);
+  }
+
+  try {
+    const updatedTimeOfDay = await setRecipe(recipeId, timeOfDayId);
+    return res.status(200).json(updatedTimeOfDay);
+  } catch (err: any) {
+    return res.status(500).json([{ message: err.message }]);
+  }
+});
 
 // PATCH: change menu name
 menuRouter.patch(

@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion';
 import { ChangeEvent, useState } from 'react';
+import { Error } from '../../../components/Error/Error';
 import { Icon } from '../../../components/Icon/Icon';
+import Loading from '../../../components/Loading/Loading';
 import { useAsyncFn } from '../../../hooks/useAsync';
 import { useDebounce } from '../../../hooks/useDebounce';
+import { setRecipe } from '../../../services/menu';
 import { getRecipesToPick } from '../../../services/recipes';
 import { useMenu } from '../contexts/MenuContext';
 import styles from '../styles/PickRecipe.module.css';
@@ -16,11 +19,14 @@ export function PickRecipe() {
   const menuContext = useMenu();
   if (!menuContext) return null;
   const { setIsOpened } = menuContext.recipePick;
+  const { dispatchMenus, menuActions } = menuContext.menus;
+  const { currentId, setCurrentId } = menuContext.timeOfDays;
 
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<Recipe[]>([]);
 
   const getRecipesToPickFn = useAsyncFn(getRecipesToPick);
+  const setRecipeFn = useAsyncFn(setRecipe);
 
   useDebounce(
     () => {
@@ -68,9 +74,35 @@ export function PickRecipe() {
             }
           />
         </label>
+        {setRecipeFn.errors && <Error errors={setRecipeFn.errors} />}
+        {getRecipesToPickFn.errors && (
+          <Error errors={getRecipesToPickFn.errors} />
+        )}
+        {setRecipeFn.loading && <Loading height='0' />}
+        {getRecipesToPickFn.loading && <Loading height='0' />}
         <ul className={styles.results}>
           {results.map(result => (
-            <li key={result.id} className={styles.result}>
+            <li
+              key={result.id}
+              className={styles.result}
+              onClick={() => {
+                if (!currentId) return;
+                setRecipeFn.run(result.id, currentId).then(res => {
+                  dispatchMenus({
+                    type: menuActions.setRecipe,
+                    payload: {
+                      id: res.recipe.id,
+                      timeOfDayId: res.id,
+                      title: res.recipe.title,
+                    },
+                  });
+                  setTimeout(() => {
+                    setIsOpened(false);
+                    setCurrentId(null);
+                  }, 250);
+                });
+              }}
+            >
               {result.title}
             </li>
           ))}

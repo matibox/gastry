@@ -151,3 +151,23 @@ export async function deleteMenu(menuId: string) {
     },
   });
 }
+
+export async function setRecipe(recipeId: string, timeOfDayId: string) {
+  return await prisma.timeOfDay.update({
+    where: {
+      id: timeOfDayId,
+    },
+    data: {
+      recipeId,
+    },
+    select: {
+      id: true,
+      recipe: {
+        select: {
+          id: true,
+          title: true,
+        },
+      },
+    },
+  });
+}

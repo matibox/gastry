@@ -29,3 +29,13 @@ export function deleteMenu(id: string) {
     method: 'DELETE',
   });
 }
+
+export function setRecipe(recipeId: string, timeOfDayId: string) {
+  return makeAuthRequest('/menu/recipe', {
+    method: 'POST',
+    data: {
+      recipeId,
+      timeOfDayId,
+    },
+  });
+}

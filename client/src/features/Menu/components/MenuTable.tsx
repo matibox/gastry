@@ -7,7 +7,7 @@ export function MenuTable() {
   if (!menuContext) return null;
   const { getActive } = menuContext.days;
   const { setIsOpened } = menuContext.recipePick;
-
+  const { setCurrentId } = menuContext.timeOfDays;
   const currentDay = getActive();
 
   return (
@@ -18,9 +18,21 @@ export function MenuTable() {
             {timeOfDay.name.replace('_', ' ')}
           </span>
           {timeOfDay.recipe ? (
-            <p className={styles.recipe}>{timeOfDay.recipe.title}</p>
+            <div className={styles.recipeWrapper}>
+              <p className={styles.recipe}>{timeOfDay.recipe.title}</p>
+              {/*//TODO delete*/}
+              <button onClick={() => {}}>
+                <Icon name='delete' />
+              </button>
+            </div>
           ) : (
-            <button className={styles.addBtn} onClick={() => setIsOpened(true)}>
+            <button
+              className={styles.addBtn}
+              onClick={() => {
+                setIsOpened(true);
+                setCurrentId(timeOfDay.id);
+              }}
+            >
               <Icon name='add' />
             </button>
           )}
