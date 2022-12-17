@@ -34,7 +34,6 @@ export function MenuTable() {
                   <button
                     onClick={() => {
                       deleteRecipeFn.run(timeOfDay.id).then(res => {
-                        console.log(res);
                         dispatchMenus({
                           type: menuActions.removeRecipe,
                           payload: res.id,

@@ -114,7 +114,16 @@ function menusReducer(state: Menu[], action: Action) {
                   : { ...day, isActive: false }
               ),
             }
-          : { ...menu, isActive: false, isEditing: false }
+          : {
+              ...menu,
+              isActive: false,
+              isEditing: false,
+              days: menu.days.map(day =>
+                day.name === getWeekday().toLowerCase()
+                  ? { ...day, isActive: true }
+                  : { ...day, isActive: false }
+              ),
+            }
       );
     case menuActions.delete:
       const foundMenu = state.find(menu => menu.id === action.payload);
@@ -214,9 +223,7 @@ export function MenuContextProvider({ children }: MenuContextProviderProps) {
   }, [state]);
 
   const getActiveDay = useCallback(() => {
-    const foundActive = state.map(menu => {
-      return menu.days.find(day => day.isActive);
-    })[0];
+    const foundActive = getActiveMenu()?.days.find(day => day.isActive);
     if (!foundActive) return null;
     return foundActive;
   }, [state]);
