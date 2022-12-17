@@ -7,6 +7,7 @@ import { useMenu } from '../contexts/MenuContext';
 import { MenuPicker } from './MenuPicker';
 import { NewMenu } from './NewMenu';
 import { MenuTable } from './MenuTable';
+import { Days } from './Days';
 
 export function MenuContent() {
   const menuContext = useMenu();
@@ -32,7 +33,8 @@ export function MenuContent() {
                 </button>
               </section>
               <section className={styles.menuWrapper}>
-                {activeMenu && <MenuTable currentMenu={activeMenu} />}
+                {activeMenu && <Days days={activeMenu.days} />}
+                {activeMenu && <MenuTable />}
               </section>
               <button
                 className={styles.addBtn}

@@ -7,7 +7,6 @@ export function useDaySwiper(days: Day[]) {
   useEffect(() => {
     const currentIndex = days.findIndex(day => day.isActive);
     if (currentIndex === -1) return;
-    console.log(currentIndex);
     setX(`${100 - currentIndex * 35}%`);
   }, [days]);
 

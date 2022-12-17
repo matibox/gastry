@@ -1,17 +1,33 @@
-import { Menu } from '../../../types/Menu';
+import { Icon } from '../../../components/Icon/Icon';
+import { useMenu } from '../contexts/MenuContext';
 import styles from '../styles/MenuTable.module.css';
-import { Days } from './Days';
 
-interface MenuTableProps {
-  currentMenu: Menu;
-}
+export function MenuTable() {
+  const menuContext = useMenu();
+  if (!menuContext) return null;
+  const { getActive } = menuContext.days;
 
-export function MenuTable({ currentMenu }: MenuTableProps) {
-  const { days } = currentMenu;
+  const currentDay = getActive();
 
   return (
-    <div className={styles.wrapper}>
-      <Days days={days} />
-    </div>
+    <>
+      {currentDay?.timeOfDays.map(timeOfDay => (
+        <div key={timeOfDay.id} className={styles.row}>
+          <span className={styles.name}>
+            {timeOfDay.name.replace('_', ' ')}
+          </span>
+          {timeOfDay.recipe ? (
+            <p className={styles.recipe}>{timeOfDay.recipe.title}</p>
+          ) : (
+            <button
+              className={styles.addBtn}
+              onClick={() => console.log(currentDay)}
+            >
+              <Icon name='add' />
+            </button>
+          )}
+        </div>
+      ))}
+    </>
   );
 }

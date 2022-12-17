@@ -14,9 +14,12 @@
 .menuWrapper {
   width: 100%;
   background-color: var(--black);
-  padding: 1.2rem 1.4rem;
+  padding: 1.4rem 2rem 4rem 2rem;
   overflow-x: hidden;
-  border-radius: 1.2rem 1.2rem 0 0;
+  border-radius: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
 }
 
 .addBtn {
