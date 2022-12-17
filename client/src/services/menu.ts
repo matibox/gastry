@@ -14,3 +14,12 @@ export function addMenu(name: string) {
     },
   });
 }
+
+export function editMenu(id: string, name: string) {
+  return makeAuthRequest(`/menu/${id}`, {
+    method: 'PATCH',
+    data: {
+      name,
+    },
+  });
+}

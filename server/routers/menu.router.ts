@@ -2,7 +2,7 @@ import express from 'express';
 import authToken from '../middleware/authenticateToken';
 import validateSchema from '../middleware/validateSchema';
 import { createMenuSchema } from '../schemas/menu.schema';
-import { addMenu, getMenus } from '../services/menu.services';
+import { addMenu, editMenu, getMenus } from '../services/menu.services';
 import { findByEmail } from '../services/user.services';
 
 export const menuRouter = express.Router();
@@ -51,6 +51,31 @@ menuRouter.post(
       return res.status(200).json(createdMenu);
     } catch (err: any) {
       return res.status(500).json([{ message: err.message }]);
+    }
+  }
+);
+
+// PATCH: change menu name
+menuRouter.patch(
+  '/:id',
+  validateSchema(createMenuSchema),
+  authToken,
+  async (req, res) => {
+    const { name } = req.body;
+    const { id } = req.params;
+    //@ts-ignore
+    const user = req.user;
+
+    try {
+      const foundUser = await findByEmail(user.email);
+      if (!foundUser) {
+        return res.status(404).json([{ message: 'No user found' }]);
+      }
+
+      const menu = await editMenu(id, name);
+      return res.status(200).json(menu);
+    } catch (err: any) {
+      res.status(500).json([{ message: err.message }]);
     }
   }
 );

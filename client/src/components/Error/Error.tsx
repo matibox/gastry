@@ -24,7 +24,7 @@ export function Error({
               size === 'normal'
                 ? '2rem'
                 : size === 'small'
-                ? '1.5rem'
+                ? '1.7rem'
                 : '2.4rem',
             fontFamily: 'Montserrat, sans-serif',
             textAlign: centered ? 'center' : 'left',

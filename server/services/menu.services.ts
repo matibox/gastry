@@ -107,3 +107,36 @@ export async function addMenu(userId: string, title: string) {
     },
   });
 }
+
+export async function editMenu(menuId: string, newName: string) {
+  return await prisma.menu.update({
+    where: {
+      id: menuId,
+    },
+    data: {
+      name: newName,
+    },
+    select: {
+      id: true,
+      name: true,
+      days: {
+        select: {
+          id: true,
+          name: true,
+          timeOfDays: {
+            select: {
+              id: true,
+              name: true,
+            },
+            orderBy: {
+              order: 'asc',
+            },
+          },
+        },
+        orderBy: {
+          order: 'asc',
+        },
+      },
+    },
+  });
+}
