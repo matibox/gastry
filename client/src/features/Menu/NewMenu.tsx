@@ -10,7 +10,7 @@ import styles from './NewMenu.module.css';
 export function NewMenu() {
   const menuContext = useMenu();
   if (!menuContext) return null;
-  const { dispatchMenus, menuActions } = menuContext.menus;
+  const { dispatchMenus, menuActions, resetErrors } = menuContext.menus;
   const { setIsOpened } = menuContext.newMenuForm;
 
   const [name, setName] = useState('');
@@ -33,6 +33,7 @@ export function NewMenu() {
       });
 
       setIsOpened(false);
+      resetErrors();
     });
   }
 

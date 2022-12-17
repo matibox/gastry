@@ -46,6 +46,9 @@ export async function getMenus(userId: string) {
         },
       },
     },
+    orderBy: {
+      updatedAt: 'asc',
+    },
   });
 }
 

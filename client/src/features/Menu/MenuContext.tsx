@@ -18,6 +18,7 @@ interface MenuContext {
     getActive: () => Menu | null;
     loading: boolean;
     errors: TError[] | undefined;
+    resetErrors: () => void;
   };
   menuPicker: {
     isOpened: boolean;
@@ -89,7 +90,6 @@ interface MenuContextProviderProps {
 }
 
 export function MenuContextProvider({ children }: MenuContextProviderProps) {
-  //! temporary
   const [state, dispatch] = useReducer(menusReducer, []);
 
   const [isMenuPickerOpened, setIsMenuPickerOpened] = useState(false);
@@ -112,7 +112,7 @@ export function MenuContextProvider({ children }: MenuContextProviderProps) {
     return foundActive;
   }, [state]);
 
-  const { loading, errors } = useGetMenus(dispatch);
+  const { loading, errors, resetErrors } = useGetMenus(dispatch);
 
   return (
     <MenuContext.Provider
@@ -124,6 +124,7 @@ export function MenuContextProvider({ children }: MenuContextProviderProps) {
           getActive,
           loading,
           errors,
+          resetErrors,
         },
         menuPicker: {
           isOpened: isMenuPickerOpened,

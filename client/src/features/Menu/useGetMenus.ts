@@ -1,10 +1,15 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useAsync } from '../../hooks/useAsync';
 import { getMenus } from '../../services/menu';
+import { TError } from '../../types/Error';
 import { Action, menuActions } from './MenuContext';
 
 export function useGetMenus(dispatchMenus: React.Dispatch<Action>) {
   const { data, loading, errors } = useAsync(getMenus);
+
+  const [resetableErrors, setResetableErrors] = useState<TError[] | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     if (data) {
@@ -12,5 +17,13 @@ export function useGetMenus(dispatchMenus: React.Dispatch<Action>) {
     }
   }, [data]);
 
-  return { loading, errors };
+  useEffect(() => {
+    setResetableErrors(errors);
+  }, [errors]);
+
+  const resetErrors = useCallback(() => {
+    setResetableErrors(undefined);
+  }, [resetableErrors]);
+
+  return { loading, errors: resetableErrors, resetErrors };
 }
