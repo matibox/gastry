@@ -118,3 +118,12 @@ export function deleteRecipe(id: string) {
     method: 'DELETE',
   });
 }
+
+export function getRecipesToPick(query: string) {
+  return makeAuthRequest('/recipes/pick', {
+    method: 'GET',
+    params: {
+      q: query,
+    },
+  });
+}

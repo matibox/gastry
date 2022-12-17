@@ -8,18 +8,20 @@ import { MenuPicker } from './MenuPicker';
 import { NewMenu } from './NewMenu';
 import { MenuTable } from './MenuTable';
 import { Days } from './Days';
+import { PickRecipe } from './PickRecipe';
 
 export function MenuContent() {
   const menuContext = useMenu();
   if (!menuContext) return null;
   const { getActive, loading, errors } = menuContext.menus;
-  const { menuPicker, newMenuForm } = menuContext;
+  const { menuPicker, newMenuForm, recipePick } = menuContext;
   const activeMenu = getActive();
 
   return (
     <>
       <AnimatePresence>{menuPicker.isOpened && <MenuPicker />}</AnimatePresence>
       <AnimatePresence>{newMenuForm.isOpened && <NewMenu />}</AnimatePresence>
+      <AnimatePresence>{recipePick.isOpened && <PickRecipe />}</AnimatePresence>
       {!errors ? (
         <>
           {loading ? (

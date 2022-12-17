@@ -32,6 +32,10 @@ interface MenuContext {
     isOpened: boolean;
     setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
   };
+  recipePick: {
+    isOpened: boolean;
+    setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  };
 }
 
 const MenuContext = createContext<MenuContext | null>(null);
@@ -128,6 +132,7 @@ export function MenuContextProvider({ children }: MenuContextProviderProps) {
 
   const [isMenuPickerOpened, setIsMenuPickerOpened] = useState(false);
   const [isNewMenuFormOpened, setIsNewMenuFormOpened] = useState(false);
+  const [isRecipePickOpened, setIsRecipePickOpened] = useState(false);
 
   usePopupToggle([
     {
@@ -137,6 +142,10 @@ export function MenuContextProvider({ children }: MenuContextProviderProps) {
     {
       state: isNewMenuFormOpened,
       setState: setIsNewMenuFormOpened,
+    },
+    {
+      state: isRecipePickOpened,
+      setState: setIsRecipePickOpened,
     },
   ]);
 
@@ -185,6 +194,10 @@ export function MenuContextProvider({ children }: MenuContextProviderProps) {
         newMenuForm: {
           isOpened: isNewMenuFormOpened,
           setIsOpened: setIsNewMenuFormOpened,
+        },
+        recipePick: {
+          isOpened: isRecipePickOpened,
+          setIsOpened: setIsRecipePickOpened,
         },
       }}
     >

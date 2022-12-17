@@ -211,3 +211,18 @@ export async function getYourLatestRecipes(email: string, quantity: number) {
     },
   });
 }
+
+export async function getRecipesToPick(query: string) {
+  return await prisma.recipe.findMany({
+    select: {
+      id: true,
+      title: true,
+    },
+    where: {
+      title: {
+        contains: query,
+      },
+    },
+    take: 15,
+  });
+}

@@ -9,6 +9,7 @@ import {
   updateRecipe,
   deleteRecipe,
   getYourLatestRecipes,
+  getRecipesToPick,
 } from '../services/recipes.services';
 import { Prisma, RecipeTypeName } from '@prisma/client';
 import validateSchema from '../middleware/validateSchema';
@@ -119,6 +120,22 @@ recipeRouter.get('/your/latest', authToken, async (req, res) => {
       return res.status(404).json([{ message: 'No recipes found' }]);
     }
 
+    return res.status(200).json(recipes);
+  } catch (err: any) {
+    return res.status(500).json([{ message: err.message }]);
+  }
+});
+
+// GET: recipe menu picker
+recipeRouter.get('/pick', authToken, async (req, res) => {
+  const query = req.query.q as string;
+  if (!query) return res.status(400).json([{ message: 'No query provided' }]);
+
+  try {
+    const recipes = await getRecipesToPick(query);
+    if (recipes.length === 0) {
+      return res.status(404).json([{ message: 'No recipes found' }]);
+    }
     return res.status(200).json(recipes);
   } catch (err: any) {
     return res.status(500).json([{ message: err.message }]);
