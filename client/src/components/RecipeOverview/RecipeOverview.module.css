@@ -9,10 +9,11 @@
 
 .link {
   display: block;
-}
-
-.link img {
   width: 100%;
+  aspect-ratio: 334 / 223;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
 }
 
 .infoWrapper {

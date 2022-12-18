@@ -32,7 +32,10 @@ export function RecipeContent() {
         <>
           <h1>{recipe.title}</h1>
           <div className={styles.content}>
-            <img src={recipe.thumbnail} alt={recipe.title} />
+            <div
+              className={styles.thumbnail}
+              style={{ backgroundImage: `url(${recipe.thumbnail})` }}
+            />
             <section className={styles.info}>
               <p className={styles.iconWrapper}>
                 <Icon name='timer' />

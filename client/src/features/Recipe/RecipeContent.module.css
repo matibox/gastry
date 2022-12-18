@@ -25,6 +25,14 @@
   padding-bottom: 3rem;
 }
 
+.thumbnail {
+  width: 100%;
+  aspect-ratio: 334 / 223;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
 .info {
   padding-inline: 1rem;
   display: flex;

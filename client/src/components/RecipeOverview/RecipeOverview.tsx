@@ -18,12 +18,16 @@ export function RecipeOverview({ recipe, lastElRef }: RecipeOverviewProps) {
 
   return (
     <div className={styles.wrapper} ref={lastElRef}>
-      <Link className={styles.link} to={`/recipes/${recipe.id}`}>
-        <img
+      <Link
+        className={styles.link}
+        to={`/recipes/${recipe.id}`}
+        style={{ backgroundImage: `url(${recipe.thumbnail})` }}
+      >
+        {/* <img
           className={styles.thumbnail}
           src={recipe.thumbnail}
           alt={recipe.title}
-        />
+        /> */}
       </Link>
       <div className={styles.infoWrapper}>
         <h3>{recipe.title}</h3>
