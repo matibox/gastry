@@ -38,3 +38,13 @@ export function logout() {
     method: 'POSt',
   });
 }
+
+export function updateProfilePicture(formData: FormData) {
+  return makeAuthRequest('/auth/picture', {
+    method: 'PATCH',
+    data: formData,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+}

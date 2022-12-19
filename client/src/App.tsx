@@ -12,11 +12,11 @@ import { Favourites } from './pages/Favourites';
 import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { Menu } from './pages/Menu';
-import { Profile } from './pages/Profile';
 import { Recipe } from './pages/Recipe';
 import { YourRecipes } from './pages/Recipes';
 import { Search } from './pages/Search';
 import { Signup } from './pages/Signup';
+import { ProfileContent } from './features/Profile/ProfileContent';
 
 function App() {
   const { isMobile } = useIsMobile();
@@ -49,7 +49,7 @@ function App() {
         <Route path='/favourites' element={<Favourites />} />
         <Route path='/recipes' element={<YourRecipes />} />
         <Route path='/recipes/:id' element={<Recipe />} />
-        <Route path='/profile' element={<Profile />} />
+        <Route path='/profile' element={<ProfileContent />} />
         <Route path='/menu' element={<Menu />} />
       </Routes>
       {isMobile && <MobileMenu />}

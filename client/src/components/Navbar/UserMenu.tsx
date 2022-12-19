@@ -29,7 +29,7 @@ const links: Link[] = [
   {
     title: 'profile',
     icon: 'account_circle',
-    route: '/account',
+    route: '/profile',
   },
   {
     title: 'your recipes',

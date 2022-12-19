@@ -1,0 +1,89 @@
+.wrapper {
+  padding-inline: 3.6rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  padding-top: 3rem;
+}
+
+.wrapper > h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  font-size: 3.6rem;
+  color: var(--black);
+  text-align: center;
+}
+
+.pictureWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 10rem;
+  gap: 2rem;
+}
+
+.pictureWrapper > img {
+  max-height: 100%;
+  border-radius: 50%;
+  aspect-ratio: 1;
+}
+
+.pictureWrapper > p {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--black);
+}
+
+.edit > span {
+  color: var(--green);
+  font-size: 2.4rem;
+}
+
+.userData {
+  display: flex;
+  flex-direction: column;
+  gap: 1.7rem;
+}
+
+.userData > p {
+  color: var(--black);
+  font-size: 1.8rem;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Open Sans';
+}
+
+.bold {
+  font-weight: 700;
+  color: var(--brown);
+  font-size: 1.15em;
+}
+
+.logoutWrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.logout {
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 16rem;
+  border-radius: 10rem;
+  color: var(--black);
+  font-family: 'Open Sans', sans-serif;
+  font-size: 2.2rem;
+  padding: 0.6rem 2rem;
+  border: 2px solid var(--orange);
+  transition: all 0.15s ease;
+}
+
+.logout:hover {
+  background-color: var(--orange);
+  color: var(--white);
+}

@@ -44,3 +44,14 @@ export async function removeRefreshToken(token: string) {
     },
   });
 }
+
+export async function updateProfilePicture(email: string, URL: string) {
+  return await prisma.user.update({
+    where: {
+      email,
+    },
+    data: {
+      profilePicture: URL,
+    },
+  });
+}

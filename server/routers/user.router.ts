@@ -7,10 +7,13 @@ import {
   findByEmail,
   getRefreshToken,
   removeRefreshToken,
+  updateProfilePicture,
 } from '../services/user.services';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { accessTokenExpiry, refreshTokenExpiry } from '../config/jwtExpiry';
+import parser from '../utils/multer';
+import authToken from '../middleware/authenticateToken';
 
 export const authRouter = express.Router();
 
@@ -146,6 +149,42 @@ authRouter.post('/logout', async (req, res) => {
     return res.status(500).json([{ message: err.message }]);
   }
 });
+
+// PATCH: update user's profile picture
+authRouter.patch(
+  '/picture',
+  authToken,
+  parser.single('picture'),
+  async (req, res) => {
+    //@ts-ignore
+    const reqUser = req.user;
+
+    if (!req.file) {
+      return res.status(400).json([{ message: 'Profile picture not found' }]);
+    }
+
+    const imgURL = req.file.path;
+
+    try {
+      const user = await findByEmail(reqUser.email);
+
+      if (!user) {
+        return res.status(404).json([{ message: 'User not found' }]);
+      }
+
+      const updatedUser = await updateProfilePicture(user.email, imgURL);
+
+      return res.json({
+        email: updatedUser.email,
+        name: updatedUser.name,
+        isAdmin: updatedUser.role === 'admin',
+        profilePicture: updatedUser.profilePicture,
+      });
+    } catch (err: any) {
+      return res.status(500).json([{ message: err.message }]);
+    }
+  }
+);
 
 function generateAccessToken(payload: TokenPayload) {
   return jwt.sign(payload, process.env.JWT_SECRET as string, {

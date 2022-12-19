@@ -39,4 +39,6 @@
 
 .userWrapper > img {
   max-width: 3.4rem;
+  border-radius: 50%;
+  aspect-ratio: 1;
 }
