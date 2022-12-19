@@ -6,7 +6,9 @@
   "scripts": {
     "push": "npx prisma db push",
     "seed": "npx prisma db seed",
-    "dev": "nodemon index.ts"
+    "dev": "nodemon index.ts",
+    "build": "tsc",
+    "prod": "node dist/index.js"
   },
   "keywords": [],
   "author": "",
