@@ -145,3 +145,20 @@ export function dislikeRecipe(id: string) {
     method: 'DELETE',
   });
 }
+
+export function getLikedRecipes(
+  offset: number,
+  quantity: number,
+  query: string,
+  filters?: Filters[]
+) {
+  return makeAuthRequest('/recipes/liked', {
+    method: 'GET',
+    params: {
+      q: query,
+      skip: offset,
+      take: quantity,
+      filters: filters?.join(',') || undefined,
+    },
+  });
+}

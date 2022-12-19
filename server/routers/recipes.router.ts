@@ -13,6 +13,7 @@ import {
   getIsFavourite,
   likeRecipe,
   dislikeRecipe,
+  getLikedRecipes,
 } from '../services/recipes.services';
 import { Prisma, RecipeTypeName } from '@prisma/client';
 import validateSchema from '../middleware/validateSchema';
@@ -88,6 +89,47 @@ recipeRouter.get('/your', authToken, async (req, res) => {
     );
     const nextRecipes = await getYourRecipes(
       user.email,
+      skip + take,
+      take,
+      recipeWhereFields
+    );
+
+    if (recipes.length === 0) {
+      return res.status(404).json([{ message: 'No recipes found' }]);
+    }
+
+    return res.status(200).json({
+      recipes,
+      moreToLoad: nextRecipes.length > 0,
+    });
+  } catch (err: any) {
+    return res.status(500).json([{ message: err.message }]);
+  }
+});
+
+// GET: liked recipes
+recipeRouter.get('/liked', authToken, async (req, res) => {
+  const { skip, take, recipeWhereFields, error } = recipeSearchHandler(
+    req,
+    false
+  );
+
+  if (error) return res.status(error.code).json([{ message: error.message }]);
+
+  //@ts-ignore
+  const reqUser = req.user;
+
+  try {
+    const user = await findByEmail(reqUser.email);
+    if (!user) return res.status(404).json([{ message: 'User not found' }]);
+    const recipes = await getLikedRecipes(
+      user.id,
+      skip,
+      take,
+      recipeWhereFields
+    );
+    const nextRecipes = await getLikedRecipes(
+      user.id,
       skip + take,
       take,
       recipeWhereFields

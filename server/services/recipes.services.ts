@@ -259,3 +259,31 @@ export async function dislikeRecipe(recipeId: string, userId: string) {
     },
   });
 }
+
+export async function getLikedRecipes(
+  userId: string,
+  skip: number,
+  take: number,
+  whereFields: object[]
+) {
+  return await prisma.recipe.findMany({
+    select: recipeOverviewSelectFields,
+    where: {
+      AND: [
+        ...whereFields,
+        {
+          favourites: {
+            some: {
+              userId,
+            },
+          },
+        },
+      ],
+    },
+    orderBy: {
+      updatedAt: 'desc',
+    },
+    skip,
+    take,
+  });
+}
