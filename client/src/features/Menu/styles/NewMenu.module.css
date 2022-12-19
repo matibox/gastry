@@ -13,8 +13,10 @@
   --padding: 2rem;
   position: absolute;
   top: calc(var(--navbar-height) + 25%);
-  left: var(--padding);
+  left: 50%;
+  translate: -50% 0;
   width: calc(100vw - var(--padding) * 2);
+  max-width: 50rem;
   z-index: 9;
   background-color: var(--black);
   color: var(--white);

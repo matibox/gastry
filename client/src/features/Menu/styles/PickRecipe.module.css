@@ -12,10 +12,11 @@
 .wrapper {
   --padding: 2rem;
   position: absolute;
-  top: calc(var(--navbar-height) + 5%);
-  left: var(--padding);
+  top: 50%;
+  left: 50%;
+  translate: -50% calc(-50% - var(--navbar-height));
   width: calc(100vw - var(--padding) * 2);
-  z-index: 9;
+  max-width: 60rem;
   background-color: var(--black);
   color: var(--white);
   border-radius: 1.5rem;
@@ -23,6 +24,7 @@
   flex-direction: column;
   padding: var(--padding) calc(var(--padding) + 1rem);
   gap: 2rem;
+  z-index: 10;
 }
 
 .wrapper h3 {

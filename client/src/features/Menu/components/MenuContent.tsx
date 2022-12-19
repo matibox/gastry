@@ -9,9 +9,12 @@ import { NewMenu } from './NewMenu';
 import { MenuTable } from './MenuTable';
 import { Days } from './Days';
 import { PickRecipe } from './PickRecipe';
+import { useIsMobile } from '../../../contexts/isMobileContext';
 
 export function MenuContent() {
   const menuContext = useMenu();
+  const { isMobile } = useIsMobile();
+
   if (!menuContext) return null;
   const { getActive, loading, errors } = menuContext.menus;
   const { menuPicker, newMenuForm, recipePick } = menuContext;
@@ -19,7 +22,6 @@ export function MenuContent() {
 
   return (
     <>
-      <AnimatePresence>{menuPicker.isOpened && <MenuPicker />}</AnimatePresence>
       <AnimatePresence>{newMenuForm.isOpened && <NewMenu />}</AnimatePresence>
       <AnimatePresence>{recipePick.isOpened && <PickRecipe />}</AnimatePresence>
       {!errors ? (
@@ -27,13 +29,18 @@ export function MenuContent() {
           {loading ? (
             <Loading />
           ) : (
-            <>
-              <section className={styles.titleWrapper}>
-                <h2>{activeMenu?.name}</h2>
-                <button onClick={() => menuPicker.setIsOpened(true)}>
-                  <Icon name='menu' />
-                </button>
-              </section>
+            <div className={`${styles.wrapper} ${!isMobile && styles.pc}`}>
+              {isMobile && (
+                <section className={styles.titleWrapper}>
+                  <h2>{activeMenu?.name}</h2>
+                  <button onClick={() => menuPicker.setIsOpened(true)}>
+                    <Icon name='menu' />
+                  </button>
+                </section>
+              )}
+              <AnimatePresence>
+                {menuPicker.isOpened && <MenuPicker />}
+              </AnimatePresence>
               <section className={styles.menuWrapper}>
                 {activeMenu && <Days days={activeMenu.days} />}
                 {activeMenu && <MenuTable />}
@@ -44,7 +51,7 @@ export function MenuContent() {
               >
                 <Icon name={`${newMenuForm.isOpened ? 'close' : 'add'}`} />
               </button>
-            </>
+            </div>
           )}
         </>
       ) : (

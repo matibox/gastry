@@ -2,9 +2,11 @@ import { motion } from 'framer-motion';
 import { MenuEl } from './MenuEl';
 import { useMenu } from '../contexts/MenuContext';
 import styles from '../styles/MenuPicker.module.css';
+import { useIsMobile } from '../../../contexts/isMobileContext';
 
 export function MenuPicker() {
   const menuContext = useMenu();
+  const { isMobile } = useIsMobile();
   if (!menuContext) return null;
   const { data: menus } = menuContext.menus;
   const { setIsOpened } = menuContext.menuPicker;
@@ -19,7 +21,7 @@ export function MenuPicker() {
           duration: 0.2,
           ease: 'easeOut',
         }}
-        className={styles.overlay}
+        className={`${styles.overlay} ${!isMobile && styles.pc}`}
         onClick={() => setIsOpened(false)}
       />
       <motion.div
@@ -30,7 +32,7 @@ export function MenuPicker() {
           duration: 0.35,
           ease: 'backOut',
         }}
-        className={styles.wrapper}
+        className={`${styles.wrapper} ${!isMobile && styles.pc}`}
       >
         <h3>Menu picker</h3>
         <ul className={styles.menuList}>

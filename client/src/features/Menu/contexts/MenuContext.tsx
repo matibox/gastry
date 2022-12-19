@@ -2,6 +2,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useReducer,
   useState,
 } from 'react';
@@ -10,6 +11,7 @@ import { Day, Menu } from '../../../types/Menu';
 import { usePopupToggle } from '../hooks/usePopupToggle';
 import { TError } from '../../../types/Error';
 import { getWeekday } from '../utils/getWeekday';
+import { useIsMobile } from '../../../contexts/isMobileContext';
 
 interface MenuContext {
   menus: {
@@ -192,14 +194,19 @@ interface MenuContextProviderProps {
 
 export function MenuContextProvider({ children }: MenuContextProviderProps) {
   const [state, dispatch] = useReducer(menusReducer, []);
+  const { isMobile } = useIsMobile();
 
   const [currentTimeOfDayId, setCurrentTimeOfDayId] = useState<null | string>(
     null
   );
 
-  const [isMenuPickerOpened, setIsMenuPickerOpened] = useState(false);
+  const [isMenuPickerOpened, setIsMenuPickerOpened] = useState(!isMobile);
   const [isNewMenuFormOpened, setIsNewMenuFormOpened] = useState(false);
   const [isRecipePickOpened, setIsRecipePickOpened] = useState(false);
+
+  useEffect(() => {
+    setIsMenuPickerOpened(!isMobile);
+  }, [isMobile]);
 
   usePopupToggle([
     {
