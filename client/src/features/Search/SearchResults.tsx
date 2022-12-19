@@ -11,10 +11,9 @@ export function SearchResults() {
       {data && (
         <h1
           style={{
-            alignSelf: 'flex-start',
             fontFamily: '"Montserrat", sans-serif',
             fontWeight: '500',
-            fontSize: '2.4rem',
+            fontSize: 'clamp(2.4rem, 3vw, 3.6rem)',
           }}
         >
           {data.length > 0 && !errors && (

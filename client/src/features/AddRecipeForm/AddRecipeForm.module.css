@@ -6,21 +6,23 @@
   left: 0;
   background-color: var(--black-alpha);
   backdrop-filter: blur(5px);
+  z-index: 11;
 }
 
 .wrapper {
   position: fixed;
   top: 50%;
   left: 50%;
-  translate: -50% -60%;
+  translate: -50% -50%;
   width: 90%;
+  max-width: 50rem;
   background-color: var(--black);
   border-radius: 1rem;
   display: flex;
   flex-direction: column;
   padding: 2rem 3rem;
   gap: 1rem;
-  z-index: 2;
+  z-index: 12;
 }
 
 .wrapper h2 {
@@ -73,9 +75,8 @@
   gap: 1rem 1rem;
 }
 
-.ingredientInputsWrapper input,
-.ingredientInputsWrapper button {
-  max-width: calc(50% - 1rem);
+.ingredientInputsWrapper input {
+  width: calc(50% - 0.5rem);
 }
 
 .ingredientInputsWrapper button {
@@ -89,7 +90,7 @@
   font-family: 'Montserrat', sans-serif;
   font-size: 1.6rem;
   font-weight: 400;
-  width: 40%;
+  width: calc(50% - 1rem);
   flex-grow: 1;
   transition: background-color 0.15s ease;
   cursor: pointer;
