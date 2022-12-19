@@ -226,3 +226,36 @@ export async function getRecipesToPick(query: string) {
     take: 15,
   });
 }
+
+export async function getIsFavourite(recipeId: string, userId: string) {
+  return await prisma.favourite.findUnique({
+    where: {
+      userId_recipeId: {
+        recipeId,
+        userId,
+      },
+    },
+  });
+}
+
+export async function likeRecipe(recipeId: string, userId: string) {
+  const found = await getIsFavourite(recipeId, userId);
+  if (found) throw new Error('Recipe is already liked');
+  return await prisma.favourite.create({
+    data: {
+      recipeId,
+      userId,
+    },
+  });
+}
+
+export async function dislikeRecipe(recipeId: string, userId: string) {
+  return await prisma.favourite.delete({
+    where: {
+      userId_recipeId: {
+        userId,
+        recipeId,
+      },
+    },
+  });
+}

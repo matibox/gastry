@@ -127,3 +127,21 @@ export function getRecipesToPick(query: string) {
     },
   });
 }
+
+export function getIsLiked(id: string) {
+  return makeAuthRequest(`/recipes/${id}/liked`, {
+    method: 'GET',
+  });
+}
+
+export function likeRecipe(id: string) {
+  return makeAuthRequest(`/recipes/${id}/like`, {
+    method: 'POST',
+  });
+}
+
+export function dislikeRecipe(id: string) {
+  return makeAuthRequest(`/recipes/${id}/like`, {
+    method: 'DELETE',
+  });
+}

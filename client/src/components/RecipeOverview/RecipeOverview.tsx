@@ -1,34 +1,34 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/authContext';
+import { useAsyncFn } from '../../hooks/useAsync';
+import { useLike } from '../../hooks/useLike';
+import { dislikeRecipe, getIsLiked, likeRecipe } from '../../services/recipes';
 import Recipe from '../../types/RecipeOverview';
+import { Error } from '../Error/Error';
 import { Icon } from '../Icon/Icon';
+import Loading from '../Loading/Loading';
 
 // styles
 import styles from './RecipeOverview.module.css';
 
 interface RecipeOverviewProps {
   recipe: Recipe;
-  lastElRef?: React.RefObject<HTMLDivElement>;
 }
 
-export function RecipeOverview({ recipe, lastElRef }: RecipeOverviewProps) {
-  //TODO get favorite data from API
-  //TODO more info on PC
-  const [isFav, setIsFav] = useState(false);
+export function RecipeOverview({ recipe }: RecipeOverviewProps) {
+  const authContext = useAuth();
+  if (!authContext) return null;
+  const { user } = authContext;
+  const { isFav, toggleLike, loading, errors } = useLike(user, recipe.id);
 
   return (
-    <div className={styles.wrapper} ref={lastElRef}>
+    <div className={styles.wrapper}>
       <Link
         className={styles.link}
         to={`/recipes/${recipe.id}`}
         style={{ backgroundImage: `url(${recipe.thumbnail})` }}
-      >
-        {/* <img
-          className={styles.thumbnail}
-          src={recipe.thumbnail}
-          alt={recipe.title}
-        /> */}
-      </Link>
+      />
       <div className={styles.infoWrapper}>
         <h3>{recipe.title}</h3>
         <div className={styles.timer}>
@@ -39,12 +39,16 @@ export function RecipeOverview({ recipe, lastElRef }: RecipeOverviewProps) {
           <span>cook now</span>
           <Icon name='restaurant' />
         </Link>
-        <button
-          onClick={() => setIsFav(prev => !prev)}
-          className={`${styles.favBtn} ${isFav && styles.favActive}`}
-        >
-          <Icon name='favorite' isFilled={isFav} />
-        </button>
+        {user && (
+          <button
+            onClick={toggleLike}
+            className={`${styles.favBtn} ${isFav && styles.favActive}`}
+            disabled={loading}
+          >
+            <Icon name='favorite' isFilled={isFav} />
+          </button>
+        )}
+        {errors && <Error errors={errors} />}
       </div>
     </div>
   );

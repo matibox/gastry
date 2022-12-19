@@ -10,6 +10,9 @@ import {
   deleteRecipe,
   getYourLatestRecipes,
   getRecipesToPick,
+  getIsFavourite,
+  likeRecipe,
+  dislikeRecipe,
 } from '../services/recipes.services';
 import { Prisma, RecipeTypeName } from '@prisma/client';
 import validateSchema from '../middleware/validateSchema';
@@ -155,7 +158,29 @@ recipeRouter.get('/:id', async (req, res) => {
     }
 
     return res.status(200).json({ ...recipe, isAuthor: false });
-    //TODO isLiked, isAuthor etc.
+  } catch (err: any) {
+    return res.status(500).json([{ message: err.message }]);
+  }
+});
+
+// GET: single recipe is liked
+recipeRouter.get('/:id/liked', authToken, async (req, res) => {
+  const { id } = req.params;
+
+  //@ts-ignore
+  const reqUser = req.user;
+
+  if (!id) return res.status(400).json([{ message: 'No id specified' }]);
+
+  try {
+    const user = await findByEmail(reqUser.email);
+    if (!user) {
+      return res.status(404).json([{ message: 'User not found' }]);
+    }
+
+    const result = await getIsFavourite(id, user.id);
+
+    return res.status(200).json(result ? true : false);
   } catch (err: any) {
     return res.status(500).json([{ message: err.message }]);
   }
@@ -216,6 +241,44 @@ recipeRouter.post(
     }
   }
 );
+
+// POST: like recipe
+recipeRouter.post('/:id/like', authToken, async (req, res) => {
+  const { id } = req.params;
+
+  //@ts-ignore
+  const reqUser = req.user;
+
+  if (!id) return res.status(400).json([{ message: 'No id specified' }]);
+  try {
+    const user = await findByEmail(reqUser.email);
+    if (!user) return res.status(404).json([{ message: 'No user found' }]);
+    const result = await likeRecipe(id, user.id);
+    return res.status(200).json(result ? true : false);
+  } catch (err: any) {
+    if (err.message === 'Recipe is already liked') {
+      return res.status(409).json([{ message: err.message }]);
+    }
+    return res.status(500).json([{ message: err.message }]);
+  }
+});
+
+recipeRouter.delete('/:id/like', authToken, async (req, res) => {
+  const { id } = req.params;
+
+  //@ts-ignore
+  const reqUser = req.user;
+
+  if (!id) return res.status(400).json([{ message: 'No id specified' }]);
+  try {
+    const user = await findByEmail(reqUser.email);
+    if (!user) return res.status(404).json([{ message: 'No user found' }]);
+    const result = await dislikeRecipe(id, user.id);
+    return res.status(200).json(result ? false : true);
+  } catch (err: any) {
+    return res.status(500).json([{ message: err.message }]);
+  }
+});
 
 // PATCH: update recipe thumbnail
 recipeRouter.patch(
