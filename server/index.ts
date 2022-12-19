@@ -19,7 +19,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: 'http://localhost:5173',
+    origin: process.env.CLIENT_URL || 'localhost:5173',
   })
 );
 app.use(cookies());
@@ -28,11 +28,6 @@ app.use('/recipes', recipeRouter);
 app.use('/filters', filtersRouter);
 app.use('/auth', authRouter);
 app.use('/menu', menuRouter);
-
-app.get('/test', authToken, (req, res) => {
-  //@ts-ignore
-  res.status(200).json(req.user);
-});
 
 app.listen(PORT, () => {
   console.log(`App listening on port ${PORT}`);
