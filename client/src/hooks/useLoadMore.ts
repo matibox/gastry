@@ -1,9 +1,10 @@
 import { useCallback, useState } from 'react';
+import { TError } from '../types/Error';
 
 interface ServiceFn {
   data: undefined;
   loading: boolean;
-  errors: undefined;
+  errors: undefined | TError[];
   run: (...params: any[]) => Promise<any>;
 }
 
