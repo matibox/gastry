@@ -50,17 +50,14 @@ const links: Link[] = [
 
 export function Navbar() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-
   const { pathname } = useLocation();
-  if (pathname === '/signup' || pathname === '/login') return null;
-
   const authContext = useAuth();
+  const { isMobile } = useIsMobile();
+  const navigate = useNavigate();
+
+  if (pathname === '/signup' || pathname === '/login') return null;
   if (!authContext) return null;
   const { user } = authContext;
-
-  const { isMobile } = useIsMobile();
-
-  const navigate = useNavigate();
 
   return (
     <header className={`${styles.wrapper} ${!isMobile ? styles.pc : ''}`}>
@@ -73,6 +70,7 @@ export function Navbar() {
         <nav className={styles.nav}>
           {links.map(link => (
             <NavLink
+              key={link.path}
               to={link.path}
               className={({ isActive }) =>
                 `${isActive ? styles.active : ''} ${styles.link}`
