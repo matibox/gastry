@@ -73,6 +73,7 @@ export function UpdatePic({ setIsOpen }: UpdatePicProps) {
         }}
         onSubmit={(e: FormEvent<HTMLFormElement>) => handleSubmit(e)}
       >
+        <h2>Edit profile picture</h2>
         <label>
           <span>Profile picture</span>
           <input

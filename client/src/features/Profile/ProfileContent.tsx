@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Icon } from '../../components/Icon/Icon';
 import { useAuth } from '../../contexts/authContext';
+import { useIsMobile } from '../../contexts/isMobileContext';
 import { useAsyncFn } from '../../hooks/useAsync';
 import { logout } from '../../services/user';
 
@@ -12,9 +13,11 @@ import { UpdatePic } from './UpdatePic';
 export function ProfileContent() {
   const [isOpen, setIsOpen] = useState(false);
 
+  const { isMobile } = useIsMobile();
+
   const authContext = useAuth();
   if (!authContext) return null;
-  const { user, setLocalUser, resetUser } = authContext;
+  const { user, resetUser } = authContext;
 
   const logoutFn = useAsyncFn(logout);
 
@@ -22,7 +25,7 @@ export function ProfileContent() {
 
   return (
     <>
-      <main className={styles.wrapper}>
+      <main className={`${styles.wrapper} ${!isMobile && styles.pc}`}>
         <AnimatePresence>
           {isOpen && <UpdatePic setIsOpen={setIsOpen} />}
         </AnimatePresence>
