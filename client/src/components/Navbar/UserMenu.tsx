@@ -52,7 +52,7 @@ export function UserMenu({ username, setOpen }: UserMenuProps) {
   const logoutFn = useAsyncFn(logout);
 
   const authContext = useAuth();
-  if (!authContext) return;
+  if (!authContext) return null;
   const { resetUser } = authContext;
 
   return (
