@@ -7,6 +7,11 @@
   justify-content: space-between;
 }
 
+.wrapper.pc .main {
+  width: 50rem;
+  margin-inline: auto;
+}
+
 .main h1 {
   color: var(--white);
   font-weight: 500;

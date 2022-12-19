@@ -6,7 +6,6 @@ import cookies from 'cookie-parser';
 import { recipeRouter } from './routers/recipes.router';
 import { filtersRouter } from './routers/filters.router';
 import { authRouter } from './routers/user.router';
-import authToken from './middleware/authenticateToken';
 import { menuRouter } from './routers/menu.router';
 
 dotenv.config();
@@ -19,7 +18,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: process.env.CLIENT_URL || 'localhost:5173',
+    origin: process.env.CLIENT_URL || 'http://localhost:5173',
   })
 );
 app.use(cookies());

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Icon } from '../Icon/Icon';
 import styles from './UserInfoForm.module.css';
 import Github from '../../assets/github-green.png';
+import { useIsMobile } from '../../contexts/isMobileContext';
 
 interface UserInfoFormProps {
   heading: string;
@@ -26,8 +27,10 @@ export function UserInfoForm({
   onSubmit,
   children,
 }: UserInfoFormProps) {
+  const { isMobile } = useIsMobile();
+
   return (
-    <div className={styles.wrapper}>
+    <div className={`${styles.wrapper} ${!isMobile && styles.pc}`}>
       <header>
         <Link to='/'>
           <img src='/logo.png' alt='gastry' />
