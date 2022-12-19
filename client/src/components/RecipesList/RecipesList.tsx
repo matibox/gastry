@@ -34,10 +34,21 @@ export function RecipesList({
 
   return (
     <>
-      {!loading &&
-        recipes?.map((recipe, i) => (
-          <RecipeOverview key={recipe.id} recipe={recipe} />
-        ))}
+      {!loading && (
+        <div
+          style={{
+            display: 'flex',
+            gap: '2rem',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            width: '100%',
+          }}
+        >
+          {recipes?.map((recipe, i) => (
+            <RecipeOverview key={recipe.id} recipe={recipe} />
+          ))}
+        </div>
+      )}
       {loading && <Loading />}
       {loadMore && moreToLoad && !loading && (
         <button

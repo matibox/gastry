@@ -7,10 +7,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: var(--navbar-height);
 }
 
 .mobile {
   height: calc(100vh - var(--mobile-menu-height) - var(--navbar-height));
+  margin-top: 0;
 }
 
 .overlay {

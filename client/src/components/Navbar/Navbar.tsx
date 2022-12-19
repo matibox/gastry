@@ -63,7 +63,7 @@ export function Navbar() {
   const navigate = useNavigate();
 
   return (
-    <header className={styles.wrapper}>
+    <header className={`${styles.wrapper} ${!isMobile ? styles.pc : ''}`}>
       <div className={styles.logoWrapper}>
         <Link to='/'>
           <img src='/logo.png' alt='gastry' />
