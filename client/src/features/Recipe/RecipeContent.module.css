@@ -3,16 +3,42 @@
   flex-direction: column;
   justify-content: center;
   width: 100%;
-  padding: 3rem;
   gap: 1.8rem;
   margin-bottom: var(--mobile-menu-height);
+  padding: 3rem;
 }
 
-.wrapper > h1 {
+.wrapper.pc {
+  margin-top: var(--navbar-height);
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 1fr;
+  gap: 6rem;
+  padding: 10rem;
+  justify-items: center;
+}
+
+.wrapper.noThumbnail {
+  grid-template-columns: 1fr;
+}
+
+.pcWrapper > h1 {
   text-align: center;
   font-weight: 500;
   font-family: 'Montserrat', sans-serif;
-  font-size: 3.6rem;
+  font-size: clamp(3.6rem, 3vw, 5.6rem);
+  margin-bottom: 3.6rem;
+}
+
+.pcThumbnail {
+  width: 100%;
+  aspect-ratio: 334 / 223;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  border-radius: 2rem;
+  outline: 2px solid var(--brown);
+  box-shadow: 0 0 2rem var(--black-alpha);
 }
 
 .content {
@@ -23,6 +49,10 @@
   overflow: hidden;
   border-radius: 2rem;
   padding-bottom: 3rem;
+}
+
+.wrapper.pc .content {
+  background-color: transparent;
 }
 
 .thumbnail {
@@ -46,6 +76,10 @@
   right: 1rem;
 }
 
+.wrapper.pc .info > button > span {
+  font-size: 3rem;
+}
+
 .iconWrapper {
   display: flex;
   align-items: center;
@@ -54,10 +88,18 @@
   font-size: 1.8rem !important;
 }
 
+.wrapper.pc .iconWrapper {
+  color: var(--black) !important;
+}
+
 .info > p {
   color: var(--white);
-  font-size: 1.5rem;
+  font-size: clamp(1.5rem, 1vw, 2rem);
   line-height: 1.5;
+}
+
+.wrapper.pc .info > p {
+  color: var(--black);
 }
 
 .bold {
@@ -72,6 +114,7 @@
   align-self: center;
   gap: 2rem;
   margin-top: 2rem;
+  max-width: 20rem;
 }
 
 .button {
@@ -87,6 +130,10 @@
   transition: background-color 0.2s ease;
 }
 
+.wrapper.pc .button {
+  color: var(--black);
+}
+
 .button.green:hover {
   background-color: var(--green);
 }
@@ -95,15 +142,19 @@
   background-color: var(--orange);
 }
 
+.wrapper.pc .favBtn {
+  color: var(--black);
+}
+
 .favBtn {
   color: var(--white);
   cursor: pointer;
 }
 
 .favBtn:hover {
-  color: var(--brown);
+  color: var(--brown) !important;
 }
 
 .favBtn.favActive {
-  color: var(--brown);
+  color: var(--brown) !important;
 }

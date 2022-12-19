@@ -75,6 +75,7 @@ export function Navbar() {
               className={({ isActive }) =>
                 `${isActive ? styles.active : ''} ${styles.link}`
               }
+              end={true}
             >
               <span>{link.title}</span>
               <Icon name={link.icon} />
