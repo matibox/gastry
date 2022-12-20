@@ -6,7 +6,6 @@ import { useAuth } from '../../contexts/authContext';
 import { useAsyncFn } from '../../hooks/useAsync';
 import { updateProfilePicture } from '../../services/user';
 import { TError } from '../../types/Error';
-import { User } from '../../types/User';
 import styles from './UpdatePic.module.css';
 
 interface UpdatePicProps {
@@ -84,6 +83,7 @@ export function UpdatePic({ setIsOpen }: UpdatePicProps) {
           />
         </label>
         {editPictureFn.errors && <Error errors={editPictureFn.errors} />}
+        {pfpError && <Error errors={[pfpError]} />}
         {editPictureFn.loading ? (
           <button
             className={`${styles.loadingButton} ${styles.submit}`}

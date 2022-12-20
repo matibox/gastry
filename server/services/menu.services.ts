@@ -79,11 +79,11 @@ export async function addMenu(userId: string, title: string) {
     },
   });
 
-  createdMenu.days.forEach(async day => {
+  for (const day of createdMenu.days) {
     await prisma.timeOfDay.createMany({
       data: timesOfDay.map(time => ({ ...time, dayId: day.id })),
     });
-  });
+  }
 
   return await prisma.menu.findUnique({
     where: {

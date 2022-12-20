@@ -9,6 +9,7 @@ import { deleteMenu, editMenu } from '../../../services/menu';
 import { Error } from '../../../components/Error/Error';
 import Loading from '../../../components/Loading/Loading';
 import { getWeekday } from '../utils/getWeekday';
+import { useIsMobile } from '../../../contexts/isMobileContext';
 
 interface MenuProps {
   menu: Menu;
@@ -25,6 +26,8 @@ export function MenuEl({ menu, undeletable }: MenuProps) {
 
   const editMenuFn = useAsyncFn(editMenu);
   const deleteMenuFn = useAsyncFn(deleteMenu);
+
+  const { isMobile } = useIsMobile();
 
   function handleEdit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -78,6 +81,7 @@ export function MenuEl({ menu, undeletable }: MenuProps) {
                     });
                   }
                   setTimeout(() => {
+                    if (!isMobile) return;
                     setIsOpened(false);
                   }, 250);
                 }}

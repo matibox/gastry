@@ -109,18 +109,22 @@ authRouter.post('/token', async (req, res) => {
     jwt.verify(
       refreshToken,
       process.env.JWT_REFRESH_SECRET as string,
-      (err: any, user: any) => {
+      async (err: any, user: any) => {
         if (err) return res.status(403).json([{ message: 'Wrong token' }]);
         const accessToken = generateAccessToken({
           email: user.email,
           isAdmin: user.isAdmin,
           name: user.name,
         });
-        res.status(200).json({
+
+        const foundUser = await findByEmail(user.email);
+
+        return res.status(200).json({
           email: user.email,
           isAdmin: user.isAdmin,
           name: user.name,
           accessToken,
+          profilePicture: foundUser?.profilePicture,
         });
       }
     );

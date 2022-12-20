@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Error } from '../../../components/Error/Error';
 import { Icon } from '../../../components/Icon/Icon';
 import Loading from '../../../components/Loading/Loading';
@@ -13,12 +13,10 @@ export function MenuTable() {
   const { getActive } = menuContext.days;
   const { setIsOpened } = menuContext.recipePick;
   const { setCurrentId } = menuContext.timeOfDays;
-  const { dispatchMenus, menuActions } = menuContext.menus;
+  const { data, dispatchMenus, menuActions } = menuContext.menus;
   const currentDay = getActive();
 
   const deleteRecipeFn = useAsyncFn(deleteRecipe);
-
-  const navigate = useNavigate();
 
   return (
     <>
