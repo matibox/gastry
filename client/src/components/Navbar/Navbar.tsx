@@ -13,6 +13,7 @@ interface Link {
   title: string;
   icon: string;
   path: string;
+  needsAuth?: boolean;
 }
 
 const links: Link[] = [
@@ -25,6 +26,7 @@ const links: Link[] = [
     title: 'profile',
     icon: 'account_circle',
     path: '/profile',
+    needsAuth: true,
   },
   {
     title: 'search',
@@ -69,17 +71,34 @@ export function Navbar() {
       {!isMobile && (
         <nav className={styles.nav}>
           {links.map(link => (
-            <NavLink
-              key={link.path}
-              to={link.path}
-              className={({ isActive }) =>
-                `${isActive ? styles.active : ''} ${styles.link}`
-              }
-              end={true}
-            >
-              <span>{link.title}</span>
-              <Icon name={link.icon} />
-            </NavLink>
+            <>
+              {link.needsAuth && user && (
+                <NavLink
+                  key={link.path}
+                  to={link.path}
+                  className={({ isActive }) =>
+                    `${isActive ? styles.active : ''} ${styles.link}`
+                  }
+                  end={true}
+                >
+                  <span>{link.title}</span>
+                  <Icon name={link.icon} />
+                </NavLink>
+              )}
+              {!link.needsAuth && (
+                <NavLink
+                  key={link.path}
+                  to={link.path}
+                  className={({ isActive }) =>
+                    `${isActive ? styles.active : ''} ${styles.link}`
+                  }
+                  end={true}
+                >
+                  <span>{link.title}</span>
+                  <Icon name={link.icon} />
+                </NavLink>
+              )}
+            </>
           ))}
         </nav>
       )}

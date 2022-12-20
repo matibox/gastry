@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { createContext, useCallback, useContext, useState } from 'react';
 import { User } from '../types/User';
 
 interface AuthContext {
@@ -24,11 +18,7 @@ interface authContextProviderProps {
 }
 
 export function AuthContextProvider({ children }: authContextProviderProps) {
-  const { user, getUser, setLocalUser, resetUser } = useLocalUser();
-
-  useEffect(() => {
-    getUser();
-  }, [getUser]);
+  const { user, setLocalUser, resetUser } = useLocalUser();
 
   return (
     <AuthContext.Provider
@@ -44,24 +34,22 @@ export function AuthContextProvider({ children }: authContextProviderProps) {
 }
 
 function useLocalUser() {
-  const [user, setUser] = useState<User>();
-
   const localStorageItemName = 'user';
+
+  const [user, setUser] = useState<User>(() => {
+    const currentUser = localStorage.getItem(localStorageItemName);
+    if (!currentUser) return undefined;
+    return JSON.parse(currentUser);
+  });
 
   const setLocalUser = useCallback((user: User) => {
     setUser(user);
     localStorage.setItem(localStorageItemName, JSON.stringify(user));
   }, []);
 
-  const getUser = useCallback(() => {
-    const currentUser = localStorage.getItem(localStorageItemName);
-    if (!currentUser) return undefined;
-    setUser(JSON.parse(currentUser));
-  }, []);
-
   const resetUser = useCallback(() => {
     localStorage.removeItem(localStorageItemName);
   }, []);
 
-  return { user, setLocalUser, getUser, resetUser };
+  return { user, setLocalUser, resetUser };
 }
