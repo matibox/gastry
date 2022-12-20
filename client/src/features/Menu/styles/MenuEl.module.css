@@ -28,6 +28,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 70%;
+  user-select: none;
 }
 
 .edit {

@@ -132,7 +132,19 @@ function menusReducer(state: Menu[], action: Action) {
       if (foundMenu?.isActive) {
         return state
           .filter(menu => menu.id !== action.payload)
-          .map((menu, i) => (i === 0 ? { ...menu, isActive: true } : menu));
+          .map((menu, i) =>
+            i === 0
+              ? {
+                  ...menu,
+                  days: menu.days.map(day =>
+                    day.name === getWeekday().toLowerCase()
+                      ? { ...day, isActive: true }
+                      : day
+                  ),
+                  isActive: true,
+                }
+              : menu
+          );
       }
       return state.filter(menu => menu.id !== action.payload);
     case menuActions.setDayActive:
