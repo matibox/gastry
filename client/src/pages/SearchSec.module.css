@@ -27,7 +27,7 @@
 
 .addBtn {
   position: fixed;
-  bottom: 7rem;
+  bottom: 5vh;
   right: max(1.5rem, 5vw);
   background-color: var(--orange);
   display: flex;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/authContext';
 import { useIsMobile } from '../../contexts/isMobileContext';
@@ -71,10 +71,9 @@ export function Navbar() {
       {!isMobile && (
         <nav className={styles.nav}>
           {links.map(link => (
-            <>
+            <React.Fragment key={link.path}>
               {link.needsAuth && user && (
                 <NavLink
-                  key={link.path}
                   to={link.path}
                   className={({ isActive }) =>
                     `${isActive ? styles.active : ''} ${styles.link}`
@@ -87,7 +86,6 @@ export function Navbar() {
               )}
               {!link.needsAuth && (
                 <NavLink
-                  key={link.path}
                   to={link.path}
                   className={({ isActive }) =>
                     `${isActive ? styles.active : ''} ${styles.link}`
@@ -98,7 +96,7 @@ export function Navbar() {
                   <Icon name={link.icon} />
                 </NavLink>
               )}
-            </>
+            </React.Fragment>
           ))}
         </nav>
       )}
