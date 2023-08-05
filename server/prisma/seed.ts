@@ -44,7 +44,7 @@ async function main() {
       },
       userId: user1.id,
       thumbnail:
-        'https://res.cloudinary.com/drjsjdeff/image/upload/v1668449869/dev_setups/thumbnail_kmgait.png',
+        'https://res.cloudinary.com/drjsjdeff/image/upload/v1691234058/pexels-photo-1213710_fxm1mz.jpg',
     },
   });
 
@@ -70,7 +70,7 @@ async function main() {
       },
       userId: user2.id,
       thumbnail:
-        'https://res.cloudinary.com/drjsjdeff/image/upload/v1668449869/dev_setups/thumbnail_kmgait.png',
+        'https://res.cloudinary.com/drjsjdeff/image/upload/v1691234130/Pizza_with_tomatoes_mihw3w.jpg',
       types: {
         create: [
           {
